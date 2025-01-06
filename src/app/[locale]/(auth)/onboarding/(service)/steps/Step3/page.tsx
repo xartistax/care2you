@@ -1,3 +1,4 @@
+'use client';
 import { Box, Heading, HStack, Link, Spinner, Stack, Text, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation'; // Importiere useRouter
 import { useTranslations } from 'next-intl';
