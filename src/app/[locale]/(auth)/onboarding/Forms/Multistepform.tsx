@@ -1,4 +1,3 @@
-// src/app/[locale]/(auth)/onboarding/(client)/Multistepform.tsx
 'use client';
 
 import { VStack } from '@chakra-ui/react';
@@ -6,10 +5,10 @@ import React from 'react';
 
 import { useOnboarding } from '@/contexts/OnboardingContext';
 
-import Step1 from '../(client)/steps/Step1/page';
-import Step2Client from '../(client)/steps/Step2/page';
-import Step2Service from '../(service)/steps/Step2/page';
-import Step3Service from '../(service)/steps/Step3/page';
+import Step1 from '../client/steps/Step1/page';
+import Step2Client from '../client/steps/Step2/page';
+import Step2Service from '../service/steps/Step2/page';
+import Step3Service from '../service/steps/Step3/page';
 
 export const MultiStepForm = () => {
   const { formState } = useOnboarding();

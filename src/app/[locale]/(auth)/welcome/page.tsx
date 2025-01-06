@@ -3,8 +3,8 @@ import { getTranslations } from 'next-intl/server';
 
 import type { OnBoardingClientUser } from '@/utils/Types';
 
-import Welcome_Client from './(client)/Welcome';
-import Welcome_Service from './(service)/Welcome';
+import Welcome_Client from './client/Welcome';
+import Welcome_Service from './service/Welcome';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
   const user = await currentUser();
