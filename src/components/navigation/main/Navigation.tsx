@@ -38,6 +38,19 @@ export default async function MainNavigation() {
       );
 
     default:
-      return (null);
+      return (
+
+        <li>
+          <Link
+            href="/de/welcome/new/care"
+            className="flex items-center gap-x-2 border-none text-gray-700 hover:text-gray-900"
+          >
+
+            <ClipboardIcon className="size-5" />
+            Services
+          </Link>
+        </li>
+
+      );
   }
 }
