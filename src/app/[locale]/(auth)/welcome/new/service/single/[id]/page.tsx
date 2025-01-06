@@ -20,12 +20,14 @@ export async function generateMetadata({ params }: { params: { locale: string } 
 }
 
 export default async function NewServiceServer({ params }: { params: { id: string } }) {
-  const { id } = params;
+  const serviceId = Number(params.id);
 
   // Ensure `id` is parsed correctly and valid
-  const serviceId = Number.parseInt(id, 10);
-  if (Number.isNaN(serviceId)) {
-    throw new TypeError('Invalid service ID'); // ✅ Throw an error instead of returning JSX
+
+  const allServices = await db.select().from(servicesSchema).limit(10);
+
+  if (allServices.length === 0) {
+    throw new Error('No services found in the database. Check if your database is seeded correctly.');
   }
 
   // Fetch the service from DB
@@ -33,6 +35,7 @@ export default async function NewServiceServer({ params }: { params: { id: strin
     .select()
     .from(servicesSchema)
     .where(eq(servicesSchema.id, serviceId))
+
     .limit(1);
 
   // Get the first service object
@@ -64,7 +67,7 @@ export default async function NewServiceServer({ params }: { params: { id: strin
   };
 
   // Validate userId before fetching the user
-  const userId = 'user_2qQZWJXgjMAJSZUwFSR5331TWrk';
+  const userId = 'user_2rFfqj3vhZz9fbTw5OFuYwVhLHv';
 
   if (!userId) {
     throw new Error('User not found'); // ✅ Ensure we don’t fetch a null user
