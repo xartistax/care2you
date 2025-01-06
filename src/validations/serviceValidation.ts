@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 // Define the validation schema for services
 export const serviceSchema = z.object({
-  id: z.number(),
+  id: z.number().optional(),
   title: z.string(),
   description: z.string(),
   price: z.number(),

@@ -409,11 +409,12 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
         {step === 3 && (
           <>
             {/* Street Address & Street Number in One Row */}
-            <HStack spaceY={4} w="100%">
-              <FormControl flex={3}>
+            <HStack spaceY={4} w="100%" alignItems="center">
+              <FormControl flex={3} marginTop={0}>
                 <FormLabel fontSize="small" fontWeight="bold">Street Address</FormLabel>
                 <Input
                   type="text"
+                  h="40px" // ✅ Ensures same height
                   value={formData.location.street}
                   onChange={e => setFormData(prev => ({
                     ...prev,
@@ -422,10 +423,11 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 />
               </FormControl>
 
-              <FormControl flex={1}>
+              <FormControl flex={1} marginTop={0}>
                 <FormLabel fontSize="small" fontWeight="bold">Street Number</FormLabel>
                 <Input
                   type="text"
+                  h="40px" // ✅ Ensures same height
                   value={formData.location.number}
                   onChange={e => setFormData(prev => ({
                     ...prev,
@@ -436,11 +438,12 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
             </HStack>
 
             {/* Zip Code & City in One Row */}
-            <HStack spaceY={4} w="100%" marginTop={4}>
-              <FormControl flex={1}>
+            <HStack spaceY={4} w="100%" alignItems="center">
+              <FormControl flex={2} marginTop={0}>
                 <FormLabel fontSize="small" fontWeight="bold">Zip Code</FormLabel>
                 <Input
                   type="text"
+                  h="40px" // ✅ Ensures same height
                   value={formData.location.postalCode}
                   onChange={e => setFormData(prev => ({
                     ...prev,
@@ -449,10 +452,11 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 />
               </FormControl>
 
-              <FormControl flex={2}>
+              <FormControl flex={2} marginTop={0}>
                 <FormLabel fontSize="small" fontWeight="bold">City</FormLabel>
                 <Input
                   type="text"
+                  h="40px" // ✅ Ensures same height
                   value={formData.location.city}
                   onChange={e => setFormData(prev => ({
                     ...prev,
@@ -535,10 +539,10 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
 
             </Text>
 
-            <Divider marginY={4} />
+            <Divider marginY={1} />
 
             {/* Chosen Working Hours */}
-            <Stack spaceY={2}>
+            <Stack spaceY={0}>
               {Object.keys(formData.workingHours).map((day) => {
                 const dayKey = day as keyof ServiceFormData['workingHours']; // ✅ Explicitly cast `day`
 
@@ -561,44 +565,46 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               })}
             </Stack>
 
-            <Divider marginY={4} />
+            <Divider marginY={1} />
 
-            <Text fontSize="sm">
+            <Stack spaceY={0}>
+              <Text fontSize="sm">
 
-              {formData.location.street }
-              {' '}
-              {formData.location.number }
-            </Text>
+                {formData.location.street }
+                {' '}
+                {formData.location.number }
+              </Text>
 
-            <Text fontSize="sm">
-              {formData.location.postalCode }
-              {' '}
-              {formData.location.city }
+              <Text fontSize="sm">
+                {formData.location.postalCode }
+                {' '}
+                {formData.location.city }
 
-            </Text>
+              </Text>
 
-            <Text fontSize="sm">
+              <Text fontSize="sm">
 
-              <Link
-                href={`tel: ${user.privateMetadata.phone as string}`}
-                className="text-blue-700 hover:border-b hover:border-blue-700"
+                <Link
+                  href={`tel: ${user.privateMetadata.phone as string}`}
+                  className="text-blue-700 hover:border-b hover:border-blue-700"
 
-              >
-                {user.privateMetadata.phone as string }
-              </Link>
-            </Text>
+                >
+                  {user.privateMetadata.phone as string }
+                </Link>
+              </Text>
 
-            <Text fontSize="sm">
+              <Text fontSize="sm">
 
-              <Link
-                href={formData.calendly}
-                className="text-blue-700 hover:border-b hover:border-blue-700"
-                target="_blank"
-              >
-                { formData.calendly }
-              </Link>
+                <Link
+                  href={formData.calendly}
+                  className="text-blue-700 hover:border-b hover:border-blue-700"
+                  target="_blank"
+                >
+                  { formData.calendly }
+                </Link>
 
-            </Text>
+              </Text>
+            </Stack>
 
             <Flex
               justify="space-between"
