@@ -1,6 +1,7 @@
+import { currentUser } from '@clerk/nextjs/server';
 import { getTranslations } from 'next-intl/server';
 
-import { Hello } from '@/components/Hello';
+import Dashboard from './Dashboard';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
   const t = await getTranslations({
@@ -13,10 +14,12 @@ export async function generateMetadata(props: { params: { locale: string } }) {
   };
 }
 
-const Dashboard = () => (
-  <div className="[&_p]:my-6">
-    <Hello />
-  </div>
-);
+// This is a server-side page, rendering ProfilePage component
+export default async function DashboardServer() {
+  const user = await currentUser();
+  if (!user) {
+    throw new Error('User not found');
+  }
 
-export default Dashboard;
+  return <Dashboard />;
+}

@@ -1,0 +1,187 @@
+{
+  "RootLayout": {
+    "services_link": "Services",
+    "history_link": "Verlauf",
+    "requests_link": "Anfragen",
+    "counter_link": "Counter",
+    "portfolio_link": "Portfolio",
+    "sign_in_link": "Sign in",
+    "sign_up_link": "Sign up",
+    "currency": "CHF",
+    "welcome_link": "Welcome",
+    "dashboard_link": "Dashboard",
+    "user_profile_link": "Profil",
+    "sign_out": "Sign out",
+    "days": {
+      "monday": "Montag",
+      "tuesday": "Dienstag",
+      "wednesday": "Mittwoch",
+      "thursday": "Donnerstag",
+      "friday": "Freitag",
+      "saturday": "Samstag",
+      "sunday": "Sonntag"
+    }
+  },
+  "Header": {
+    "description": "Care2You powered by IAHA "
+  },
+  "Footer": {
+    "made_with": "entwickelt von <author></author>.",
+    "copyright": "Care2You powered by IAHA - International Asscociation for Healthy Aging"
+  },
+  "Error": {
+    "title": "Ohh Nein",
+    "description": "Wir haben gerade Schwierigkeiten dir den Inhalt zu zeigen"
+  },
+  "NotFound": {
+    "title": "Uh-oh!",
+    "description": "Wir können die Seite nicht finden"
+  },
+  "Index": {
+    "meta_title": "Care2You ",
+    "meta_description": "Die Care2you AG ist ein Beratungs- und Serviceunternehmen mit Sitz in Zürich. Für unsere Kunden planen, entwickeln und bieten wir digitale Ausbildungs- und Koordinationslösungen im Gesundheitswesen an.",
+    "sponsors_title": "Sponsoren"
+  },
+  "Counter": {
+    "meta_title": "Zähler",
+    "meta_description": "Ein Beispiel für eine Datenbankoperation",
+    "loading_counter": "Zähler wird geladen...",
+    "error_reporting_powered_by": "Fehlerbericht unterstützt von"
+  },
+  "CounterForm": {
+    "presentation": "Der Zähler wird in der Datenbank gespeichert und um den angegebenen Wert erhöht.",
+    "label_increment": "Erhöhen um",
+    "button_increment": "Erhöhen"
+  },
+  "CurrentCount": {
+    "count": "Zählerstand: {count}"
+  },
+  "About": {
+    "meta_title": "Über uns",
+    "meta_description": "Beschreibung der Über-uns-Seite",
+    "about_paragraph": "Willkommen auf unserer Über-uns-Seite! Wir sind ein Team von engagierten Personen, die großartige Software erstellen möchten.",
+    "translation_powered_by": "Übersetzung unterstützt von"
+  },
+  "Portfolio": {
+    "meta_title": "Portfolio",
+    "meta_description": "Willkommen auf meiner Portfolio-Seite!",
+    "presentation": "Willkommen auf meiner Portfolio-Seite! Hier findest du eine sorgfältig kuratierte Sammlung meiner Arbeiten und Erfolge. Mit diesem Portfolio möchte ich meine Expertise, Kreativität und den Mehrwert präsentieren, den ich zu deinen Projekten beitragen kann.",
+    "portfolio_name": "Portfolio {name}",
+    "error_reporting_powered_by": "Fehlerbericht unterstützt von",
+    "coverage_powered_by": "Codeabdeckung unterstützt von"
+  },
+  "PortfolioSlug": {
+    "meta_title": "Portfolio {slug}",
+    "meta_description": "Beschreibung des Portfolios {slug}",
+    "header": "Portfolio {slug}",
+    "content": "Erstellung einer Reihe von Werbematerialien und Branding-Elementen für eine Firmenveranstaltung. Entwicklung eines visuell einheitlichen Themas, das ein Logo, Poster, Banner und digitale Assets umfasst. Integration der Markenidentität des Kunden mit einem zeitgemäßen und innovativen Ansatz. Positive Resonanz von den Veranstaltungsteilnehmern, was zu einer erfolgreichen Veranstaltung mit erhöhter Teilnehmerbindung und gesteigerter Markenbekanntheit führte.",
+    "log_management_powered_by": "Log-Management unterstützt von"
+  },
+  "SignIn": {
+    "meta_title": "Anmelden",
+    "meta_description": "Melde dich nahtlos bei deinem Konto an mit unserem benutzerfreundlichen Anmeldeprozess."
+  },
+  "SignUp": {
+    "meta_title": "Registrieren",
+    "meta_description": "Erstelle mühelos ein Konto mit unserem intuitiven Registrierungsprozess."
+  },
+  "Dashboard": {
+    "meta_title": "Dashboard",
+    "hello_message": "Hallo {email}!",
+    "request_title": "Service Anfragen"
+  },
+  "Welcome": {
+    "meta_title": "Grüezi {username}",
+    "hello_message_client": "Welche Art von Dienstleistung benötigen Sie heute?",
+    "hello_message_service": "Welche Art von Dienstleistung möchten Sie anbieten?",
+    "wellcome_message": "Willkommen zurück!",
+    "new_care": "Neue Pflege",
+    "new_service": "Neuer Service",
+    "search_new_service": "suche nach neuer Serviceleistung",
+    "search_new_care": "suche nach neuer Pflegeleistung",
+    "new_service_form_title": "Wählen Sie Ihre Dienstleistung aus",
+    "new_care_form_title": "Wählen Sie Ihre Pflegeleistung aus",
+    "slider_label_default": "direkte umgebung",
+    "slider_label_active": "max. {value}km entfernt",
+    "choose_a_date": "Bitte wählen Sie ein Datum",
+    "single_view": "Einzelansicht",
+    "add_service": "Service anbieten"
+
+  },
+  "UserProfile": {
+    "meta_title": "Benutzerprofil"
+  },
+
+  "OnBoarding": {
+    "meta_title": "Onboarding",
+    "greetings": "Hallo, Bitte vervollständigen Sie ihr Benutzerprofil",
+    "client_instructions_title": "Willkommen bei Care2You",
+    "checkbox_text": "Ich stimme den <link>Nutzungsbedingungen</link> zu.",
+    "submit_button": "bestätigen"
+  },
+
+  "Buttons": {
+    "confirm": "bestätigen",
+    "read_more": "mehr",
+    "go_back": "zurück",
+    "details": "Details",
+    "filter_by_status": "filter"
+  },
+
+  "States": {
+    "all": "Alle",
+    "accepted": "Angenommen",
+    "rejected": "Abgelehnt"
+  },
+
+  "Forms": {
+    "DefaultForm": {
+      "Errors": {
+        "empty_fields": "Bitte füllen Sie alle Felder aus",
+        "wrong_role": "Bitte melden Sie sich beim Support",
+        "wrong_email": "Bitte überprüfen Sie Ihre Emailadresse",
+        "wrong_mobile": "Bitte überprüfen Sie Ihre Schweizer-Telefonnummer"
+      },
+      "Labels": {
+        "choose_role": "Rollenwahl",
+        "salutation": "Anrede",
+        "salutation_list": { "masculin": "Herr", "feminin": "Frau" },
+        "first_name": "Vorname",
+        "last_name": "Nachname",
+        "email": "E-Mail Adresse",
+        "mobile": "Mobilnummer",
+        "submit": "weiter",
+        "choose_gender": " --- bitte auswählen ---"
+      }
+    },
+    "AddServiceForm": {
+      "Labels": {
+        "workingHours": "Arbeitsstunden",
+        "priceType": "Preisart",
+        "calLink": "Kalenderlink",
+        "service": "Geben Sie dem Service einen Titel",
+        "description": "Beschreiben Sie den Service",
+        "fixprice": "Fixpreis",
+        "hourlyprice": "Stundensatz",
+        "price": "Service Preis"
+      },
+      "Errors": {
+        "noImage": "Bitte wählen Sie ein Bild aus",
+        "workinghours": "Bitte wähle mindestens einen Arbeitstag aus.",
+        "calLink": "Bitte geben Sie einen Kalender an.",
+        "general": "Bitte füllen Sie alle Felder aus",
+        "price": "Der Preis muss höher als 10.00 sein"
+
+      },
+      "Buttons": {
+        "next": "weiter",
+        "back": "zurück",
+        "submit": "Inserat veröffentlichen"
+      },
+      "Info": {
+        "cost": "Dieses Inserat kostet 1 Credit",
+        "recharge_info": "Sie können Ihre Credits jederzeit aufladen!"
+      }
+    }
+  }
+}

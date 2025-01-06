@@ -26,6 +26,10 @@ export default withSentryConfig(
       reactStrictMode: true,
       experimental: {
         serverComponentsExternalPackages: ['@electric-sql/pglite'],
+        optimizePackageImports: ['@chakra-ui/react'],
+      },
+      images: {
+        domains: ['img.clerk.com'],
       },
     }),
   ),
@@ -66,4 +70,5 @@ export default withSentryConfig(
     // Disable Sentry telemetry
     telemetry: false,
   },
+
 );

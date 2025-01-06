@@ -5,8 +5,16 @@ import { z } from 'zod';
 export const Env = createEnv({
   server: {
     CLERK_SECRET_KEY: z.string().min(1),
+    CLERK_BACKEND_BASE: z.string().min(1), // Add this line
     DATABASE_URL: z.string().optional(),
     LOGTAIL_SOURCE_TOKEN: z.string().optional(),
+
+    // 🟢 Add missing Bunny variables here!
+    BUNNY_API: z.string().min(1),
+    BUNNY_READONLY: z.string().optional(),
+    BUNNY_USERNAME: z.string().min(1),
+    BUNNY_HOST: z.string().min(1),
+    BUNNY_ZONE: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().optional(),
@@ -18,7 +26,13 @@ export const Env = createEnv({
   },
   // You need to destructure all the keys manually
   runtimeEnv: {
+    BUNNY_API: process.env.BUNNY_API,
+    BUNNY_READONLY: process.env.BUNNY_READONLY,
+    BUNNY_USERNAME: process.env.BUNNY_USERNAME,
+    BUNNY_HOST: process.env.BUNNY_HOST,
+    BUNNY_ZONE: process.env.BUNNY_ZONE,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    CLERK_BACKEND_BASE: process.env.CLERK_BACKEND_BASE, // Add this line
     DATABASE_URL: process.env.DATABASE_URL,
     LOGTAIL_SOURCE_TOKEN: process.env.LOGTAIL_SOURCE_TOKEN,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
@@ -26,5 +40,6 @@ export const Env = createEnv({
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL,
     NODE_ENV: process.env.NODE_ENV,
+
   },
 });

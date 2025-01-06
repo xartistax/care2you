@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { userEvent, within } from '@storybook/test';
 import { NextIntlClientProvider } from 'next-intl';
 
-import messages from '@/locales/en.json';
+import MainNavigation from '@/components/navigation/main/Navigation';
+import messages from '@/locales/de.json';
 
 import { BaseTemplate } from './BaseTemplate';
 
@@ -27,11 +28,11 @@ type Story = StoryObj<typeof meta>;
 
 export const BaseWithReactComponent = {
   args: {
-    children: <div>Children node</div>,
-    leftNav: (
+    locale: 'en', // ✅ Ensure the locale is provided
+    children: (
       <>
-        <li>Link 1</li>
-        <li>Link 2</li>
+        <MainNavigation />
+        <div>Children node</div>
       </>
     ),
   },
@@ -39,24 +40,23 @@ export const BaseWithReactComponent = {
 
 export const BaseWithString = {
   args: {
-    children: 'String',
-    leftNav: (
+    locale: 'de', // ✅ Ensure the locale is provided
+    children: (
       <>
-        <li>Link 1</li>
-        <li>Link 2</li>
+        <MainNavigation />
+        'String'
       </>
     ),
   },
 } satisfies Story;
 
-// More on interaction testing: https://storybook.js.org/docs/7.0/react/writing-tests/interaction-testing
 export const BaseWithHomeLink: Story = {
   args: {
-    children: <div>Children node</div>,
-    leftNav: (
+    locale: 'en', // ✅ Ensure the locale is provided
+    children: (
       <>
-        <li>Link 1</li>
-        <li>Link 2</li>
+        <MainNavigation />
+        <div>Children node</div>
       </>
     ),
   },

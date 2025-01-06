@@ -1,12 +1,13 @@
-import { UserProfile } from '@clerk/nextjs';
+// pages/profile/[locale]/index.tsx (or wherever the path is)
+
 import { getTranslations } from 'next-intl/server';
 
-import { getI18nPath } from '@/utils/Helpers';
+import ProfilePage from './ProfilePage';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
   const t = await getTranslations({
     locale: props.params.locale,
-    namespace: 'UserProfile',
+    namespace: 'Dashboard',
   });
 
   return {
@@ -14,12 +15,7 @@ export async function generateMetadata(props: { params: { locale: string } }) {
   };
 }
 
-const UserProfilePage = (props: { params: { locale: string } }) => (
-  <div className="my-6 -ml-16">
-    <UserProfile
-      path={getI18nPath('/dashboard/user-profile', props.params.locale)}
-    />
-  </div>
-);
-
-export default UserProfilePage;
+// This is a server-side page, rendering ProfilePage component
+export default async function ProfilePageServer() {
+  return <ProfilePage />;
+}

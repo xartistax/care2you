@@ -1,0 +1,131 @@
+'use client';
+
+import React, { createContext, useContext, useMemo, useState } from 'react';
+
+import type { OnBoardingClientUser } from '@/utils/Types';
+
+export type OnboardingState = {
+  step: number;
+  data: OnBoardingClientUser ;
+};
+
+type OnboardingContextProps = {
+  formState: OnboardingState;
+  setFormState: React.Dispatch<React.SetStateAction<OnboardingState>>;
+  nextStep: () => void;
+  prevStep: () => void;
+  showAlert: boolean;
+  setShowAlert: React.Dispatch<React.SetStateAction<boolean>>;
+  alertMessage: string;
+  setAlertMessage: React.Dispatch<React.SetStateAction<string>>;
+  isChecked: boolean;
+  setIsChecked: React.Dispatch<React.SetStateAction<boolean>>;
+  pageVariants: {
+    initial: object;
+    animate: object;
+    exit: object;
+  };
+  animationDirection: string;
+  locale: string;
+};
+
+const OnboardingContext = createContext<OnboardingContextProps | undefined>(undefined);
+
+export const OnboardingProvider: React.FC<{ children: React.ReactNode; initialState: OnboardingState; locale: string }> = ({ children, initialState, locale }) => {
+  const [formState, setFormState] = useState<OnboardingState>({
+    step: 1,
+    data: {
+      id: initialState.data.id,
+      firstName: initialState.data.firstName,
+      lastName: initialState.data.lastName,
+      email: initialState.data.email,
+      privateMetadata: {
+        phone: initialState.data.privateMetadata.phone,
+        gender: initialState.data.privateMetadata.gender,
+        role: initialState.data.privateMetadata.role,
+        compilance: initialState.data.privateMetadata.compilance,
+        companyTitle: initialState.data.privateMetadata.companyTitle,
+        companyDescription: initialState.data.privateMetadata.companyDescription,
+        companyCategory: initialState.data.privateMetadata.companyCategory,
+        serviceCategory: initialState.data.privateMetadata.serviceCategory,
+        uidst: initialState.data.privateMetadata.uidst,
+        credits: initialState.data.privateMetadata.credits,
+      },
+    },
+  });
+
+  const [animationDirection, setAnimationDirection] = useState<'left' | 'right'>('left');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [isChecked, setIsChecked] = useState(false);
+
+  type PageVariants = {
+    initial: object;
+    animate: object;
+    exit: object;
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const pageVariants: PageVariants = {
+    initial: {
+      opacity: 0,
+      x: '-100vw',
+    },
+    animate: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+    exit: {
+      opacity: 0,
+      x: '100vw',
+      transition: {
+        duration: 0.5,
+      },
+    },
+  };
+
+  const nextStep = () => {
+    setAnimationDirection('left'); // Neue Seite kommt von rechts (Standardrichtung)
+    setFormState(prev => ({ ...prev, step: prev.step + 1 }));
+  };
+
+  const prevStep = () => {
+    setAnimationDirection('right'); // Alte Seite kommt von links
+    setFormState(prev => ({ ...prev, step: Math.max(prev.step - 1, 1) }));
+  };
+
+  const value = useMemo(
+    () => ({
+      formState,
+      setFormState,
+      showAlert,
+      setShowAlert,
+      alertMessage,
+      setAlertMessage,
+      isChecked,
+      setIsChecked,
+      nextStep,
+      prevStep,
+      pageVariants,
+      animationDirection, // Neue Variable
+      setAnimationDirection, // Setter-Funktion für Richtung
+      locale,
+    }),
+    [formState, showAlert, alertMessage, isChecked, pageVariants, animationDirection, locale],
+  );
+
+  return <OnboardingContext.Provider value={value}>{children}</OnboardingContext.Provider>;
+};
+
+export const useOnboarding = () => {
+  const context = useContext(OnboardingContext);
+  if (!context) {
+    throw new Error('useOnboarding must be used within an OnboardingProvider');
+  }
+  return context;
+};
+
+export default OnboardingContext;

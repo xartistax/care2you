@@ -1,18 +1,22 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import type { NextFetchEvent, NextRequest } from 'next/server';
+import { type NextFetchEvent, type NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 
-import { AppConfig } from './utils/AppConfig';
+import { routing } from './libs/i18nNavigation';
+import { chekOnboarding, getBaseUrl, getI18nPath } from './utils/Helpers';
 
-const intlMiddleware = createMiddleware({
-  locales: AppConfig.locales,
-  localePrefix: AppConfig.localePrefix,
-  defaultLocale: AppConfig.defaultLocale,
-});
+const intlMiddleware = createMiddleware(routing);
 
 const isProtectedRoute = createRouteMatcher([
-  '/dashboard(.*)',
-  '/:locale/dashboard(.*)',
+  getI18nPath('/dashboard(.*)', ':locale'),
+  getI18nPath('/welcome(.*)', ':locale'),
+]);
+
+const isAuthPage = createRouteMatcher([
+
+  getI18nPath('/onboarding(.*)', ':locale'),
+  getI18nPath('/sign-in(.*)', ':locale'),
+  getI18nPath('/sign-up(.*)', ':locale'),
 ]);
 
 export default function middleware(
@@ -21,19 +25,29 @@ export default function middleware(
 ) {
   // Run Clerk middleware only when it's necessary
   if (
-    request.nextUrl.pathname.includes('/sign-in')
-    || request.nextUrl.pathname.includes('/sign-up')
-    || isProtectedRoute(request)
+    isAuthPage(request) || isProtectedRoute(request)
   ) {
-    return clerkMiddleware((auth, req) => {
+    return clerkMiddleware(async (auth, req) => {
       if (isProtectedRoute(req)) {
-        const locale
-          = req.nextUrl.pathname.match(/(\/.*)\/dashboard/)?.at(1) ?? '';
+        const locale = req.nextUrl.pathname.match(/^\/([a-z]{2})(?=\/)/)?.[1] ?? '';
+        const { userId } = auth();
+        if (userId) {
+          /// Check if user has a role if so is it a valid Role? TRUE/FALSE
+          /// IF False -> redirect to onboarding
 
-        const signInUrl = new URL(`${locale}/sign-in`, req.url);
+          const checkOnboarding = await chekOnboarding(locale, userId);
+          // const checkCompilance = await chekCompilance(locale, userId);
+
+          if (!checkOnboarding) {
+            return NextResponse.redirect(getI18nPath(`${getBaseUrl()}/onboarding`, locale));
+          }
+        }
+
+        // return NextResponse.redirect(getI18nPath(`${getBaseUrl()}/onboarding`, locale));
+
+        const signInUrl = new URL(`/sign-in`, req.url);
 
         auth().protect({
-          // `unauthenticatedUrl` is needed to avoid error: "Unable to find `next-intl` locale because the middleware didn't run on this request"
           unauthenticatedUrl: signInUrl.toString(),
         });
       }
@@ -46,5 +60,10 @@ export default function middleware(
 }
 
 export const config = {
-  matcher: ['/((?!.+\\.[\\w]+$|_next|monitoring).*)', '/', '/(api|trpc)(.*)'], // Also exclude tunnelRoute used in Sentry from the matcher
+  matcher: [
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|monitoring|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
+  ],
 };

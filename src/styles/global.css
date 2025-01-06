@@ -1,3 +1,33 @@
-@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sliderLabelWrapper label {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.react-timerange-picker__inputGroup {
+  min-width: unset !important;
+}
+
+.react-timerange-picker {
+  display: contents !important;
+}
+
+/* Default TimeRangePicker Wrapper */
+.react-timerange-picker__wrapper {
+  border: 1px solid #cbd5e0; /* Default border color */
+  border-radius: 0.25rem;
+  padding: 5px;
+  background-color: white;
+  padding: 8px 32px;
+  font-size: 14px;
+}
+
+/* Disabled TimeRangePicker Wrapper */
+.time-picker-disabled .react-timerange-picker__wrapper {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border: 1px solid #e4e4e7; /* Default border color */
+}
