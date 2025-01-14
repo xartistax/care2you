@@ -21,12 +21,6 @@ const Step1 = () => {
       return;
     }
 
-    if (formState.data.privateMetadata.role === 'care') {
-      setAlertMessage('Bitte melden Sie sich beim Support');
-      setShowAlert(true);
-      return;
-    }
-
     if (!EmailValidator.validate(formState.data.email)) {
       setAlertMessage('Invalid email address.');
       setShowAlert(true);

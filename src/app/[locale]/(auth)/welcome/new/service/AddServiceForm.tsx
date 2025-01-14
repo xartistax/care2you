@@ -4,19 +4,17 @@ import '@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Divider } from '@chakra-ui/layout';
 import { Box, Button, Flex, HStack, Image, Input, Link, Spinner, Stack, Text, Textarea } from '@chakra-ui/react';
-import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
+import type { z } from 'zod';
 
-import ServiceSuccess from '@/components/ServiceSuccess';
 import TopUpCredits from '@/components/TopUpCredits';
 import { Alert } from '@/components/ui/alert';
-import { Radio, RadioGroup } from '@/components/ui/radio';
-import { Switch } from '@/components/ui/switch';
 import { Tag } from '@/components/ui/tag';
 import { Toaster, toaster } from '@/components/ui/toaster';
-import { decreaseCreditByOne, saveNewService, uploadImageToBunny } from '@/utils/Helpers';
-import type { OnBoardingClientUser, ServiceFormData } from '@/utils/Types';
+import { decreaseCreditByOne, uploadImageToBunny } from '@/utils/Helpers';
+import type { OnBoardingClientUser } from '@/utils/Types';
+import type { serviceSchema } from '@/validations/serviceValidation';
 
 export default function AddServiceForm({ user }: { user: OnBoardingClientUser }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,10 +25,12 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
 
   const t = useTranslations();
 
+  type ServiceFormData = z.infer<typeof serviceSchema>;
+
   // Initialize form data with translations
   const [formData, setFormData] = useState<ServiceFormData>({
     id: '',
-    serviceImage: '/service_placeholder.jpg',
+    image: '/service_placeholder.jpg',
     fileToUpload: null as File | null,
     workingHours: {
       Monday: { enabled: false, hours: ['08:00', '16:00'] },
@@ -41,8 +41,8 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
       Saturday: { enabled: false, hours: ['08:00', '16:00'] },
       Sunday: { enabled: false, hours: ['08:00', '16:00'] },
     },
-    serviceTitle: '',
-    serviceDescription: '',
+    title: '',
+    description: '',
     price: 0.00,
     priceType: 'fix',
     formattedPrice: '',
@@ -53,6 +53,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
       city: '',
       postalCode: '',
     },
+    userId: '',
   });
 
   // Preserve state on re-render
@@ -73,31 +74,31 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
     }
   };
 
-  const handleToggle = (day: keyof ServiceFormData['workingHours']) => {
-    setFormData(prev => ({
-      ...prev,
-      workingHours: {
-        ...prev.workingHours,
-        [day]: {
-          enabled: !prev.workingHours[day].enabled,
-          hours: prev.workingHours[day].hours || ['08:00', '16:00'],
-        },
-      },
-    }));
-  };
+  // const handleToggle = (day: keyof ServiceFormData['workingHours']) => {
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     workingHours: {
+  //       ...prev.workingHours,
+  //       [day]: {
+  //         enabled: !prev.workingHours[day]?.enabled, // Use optional chaining here
+  //         hours: prev.workingHours[day]?.hours || ['08:00', '16:00'], // Ensure fallback if `hours` is undefined
+  //       },
+  //     },
+  //   }));
+  // };
 
-  const handleTimeChange = (day: keyof ServiceFormData['workingHours'], value: [string, string]) => {
-    setFormData(prev => ({
-      ...prev,
-      workingHours: {
-        ...prev.workingHours,
-        [day]: {
-          ...prev.workingHours[day],
-          hours: value,
-        },
-      },
-    }));
-  };
+  // const handleTimeChange = (day: keyof ServiceFormData['workingHours'], value: [string, string]) => {
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     workingHours: {
+  //       ...prev.workingHours,
+  //       [day]: {
+  //         ...prev.workingHours[day],
+  //         hours: value,
+  //       },
+  //     },
+  //   }));
+  // };
 
   const handleNextStep = () => {
     if (step === 1) {
@@ -108,7 +109,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
           title: t('Forms.AddServiceForm.Errors.workinghours'),
         });
         return;
-      } else if (formData.serviceImage === '/service_placeholder.jpg') {
+      } else if (formData.image === '/service_placeholder.jpg') {
         toaster.create({
           type: 'error',
           title: t('Forms.AddServiceForm.Errors.noImage'),
@@ -122,7 +123,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
         return;
       }
     } else if (step === 2) {
-      if (!formData.serviceTitle || !formData.serviceDescription || !formData.priceType) {
+      if (!formData.title || !formData.description || !formData.priceType) {
         toaster.create({
           type: 'error',
           title: t('Forms.AddServiceForm.Errors.general'),
@@ -152,7 +153,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
       setFormData(updatedFormData);
 
       /// 2. Save the data to DB
-      await saveNewService(updatedFormData, user.id);
+      // await saveNewService(updatedFormData, user.id);
 
       /// 3. Decrease credits by one
       await decreaseCreditByOne(user.id);
@@ -201,7 +202,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
   if (success) {
     return (
       <HStack justifyContent="center" alignItems="center" height="70vh">
-        <ServiceSuccess formData={formData} />
+        {/* <ServiceSuccess formData={formData} /> */}
       </HStack>
     );
   }
@@ -238,7 +239,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 marginBottom={8}
               >
                 <Image
-                  src={formData.serviceImage}
+                  src={formData.image}
                   alt="Uploaded"
                   objectFit="cover"
                   width="100%"
@@ -260,47 +261,12 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               </Box>
             </FormControl>
 
-            {/* Step 1: Working Hours */}
-            <FormControl>
-              <FormLabel fontSize="sm" fontWeight="bold">
-                {t('Forms.AddServiceForm.Labels.workingHours')}
-              </FormLabel>
-              {Object.keys(formData.workingHours).map((day) => {
-                const dayKey = day as keyof ServiceFormData['workingHours']; // ✅ Explicitly cast `day`
-
-                return (
-                  <HStack key={`${day}-${formData.workingHours[dayKey].enabled}`} w="100%" justify="space-between" paddingBottom={4}>
-                    <HStack w="100%" opacity={1}>
-                      <Switch
-                        defaultChecked={formData.workingHours[dayKey].enabled} // ✅ Use `dayKey`
-                        onChange={() => handleToggle(dayKey)} // ✅ Use `dayKey`
-                        colorScheme="blue"
-                      />
-                      <Text fontSize="sm">{day}</Text>
-                    </HStack>
-
-                    {/* Time Range Picker */}
-                    <TimeRangePicker
-                      value={(formData.workingHours[dayKey].hours as [string, string]) ?? ['08:00', '16:00']} // ✅ Type assertion
-                      onChange={(value) => {
-                        if (Array.isArray(value) && value.length === 2 && typeof value[0] === 'string' && typeof value[1] === 'string') {
-                          handleTimeChange(dayKey, value as [string, string]); // ✅ Ensure it's a valid tuple
-                        } else {
-                          console.warn('Invalid time range value:', value);
-                          handleTimeChange(dayKey, ['08:00', '16:00']); // ✅ Fallback to default
-                        }
-                      }}
-                      disableClock
-                      format="HH:mm"
-                      clearIcon={null}
-                      disabled={!formData.workingHours[dayKey].enabled}
-                      className={!formData.workingHours[dayKey].enabled ? 'time-picker-disabled' : ''}
-                    />
-
-                  </HStack>
-                );
-              })}
-            </FormControl>
+            {/* <WorkingHoursForm
+              workingHours={formData.workingHours}
+              onToggle={handleToggle}
+              onTimeChange={handleTimeChange}
+              label="Erreichbarkeit"
+            /> */}
 
             <FormControl paddingBottom={8}>
               <FormLabel fontSize="small" fontWeight="bold">{t('Forms.AddServiceForm.Labels.calLink')}</FormLabel>
@@ -328,7 +294,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               <Input
                 type="text"
                 placeholder={t('Forms.AddServiceForm.Labels.service')}
-                value={formData.serviceTitle}
+                value={formData.title}
                 onChange={e => setFormData(prev => ({ ...prev, serviceTitle: e.target.value }))}
               />
             </FormControl>
@@ -342,7 +308,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               <Textarea
                 rows={10}
                 placeholder={t('Forms.AddServiceForm.Labels.description')}
-                value={formData.serviceDescription}
+                value={formData.description}
                 onChange={e => setFormData(prev => ({ ...prev, serviceDescription: e.target.value }))}
               />
             </FormControl>
@@ -357,7 +323,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 {' '}
               </FormLabel>
 
-              <RadioGroup
+              {/* <RadioGroup
                 value={formData.priceType}
                 onChange={event =>
                   setFormData(prev => ({
@@ -376,7 +342,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                     {' '}
                   </Radio>
                 </HStack>
-              </RadioGroup>
+              </RadioGroup> */}
 
             </FormControl>
 
@@ -385,11 +351,11 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
             {/* Price Input (Changes Label Based on Selection) */}
             <FormControl paddingBottom={8}>
               <FormLabel fontSize="small" fontWeight="bold">
-                {formData.priceType === 'Fixpreis' ? t('Forms.AddServiceForm.Labels.fixprice') : t('Forms.AddServiceForm.Labels.hourlyprice')}
+                {formData.priceType === 'fix' ? t('Forms.AddServiceForm.Labels.fixprice') : t('Forms.AddServiceForm.Labels.hourlyprice')}
               </FormLabel>
               <Input
                 type="text"
-                placeholder={formData.priceType === 'Fixpreis' ? t('Forms.AddServiceForm.Labels.fixprice') : t('Forms.AddServiceForm.Labels.hourlyprice')}
+                placeholder={formData.priceType === 'fix' ? t('Forms.AddServiceForm.Labels.fixprice') : t('Forms.AddServiceForm.Labels.hourlyprice')}
                 value={formData.formattedPrice}
                 onChange={handlePriceChange}
               />
@@ -497,7 +463,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
 
             >
               <Image
-                src={formData.serviceImage}
+                src={formData.image}
                 alt="Uploaded"
                 objectFit="cover"
                 width="100%"
@@ -521,10 +487,10 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
             <Divider marginY={4} />
 
             <Text fontWeight="bold" fontSize="lg">
-              {formData.serviceTitle}
+              {formData.title}
             </Text>
             <Text fontSize="sm" marginBottom={4}>
-              {formData.serviceDescription}
+              {formData.description}
             </Text>
             <Text fontWeight="bold" fontSize="sm">
               {' CHF '}
@@ -532,7 +498,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               {' '}
               <Tag fontWeight="initial">
                 {
-                  (formData.priceType === 'Fixpreis') ? (t('Forms.AddServiceForm.Labels.fixprice')) : (t('Forms.AddServiceForm.Labels.hourlyprice'))
+                  (formData.priceType === 'fix') ? (t('Forms.AddServiceForm.Labels.fixprice')) : (t('Forms.AddServiceForm.Labels.hourlyprice'))
                 }
 
               </Tag>
@@ -542,8 +508,8 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
             <Divider marginY={1} />
 
             {/* Chosen Working Hours */}
-            <Stack spaceY={0}>
-              {Object.keys(formData.workingHours).map((day) => {
+            {/* <Stack spaceY={0}>
+               {Object.keys(formData.workingHours).map((day as any) => {
                 const dayKey = day as keyof ServiceFormData['workingHours']; // ✅ Explicitly cast `day`
 
                 return (
@@ -563,7 +529,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                   )
                 );
               })}
-            </Stack>
+            </Stack> */}
 
             <Divider marginY={1} />
 

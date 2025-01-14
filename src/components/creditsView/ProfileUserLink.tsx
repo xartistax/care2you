@@ -1,10 +1,13 @@
-import { Button } from '@chakra-ui/react';
+import { Button, Link } from '@chakra-ui/react';
 import { SignOutButton } from '@clerk/nextjs';
+import type { z } from 'zod';
 
-import type { OnBoardingClientUser } from '@/utils/Types'; // Import the correct type
+import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 
 import CoinIcon from '../header/CoinIcon';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../ui/menu';
+
+type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
 
 type ProfileUserLinkProps = {
   user: OnBoardingClientUser;
@@ -30,7 +33,12 @@ export default function ProfileUserLink({ user }: ProfileUserLinkProps) {
           </Button>
         </MenuTrigger>
         <MenuContent>
-          <MenuItem value="rename">Profil</MenuItem>
+          <MenuItem value="rename">
+            <Link href="/dashboard/user-profile">
+              Profil
+            </Link>
+
+          </MenuItem>
           <SignOutButton redirectUrl="/sign-in">
             <MenuItem
               value="logout"

@@ -12,7 +12,7 @@ export default function AuthLayout(props: {
   let signInUrl = '/sign-in';
   let signUpUrl = '/sign-up';
   let welcomeUrl = '/welcome';
-  let afterSignOutUrl = '/';
+  let afterSignOutUrl = signInUrl;
 
   if (props.params.locale !== AppConfig.defaultLocale) {
     signInUrl = `/${props.params.locale}${signInUrl}`;

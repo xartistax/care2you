@@ -9,7 +9,7 @@ import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useOnboarding } from '@/hooks/useOnboarding';
-import { constructOnboardingUser, getSalutation, updateUserData } from '@/utils/Helpers';
+import { constructOnboardingUser, getSalutation, updateUserDataService } from '@/utils/Helpers';
 
 const Step3Service = () => {
   const [isComplete, setIsComplete] = useState(false);
@@ -32,7 +32,7 @@ const Step3Service = () => {
 
     try {
       // Warte auf die Fertigstellung der Updates
-      const updateSuccess = await updateUserData(locale, user);
+      const updateSuccess = await updateUserDataService(locale, user);
 
       if (!updateSuccess) {
         throw new Error('Fehler beim Aktualisieren der Benutzerdaten');

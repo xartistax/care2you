@@ -1,10 +1,11 @@
 import { clerkClient } from '@clerk/nextjs/server';
 import { eq } from 'drizzle-orm';
 import { getTranslations } from 'next-intl/server';
+import type { z } from 'zod';
 
 import { db } from '@/libs/DB';
 import { servicesSchema } from '@/models/Schema';
-import type { ServiceFormData } from '@/utils/Types';
+import type { serviceSchema } from '@/validations/serviceValidation';
 
 import SingleListing from './SingleListing';
 
@@ -46,13 +47,16 @@ export default async function NewServiceServer({ params }: { params: { id: strin
   }
 
   // ✅ Construct full `ServiceFormData` object
+  type ServiceFormData = z.infer<typeof serviceSchema>;
+
   const formattedService: ServiceFormData = {
-    id: String(serviceData.id),
-    serviceTitle: serviceData.title ?? '',
-    serviceDescription: serviceData.description ?? '',
+    id: Number(serviceData.id),
+    userId: serviceData.userId,
+    title: serviceData.title ?? '',
+    description: serviceData.description ?? '',
     price: serviceData.price ?? 0,
     priceType: serviceData.priceType ?? 'fix',
-    serviceImage: serviceData.image || '/placeholder.jpeg',
+    image: serviceData.image || '/placeholder.jpeg',
     fileToUpload: null, // ✅ Ensure this is provided
     workingHours:
       serviceData.workingHours && typeof serviceData.workingHours === 'string'
@@ -66,17 +70,10 @@ export default async function NewServiceServer({ params }: { params: { id: strin
     calendly: serviceData.calendly ?? '', // ✅ Ensure it's a string
   };
 
-  // Validate userId before fetching the user
-  const userId = 'user_2rFfqj3vhZz9fbTw5OFuYwVhLHv';
-
-  if (!userId) {
-    throw new Error('User not found'); // ✅ Ensure we don’t fetch a null user
-  }
-
   // Fetch user details from Clerk
   let userJSON;
   try {
-    const user = await clerkClient.users.getUser(userId);
+    const user = await clerkClient.users.getUser(serviceData.userId);
     userJSON = JSON.parse(JSON.stringify(user));
   } catch (error) {
     throw new Error(`Failed to fetch user ${error}`); // ✅ Handle Clerk API errors properly

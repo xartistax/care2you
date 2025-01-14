@@ -2,9 +2,10 @@ import type { User } from '@clerk/nextjs/server';
 
 import type { OnboardingState } from '@/contexts/OnboardingContext';
 import { Env } from '@/libs/Env';
+import type { OnBoardingClientUser } from '@/validations/onBoardingValidation';
 
 import { AppConfig } from './AppConfig';
-import type { OnBoardingClientUser, ServiceFormData } from './Types';
+import type { ServiceFormData, WorkingHours } from './Types';
 
 export const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_APP_URL) {
@@ -123,9 +124,9 @@ export const updateFirstAndLastName = async (locale: string, user: OnBoardingCli
 };
 
 /// Update userdata
-export const updateUserData = async (locale: string, user: OnBoardingClientUser) => {
+export const updateUserDataService = async (locale: string, user: OnBoardingClientUser) => {
   try {
-    const response = await fetch(`/api/update-data`, {
+    const response = await fetch(`/api/update-data-service`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Setze den Header explizit
@@ -150,7 +151,39 @@ export const updateUserData = async (locale: string, user: OnBoardingClientUser)
     return true;
   } catch (error) {
     // Fehler bei Netzwerk oder Fetch
-    console.error('Error in updateUserData:', error);
+    console.error('Error in updateUserDataService:', error);
+    return false;
+  }
+};
+
+export const updateUserDataCare = async (locale: string, user: OnBoardingClientUser) => {
+  try {
+    const response = await fetch(`/api/update-data-care`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Setze den Header explizit
+      },
+      body: JSON.stringify({
+        user,
+        locale,
+      }),
+    });
+
+    // Prüfe den HTTP-Status der Antwort
+    if (!response.ok) {
+      const errorResponse = await response.text(); // Lese die Fehlermeldung aus der Antwort
+      console.error(`Failed to update user: ${response.status} - ${response.statusText}`);
+      console.error(`Response body: ${errorResponse}`);
+      return false;
+    }
+
+    // Parsen der JSON-Antwort
+    // const responseBody = await response.json();
+
+    return true;
+  } catch (error) {
+    // Fehler bei Netzwerk oder Fetch
+    console.error('Error in updateUserDataService:', error);
     return false;
   }
 };
@@ -256,7 +289,13 @@ export const constructOnboardingUser = (formState: OnboardingState): OnBoardingC
       companyCategory: formState.data.privateMetadata.companyCategory,
       serviceCategory: formState.data.privateMetadata.serviceCategory,
       uidst: formState.data.privateMetadata.uidst,
-      credits: undefined,
+      credits: formState.data.privateMetadata.credits,
+      expertise: formState.data.privateMetadata.expertise,
+      skill: formState.data.privateMetadata.skill,
+      languages: formState.data.privateMetadata.languages,
+      certificates: formState.data.privateMetadata.certificates,
+      workingHours: formState.data.privateMetadata.workingHours,
+
     },
   };
 };
@@ -279,6 +318,19 @@ export const constructUser = (user: User): OnBoardingClientUser => {
       serviceCategory: user.privateMetadata.serviceCategory,
       uidst: user.privateMetadata.uidst,
       credits: user.privateMetadata.credits,
+      expertise: user.privateMetadata.expertise,
+      skill: user.privateMetadata.skill as unknown[],
+      languages: user.privateMetadata.languages as unknown[],
+      certificates: user.privateMetadata.certificates as unknown[],
+      workingHours: user.privateMetadata.workingHours as {
+        Monday: WorkingHours;
+        Tuesday: WorkingHours;
+        Wednesday: WorkingHours;
+        Thursday: WorkingHours;
+        Friday: WorkingHours;
+        Saturday: WorkingHours;
+        Sunday: WorkingHours;
+      },
     },
   };
 };

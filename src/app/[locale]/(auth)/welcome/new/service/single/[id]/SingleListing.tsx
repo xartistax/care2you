@@ -15,10 +15,13 @@ import type { User } from '@clerk/nextjs/server';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
+import type { z } from 'zod';
 
 import { Tag } from '@/components/ui/tag';
 import { companyTypeRetriever } from '@/utils/Helpers';
-import type { ServiceFormData } from '@/utils/Types';
+import type { serviceSchema } from '@/validations/serviceValidation';
+
+type ServiceFormData = z.infer<typeof serviceSchema>;
 
 export default function SingleListing({ service, user }: { service: ServiceFormData; user: User }) {
   const [isVisible, setIsVisible] = useState(false);
@@ -45,11 +48,11 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
     setIsVisible(true);
   }, []);
 
-  if (!service.serviceImage) {
-    service.serviceImage = '/placeholder.jpeg';
-  } else if (!service.serviceImage.startsWith('http')) {
+  if (!service.image) {
+    service.image = '/placeholder.jpeg';
+  } else if (!service.image.startsWith('http')) {
     // Only prepend the base URL if it's not already a full URL
-    service.serviceImage = `https://iaha-pull-zone.b-cdn.net/${service.serviceImage}`;
+    service.image = `https://iaha-pull-zone.b-cdn.net/${service.image}`;
   }
 
   return (
@@ -67,8 +70,8 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
       {/* Image */}
       <Box mb="6">
         <ChakraImage
-          src={service.serviceImage}
-          alt={service.serviceTitle}
+          src={service.image}
+          alt={service.title}
           width="100%"
           height="auto"
           borderRadius="md"
@@ -80,7 +83,7 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
       <VStack align="start" spaceY={2}>
         {/* Title */}
         <Heading as="h1" size="lg">
-          {service.serviceTitle}
+          {service.title}
         </Heading>
 
         {/* Price */}
@@ -98,7 +101,7 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
 
         {/* Description */}
         <Text fontSize="sm" color="gray.600">
-          {service.serviceDescription}
+          {service.description}
         </Text>
 
         <VStack align="start" spaceY={0}>

@@ -22,13 +22,16 @@ export default async function NewServiceServer() {
     // Fetch services from Neon DB
     const services = await db.query.servicesSchema.findMany();
 
-    // Ensure `id` is a number & fix `workingHours`
+    // Log the raw data from the database
+
+    // Ensure `id` is a string and fix `workingHours`
     const formattedServices = services.map(service => ({
       ...service,
-      id: Number(service.id),
+      id: String(service.id),
+      name: service.title || 'Default Name', // Ensure name is a valid string
       workingHours:
         typeof service.workingHours === 'string'
-          ? JSON.parse(service.workingHours) // ✅ Convert if needed
+          ? JSON.parse(service.workingHours)
           : service.workingHours,
     }));
 
@@ -36,9 +39,7 @@ export default async function NewServiceServer() {
     const validatedServices = z.array(serviceSchema).parse(formattedServices);
 
     return (
-
       <Box
-
         bg="white"
         borderRadius="lg"
         maxWidth="800px"
@@ -46,10 +47,8 @@ export default async function NewServiceServer() {
         spaceY={8}
         p={8}
       >
-
         <ServiceList services={validatedServices} />
       </Box>
-
     );
   } catch (error) {
     console.error('❌ Validation Error:', error);

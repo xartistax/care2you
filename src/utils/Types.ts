@@ -15,10 +15,23 @@ export type OnBoardingClientUser = {
     serviceCategory: unknown;
     uidst: unknown;
     credits: unknown;
+    expertise: unknown;
+    skill: unknown[];
+    languages: unknown[];
+    certificates: unknown[];
+    workingHours: {
+      Monday: WorkingHours;
+      Tuesday: WorkingHours;
+      Wednesday: WorkingHours;
+      Thursday: WorkingHours;
+      Friday: WorkingHours;
+      Saturday: WorkingHours;
+      Sunday: WorkingHours;
+    };
   };
 };
 
-type WorkingHours = {
+export type WorkingHours = {
   enabled: boolean;
   hours: [string, string]; // Exactly two string elements for start & end time
 };
@@ -48,4 +61,22 @@ export type ServiceFormData = {
     city: string;
     postalCode: string;
   };
+};
+
+export const defaultWorkingHours: {
+  Monday: WorkingHours;
+  Tuesday: WorkingHours;
+  Wednesday: WorkingHours;
+  Thursday: WorkingHours;
+  Friday: WorkingHours;
+  Saturday: WorkingHours;
+  Sunday: WorkingHours;
+} = {
+  Monday: { enabled: false, hours: ['08:00', '16:00'] },
+  Tuesday: { enabled: false, hours: ['08:00', '16:00'] },
+  Wednesday: { enabled: false, hours: ['08:00', '16:00'] },
+  Thursday: { enabled: false, hours: ['08:00', '16:00'] },
+  Friday: { enabled: false, hours: ['08:00', '16:00'] },
+  Saturday: { enabled: false, hours: ['08:00', '16:00'] },
+  Sunday: { enabled: false, hours: ['08:00', '16:00'] },
 };

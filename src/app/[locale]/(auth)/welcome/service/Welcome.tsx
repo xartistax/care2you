@@ -14,11 +14,14 @@ import {
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
+import type { z } from 'zod';
 
 import { Avatar } from '@/components/ui/avatar';
 import { CardBody } from '@/components/ui/card';
 import { Tag } from '@/components/ui/tag';
-import type { OnBoardingClientUser } from '@/utils/Types';
+import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
+
+type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
 
 export default function WelcomeService({ user }: { user: OnBoardingClientUser },
 ) {

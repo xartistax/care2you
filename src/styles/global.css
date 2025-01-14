@@ -23,6 +23,11 @@
   background-color: white;
   padding: 8px 32px;
   font-size: 14px;
+  min-width: 50%;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* Disabled TimeRangePicker Wrapper */

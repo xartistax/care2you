@@ -10,12 +10,15 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import type { z } from 'zod';
 
 import { Avatar } from '@/components/ui/avatar';
-import type { OnBoardingClientUser } from '@/utils/Types';
+import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 
 import ProfileUserLink from '../creditsView/ProfileUserLink';
 import SiteLogo from '../Logo';
+
+type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
 
 type HeaderProps = {
   leftNav: React.ReactNode;

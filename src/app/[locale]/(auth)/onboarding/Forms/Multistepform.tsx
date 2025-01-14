@@ -5,6 +5,7 @@ import React from 'react';
 
 import { useOnboarding } from '@/contexts/OnboardingContext';
 
+import Step2Care from '../care/steps/Step2/page';
 import Step1 from '../client/steps/Step1/page';
 import Step2Client from '../client/steps/Step2/page';
 import Step2Service from '../service/steps/Step2/page';
@@ -22,6 +23,8 @@ export const MultiStepForm = () => {
           return <Step2Service />;
         } else if (formState.data.privateMetadata.role === 'client') {
           return <Step2Client />;
+        } else if (formState.data.privateMetadata.role === 'care') {
+          return <Step2Care />;
         } else {
           return;
         }

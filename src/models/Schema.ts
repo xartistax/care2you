@@ -1,21 +1,14 @@
-import { doublePrecision, jsonb, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
+import { doublePrecision, jsonb, pgEnum, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
 
-// This file defines the structure of your database tables using the Drizzle ORM.
-
-// To modify the database schema:
-// 1. Update this file with your desired changes.
-// 2. Generate a new migration by running: `npm run db:generate`
-
-// The generated migration file will reflect your schema changes.
-// The migration is automatically applied during the next database interaction,
-// so there's no need to run it manually or restart the Next.js server.
+// Define the enum type explicitly first
+export const PriceTypeEnum = pgEnum('priceTypeEnum', ['fix', 'hourly']);
 
 export const servicesSchema = pgTable('services', {
   id: serial('id').primaryKey(),
   title: text('title').notNull(), // Service title
   description: text('description').notNull(), // Detailed service description
   price: doublePrecision('price').notNull(), // Price of the service in cents (or adjust as needed)
-  priceType: text('priceType').notNull(),
+  priceType: PriceTypeEnum('priceType').notNull(), // Use the defined enum
   status: text('status').default('available').notNull(), // Status of the service (e.g., available, unavailable)
   userId: text('user_id').notNull(), // Foreign key to associate a service with a user
   image: text('image'),

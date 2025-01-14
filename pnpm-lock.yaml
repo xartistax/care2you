@@ -125,6 +125,9 @@ importers:
       react-icons:
         specifier: ^5.4.0
         version: 5.4.0(react@18.3.1)
+      react-iframe:
+        specifier: ^1.8.5
+        version: 1.8.5(react@18.3.1)
       react-lazy-load:
         specifier: ^4.0.1
         version: 4.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -9291,6 +9294,11 @@ packages:
     resolution: {integrity: sha512-7eltJxgVt7X64oHh6wSWNwwbKTCtMfK35hcjvJS0yxEAhPM8oUKdS3+kqaW1vicIltw+kR2unHaa12S9pPALoQ==}
     peerDependencies:
       react: '*'
+
+  react-iframe@1.8.5:
+    resolution: {integrity: sha512-F4cQJGs3ydaG6fJWfuz9yLwOU0Trzl6kttXuUG+vYwosH8enOOFxZWEDQCSbNVO8ayjfYZeqLxEvdvcsSy4GvA==}
+    peerDependencies:
+      react: '>=16.x.x'
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -21809,6 +21817,11 @@ snapshots:
 
   react-icons@5.4.0(react@18.3.1):
     dependencies:
+      react: 18.3.1
+
+  react-iframe@1.8.5(react@18.3.1):
+    dependencies:
+      object-assign: 4.1.1
       react: 18.3.1
 
   react-is@16.13.1: {}
