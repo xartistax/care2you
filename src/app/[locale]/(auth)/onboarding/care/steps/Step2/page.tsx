@@ -2,7 +2,7 @@
 
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Wrap } from '@chakra-ui/layout';
-import { Box, CheckboxGroup, createListCollection, Fieldset, HStack, Spinner, Stack, VStack } from '@chakra-ui/react';
+import { Box, CheckboxGroup, createListCollection, Fieldset, HStack, Input, Spinner, Stack, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import { HiXCircle } from 'react-icons/hi';
 
@@ -240,6 +240,47 @@ const Step2Care = () => {
 
       <Stack w="100%">
         {/* First Row */}
+
+        <Stack h={85} align="stretch" w="100%">
+          <FormControl flex="1">
+            <FormLabel fontSize="small" fontWeight="bold">
+              Geburtsdatum
+            </FormLabel>
+
+            <Input
+              type="text"
+              width="100%"
+              name="dob"
+              value=""
+              onChange={() => {
+                return 'ok';
+              }}
+              placeholder="01.01.1986"
+            />
+          </FormControl>
+
+        </Stack>
+
+        <Stack h={85} align="stretch" w="100%">
+          <FormControl flex="1">
+            <FormLabel fontSize="small" fontWeight="bold">
+              Geburtsdatum
+            </FormLabel>
+
+            <Input
+              type="text"
+              width="100%"
+              name="nationality"
+              value=""
+              onChange={() => {
+                return 'ok';
+              }}
+              placeholder="CH"
+            />
+          </FormControl>
+
+        </Stack>
+
         <VStack w="100%" h={85}>
 
           <FormControl flex="0.2" w="100%" h={85}>

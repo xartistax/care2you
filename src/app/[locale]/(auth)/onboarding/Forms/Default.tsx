@@ -166,6 +166,7 @@ export function OnBoardingFormDefault({
             name="phone"
             value={String(formState?.data.privateMetadata?.phone || '')}
             onChange={handleInputChange}
+            placeholder="078 888 88 88"
           />
         </FormControl>
 
@@ -181,11 +182,14 @@ export function OnBoardingFormDefault({
             </FormLabel>
 
             <Input
-              type="tel"
+              type="text"
               width="100%"
               name="strasse"
               value=""
-              onChange={handleInputChange}
+              placeholder="Seestrasse"
+              onChange={() => {
+                return 'ok';
+              }}
             />
           </FormControl>
 
@@ -195,11 +199,14 @@ export function OnBoardingFormDefault({
             </FormLabel>
 
             <Input
-              type="tel"
+              type="text"
               width="100%"
-              name="strasse"
+              name="streetnumber"
               value=""
-              onChange={handleInputChange}
+              placeholder="12"
+              onChange={() => {
+                return 'ok';
+              }}
             />
           </FormControl>
 
@@ -217,11 +224,14 @@ export function OnBoardingFormDefault({
             </FormLabel>
 
             <Input
-              type="tel"
+              type="text"
               width="100%"
-              name="strasse"
+              name="plz"
               value=""
-              onChange={handleInputChange}
+              placeholder="8000"
+              onChange={() => {
+                return 'ok';
+              }}
             />
           </FormControl>
 
@@ -231,11 +241,14 @@ export function OnBoardingFormDefault({
             </FormLabel>
 
             <Input
-              type="tel"
+              type="text"
               width="100%"
-              name="strasse"
+              name="location"
               value=""
-              onChange={handleInputChange}
+              placeholder="Zürich"
+              onChange={() => {
+                return 'ok';
+              }}
             />
           </FormControl>
 
