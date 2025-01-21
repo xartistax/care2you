@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // Define the WorkingHours schema
-const workingHoursSchema = z.object({
+export const workingHoursSchema = z.object({
   enabled: z.boolean(),
   hours: z.tuple([z.string(), z.string()]), // Start and end times as strings
 });

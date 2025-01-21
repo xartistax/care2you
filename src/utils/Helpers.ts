@@ -1,11 +1,15 @@
 import type { User } from '@clerk/nextjs/server';
+import type { z } from 'zod';
 
 import type { OnboardingState } from '@/contexts/OnboardingContext';
 import { Env } from '@/libs/Env';
 import type { OnBoardingClientUser } from '@/validations/onBoardingValidation';
+import type { serviceSchema } from '@/validations/serviceValidation';
 
 import { AppConfig } from './AppConfig';
-import type { ServiceFormData, WorkingHours } from './Types';
+import type { WorkingHours } from './Types';
+
+type ServiceFormData = z.infer<typeof serviceSchema>;
 
 export const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_APP_URL) {
@@ -356,6 +360,9 @@ export const uploadImageToBunny = async (serviceImage: File | null) => {
     body: formData,
   });
 
+  // const responseText = await response.text();
+  // console.log('Raw response:', responseText);
+
   const result = await response.json();
 
   if (!response.ok) {
@@ -365,18 +372,18 @@ export const uploadImageToBunny = async (serviceImage: File | null) => {
   return result; // This should be { success: true, url: "..." }
 };
 
-export const saveNewService = async (formData: ServiceFormData, userId: string) => {
+export const saveNewService = async (formData: ServiceFormData) => {
   try {
     const response = await fetch(`/api/addNewService`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        title: formData.serviceTitle as string, // Ensure it's a string
-        description: formData.serviceDescription as string, // Ensure it's a string
+        title: formData.title as string, // Ensure it's a string
+        description: formData.description as string, // Ensure it's a string
         price: formData.price,
-        priceType: formData.priceType === 'Fixpreis' ? 'fix' : 'hourly', // Convert to expected format
-        userId,
-        image: formData.serviceImage,
+        priceType: formData.priceType === 'fix' ? 'fix' : 'hourly', // Convert to expected format
+        userId: formData.userId,
+        image: formData.image,
         calendly: formData.calendly,
         workingHours: Object.keys(formData.workingHours).reduce((acc, day) => {
           const dayKey = day as keyof typeof formData.workingHours; // ✅ Cast `day` to a valid key

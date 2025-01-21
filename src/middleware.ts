@@ -8,13 +8,14 @@ import { chekOnboarding, getBaseUrl, getI18nPath } from './utils/Helpers';
 const intlMiddleware = createMiddleware(routing);
 
 const isProtectedRoute = createRouteMatcher([
-  getI18nPath('/dashboard(.*)', ':locale'),
   getI18nPath('/welcome(.*)', ':locale'),
+  getI18nPath('/admin(.*)', ':locale'),
 ]);
 
 const isAuthPage = createRouteMatcher([
 
   getI18nPath('/onboarding(.*)', ':locale'),
+  getI18nPath('/admin(.*)', ':locale'),
   getI18nPath('/sign-in(.*)', ':locale'),
   getI18nPath('/sign-up(.*)', ':locale'),
 ]);

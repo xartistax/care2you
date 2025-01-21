@@ -1,5 +1,5 @@
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
-import { createListCollection, Input, Stack } from '@chakra-ui/react';
+import { createListCollection, HStack, Input, Stack } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
@@ -168,6 +168,78 @@ export function OnBoardingFormDefault({
             onChange={handleInputChange}
           />
         </FormControl>
+
+      </Stack>
+
+      <Stack h={85} align="stretch" w="100%">
+
+        <HStack>
+
+          <FormControl flex="3">
+            <FormLabel fontSize="small" fontWeight="bold">
+              Strasse
+            </FormLabel>
+
+            <Input
+              type="tel"
+              width="100%"
+              name="strasse"
+              value=""
+              onChange={handleInputChange}
+            />
+          </FormControl>
+
+          <FormControl flex="1">
+            <FormLabel fontSize="small" fontWeight="bold">
+              Nr.
+            </FormLabel>
+
+            <Input
+              type="tel"
+              width="100%"
+              name="strasse"
+              value=""
+              onChange={handleInputChange}
+            />
+          </FormControl>
+
+        </HStack>
+
+      </Stack>
+
+      <Stack h={85} align="stretch" w="100%">
+
+        <HStack>
+
+          <FormControl flex="1">
+            <FormLabel fontSize="small" fontWeight="bold">
+              Postleitzahl
+            </FormLabel>
+
+            <Input
+              type="tel"
+              width="100%"
+              name="strasse"
+              value=""
+              onChange={handleInputChange}
+            />
+          </FormControl>
+
+          <FormControl flex="3">
+            <FormLabel fontSize="small" fontWeight="bold">
+              Ort
+            </FormLabel>
+
+            <Input
+              type="tel"
+              width="100%"
+              name="strasse"
+              value=""
+              onChange={handleInputChange}
+            />
+          </FormControl>
+
+        </HStack>
 
       </Stack>
 

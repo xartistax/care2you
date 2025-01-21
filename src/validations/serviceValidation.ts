@@ -1,6 +1,8 @@
 // Validation/serviceValidation.ts
 import { z } from 'zod';
 
+import { workingHoursSchema } from './onBoardingValidation';
+
 // Define the validation schema for services
 export const serviceSchema = z.object({
   id: z.any().optional(),
@@ -11,10 +13,15 @@ export const serviceSchema = z.object({
   userId: z.string(),
   image: z.string().optional(),
   calendly: z.string(),
-  workingHours: z.record(
-    z.string(),
-    z.object({ enabled: z.boolean(), hours: z.tuple([z.string(), z.string()]) }),
-  ),
+  workingHours: z.object({
+    Monday: workingHoursSchema,
+    Tuesday: workingHoursSchema,
+    Wednesday: workingHoursSchema,
+    Thursday: workingHoursSchema,
+    Friday: workingHoursSchema,
+    Saturday: workingHoursSchema,
+    Sunday: workingHoursSchema,
+  }),
 
   location: z.object({
     street: z.string(),

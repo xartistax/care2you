@@ -14,6 +14,16 @@ export default async function MainNavigation() {
     case 'service':
       return (
         <>
+
+          <li>
+            <Link
+              href="/de/welcome/new/service"
+              className="flex items-center gap-x-2 border-none text-gray-700 hover:text-gray-900"
+            >
+              <PlusCircleIcon className="size-5" />
+              Caregiver Liste
+            </Link>
+          </li>
           <li>
             <Link
               href="/de/welcome/new/service"

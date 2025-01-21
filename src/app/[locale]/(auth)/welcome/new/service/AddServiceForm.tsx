@@ -6,15 +6,20 @@ import { Divider } from '@chakra-ui/layout';
 import { Box, Button, Flex, HStack, Image, Input, Link, Spinner, Stack, Text, Textarea } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import type { z } from 'zod';
 
 import TopUpCredits from '@/components/TopUpCredits';
 import { Alert } from '@/components/ui/alert';
 import { Tag } from '@/components/ui/tag';
 import { Toaster, toaster } from '@/components/ui/toaster';
-import { decreaseCreditByOne, uploadImageToBunny } from '@/utils/Helpers';
-import type { OnBoardingClientUser } from '@/utils/Types';
+import WorkingHoursForm from '@/components/WorkingHoursForm';
+import { decreaseCreditByOne, saveNewService, uploadImageToBunny } from '@/utils/Helpers';
+import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 import type { serviceSchema } from '@/validations/serviceValidation';
+
+type ServiceFormData = z.infer<typeof serviceSchema>;
+type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
 
 export default function AddServiceForm({ user }: { user: OnBoardingClientUser }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,8 +29,6 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
   const credits = Number(user.privateMetadata.credits) || 0;
 
   const t = useTranslations();
-
-  type ServiceFormData = z.infer<typeof serviceSchema>;
 
   // Initialize form data with translations
   const [formData, setFormData] = useState<ServiceFormData>({
@@ -68,24 +71,24 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
 
       setFormData(prev => ({
         ...prev,
-        serviceImage: imageUrl, // Store preview
+        image: imageUrl, // Store preview
         fileToUpload: file, // Store actual file
       }));
     }
   };
 
-  // const handleToggle = (day: keyof ServiceFormData['workingHours']) => {
-  //   setFormData(prev => ({
-  //     ...prev,
-  //     workingHours: {
-  //       ...prev.workingHours,
-  //       [day]: {
-  //         enabled: !prev.workingHours[day]?.enabled, // Use optional chaining here
-  //         hours: prev.workingHours[day]?.hours || ['08:00', '16:00'], // Ensure fallback if `hours` is undefined
-  //       },
-  //     },
-  //   }));
-  // };
+  const handleToggle = (day: keyof ServiceFormData['workingHours']) => {
+    setFormData(prev => ({
+      ...prev,
+      workingHours: {
+        ...prev.workingHours,
+        [day]: {
+          enabled: !prev.workingHours[day]?.enabled, // Use optional chaining here
+          hours: prev.workingHours[day]?.hours || ['08:00', '16:00'], // Ensure fallback if `hours` is undefined
+        },
+      },
+    }));
+  };
 
   // const handleTimeChange = (day: keyof ServiceFormData['workingHours'], value: [string, string]) => {
   //   setFormData(prev => ({
@@ -99,6 +102,22 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
   //     },
   //   }));
   // };
+
+  const handleTimeChange = (
+    day: keyof ServiceFormData['workingHours'], // Restrict `day` to keys of `workingHours`
+    value: [string, string],
+  ) => {
+    setFormData(prev => ({
+      ...prev,
+      workingHours: {
+        ...prev.workingHours,
+        [day]: {
+          ...prev.workingHours[day], // Ensure we preserve other fields like `enabled`
+          hours: value, // Update only the `hours` field
+        },
+      },
+    }));
+  };
 
   const handleNextStep = () => {
     if (step === 1) {
@@ -146,19 +165,17 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      /// 1. Upload the Image tu bunny
-      const uploadImage = await uploadImageToBunny(formData.fileToUpload);
-      const updatedFormData = { ...formData, serviceImage: uploadImage.url };
+      // Step 1: Upload the image to Bunny (assuming the function works as expected)
+      await uploadImageToBunny(formData.fileToUpload);
 
-      setFormData(updatedFormData);
+      // Step 2: Merge the updated `userId` into the formData
+      setFormData({ ...formData, userId: user.id, id: uuidv4() });
 
-      /// 2. Save the data to DB
-      // await saveNewService(updatedFormData, user.id);
+      // Step 3: Use the updated data for further operations
+      await saveNewService(formData);
 
-      /// 3. Decrease credits by one
+      // Step 5: Other operations
       await decreaseCreditByOne(user.id);
-
-      /// 4. Other Stuff like notifications and stuff
       setSuccess(true);
     } catch (error) {
       console.error('Failed to save service:', error);
@@ -261,12 +278,12 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               </Box>
             </FormControl>
 
-            {/* <WorkingHoursForm
+            <WorkingHoursForm
               workingHours={formData.workingHours}
               onToggle={handleToggle}
               onTimeChange={handleTimeChange}
               label="Erreichbarkeit"
-            /> */}
+            />
 
             <FormControl paddingBottom={8}>
               <FormLabel fontSize="small" fontWeight="bold">{t('Forms.AddServiceForm.Labels.calLink')}</FormLabel>
@@ -295,7 +312,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 type="text"
                 placeholder={t('Forms.AddServiceForm.Labels.service')}
                 value={formData.title}
-                onChange={e => setFormData(prev => ({ ...prev, serviceTitle: e.target.value }))}
+                onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))}
               />
             </FormControl>
 
@@ -309,7 +326,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 rows={10}
                 placeholder={t('Forms.AddServiceForm.Labels.description')}
                 value={formData.description}
-                onChange={e => setFormData(prev => ({ ...prev, serviceDescription: e.target.value }))}
+                onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
               />
             </FormControl>
 
@@ -508,28 +525,6 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
             <Divider marginY={1} />
 
             {/* Chosen Working Hours */}
-            {/* <Stack spaceY={0}>
-               {Object.keys(formData.workingHours).map((day as any) => {
-                const dayKey = day as keyof ServiceFormData['workingHours']; // ✅ Explicitly cast `day`
-
-                return (
-                  formData.workingHours[dayKey].enabled && (
-                    <Text key={day} fontSize="sm">
-                      <strong>
-                        {day}
-                        :
-                      </strong>
-                      {' '}
-                      {formData.workingHours[dayKey].hours[0]}
-                      {' '}
-                      -
-                      {' '}
-                      {formData.workingHours[dayKey].hours[1]}
-                    </Text>
-                  )
-                );
-              })}
-            </Stack> */}
 
             <Divider marginY={1} />
 

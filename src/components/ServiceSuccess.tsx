@@ -1,10 +1,13 @@
 import { Box, Text, VStack } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
+import type { z } from 'zod';
 
-import type { ServiceFormData } from '@/utils/Types';
+import type { serviceSchema } from '@/validations/serviceValidation';
 
 import { Button } from './ui/button';
+
+type ServiceFormData = z.infer<typeof serviceSchema>;
 
 type ServiceSuccessProps = {
   formData: ServiceFormData;
@@ -24,11 +27,11 @@ const ServiceSuccess: React.FC<ServiceSuccessProps> = ({ formData }) => {
           {' '}
           <Box as="span" fontWeight="bold">
             {' '}
-            {formData.serviceTitle}
+            {formData.title}
             {' '}
           </Box>
           {' '}
-          {formData.serviceTitle}
+          {formData.title}
           {' '}
           wurde erfolgreich eingestellt.
         </Text>
