@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useMemo, useState } from 'react';
 
-import type { OnBoardingClientUser } from '@/utils/Types';
+import type { OnBoardingClientUser } from '@/validations/onBoardingValidation';
 
 export type OnboardingState = {
   step: number;
@@ -40,6 +40,10 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode; initialSt
       lastName: initialState.data.lastName,
       email: initialState.data.email,
       privateMetadata: {
+        streetnumber: initialState.data.privateMetadata.streetnumber,
+        street: initialState.data.privateMetadata.street,
+        plz: initialState.data.privateMetadata.plz,
+        location: initialState.data.privateMetadata.location,
         phone: initialState.data.privateMetadata.phone,
         gender: initialState.data.privateMetadata.gender,
         role: initialState.data.privateMetadata.role,

@@ -184,12 +184,10 @@ export function OnBoardingFormDefault({
             <Input
               type="text"
               width="100%"
-              name="strasse"
-              value=""
+              name="street"
+              value={String(formState?.data.privateMetadata?.street || '')}
               placeholder="Seestrasse"
-              onChange={() => {
-                return 'ok';
-              }}
+              onChange={handleInputChange}
             />
           </FormControl>
 
@@ -202,11 +200,9 @@ export function OnBoardingFormDefault({
               type="text"
               width="100%"
               name="streetnumber"
-              value=""
+              value={String(formState?.data.privateMetadata?.streetnumber || '')}
               placeholder="12"
-              onChange={() => {
-                return 'ok';
-              }}
+              onChange={handleInputChange}
             />
           </FormControl>
 
@@ -227,11 +223,9 @@ export function OnBoardingFormDefault({
               type="text"
               width="100%"
               name="plz"
-              value=""
+              value={String(formState?.data.privateMetadata?.plz || '')}
               placeholder="8000"
-              onChange={() => {
-                return 'ok';
-              }}
+              onChange={handleInputChange}
             />
           </FormControl>
 
@@ -244,11 +238,9 @@ export function OnBoardingFormDefault({
               type="text"
               width="100%"
               name="location"
-              value=""
+              value={String(formState?.data.privateMetadata?.location || '')}
               placeholder="Zürich"
-              onChange={() => {
-                return 'ok';
-              }}
+              onChange={handleInputChange}
             />
           </FormControl>
 

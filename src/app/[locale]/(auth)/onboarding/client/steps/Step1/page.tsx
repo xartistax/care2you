@@ -15,7 +15,12 @@ const Step1 = () => {
   const { formState, setFormState, nextStep, showAlert, alertMessage, setShowAlert, setAlertMessage } = useOnboarding();
 
   const handleNext = () => {
-    if (!formState.data.email || !formState.data.firstName || !formState.data.privateMetadata.gender || !formState.data.privateMetadata.phone || !formState.data.privateMetadata.role) {
+    if (
+      !formState.data.email
+      || !formState.data.firstName
+      || !formState.data.privateMetadata.gender
+      || !formState.data.privateMetadata.phone
+      || !formState.data.privateMetadata.role) {
       setShowAlert(true);
       setAlertMessage('Bitte alles ausfüllen');
       return;
@@ -62,33 +67,44 @@ const Step1 = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    // Prüfen, ob die Eingabe Buchstaben enthält
-    if (/[a-z]/i.test(value)) {
-      setAlertMessage('Telefonnummer darf keine Buchstaben enthalten.');
-      setShowAlert(true);
-      return;
-    } else {
-      setAlertMessage(''); // Entferne die Fehlermeldung, wenn die Eingabe korrekt ist
-      setShowAlert(false);
-    }
-
-    // Erlaube nur Zahlen
-    const numericValue = value.replace(/\D/g, '');
-
+    // Validate phone field specifically
     if (name === 'phone') {
-      // Update only `phone` in `privateMetadata`
+      if (/[a-z]/i.test(value)) {
+        setAlertMessage('Telefonnummer darf keine Buchstaben enthalten.');
+        setShowAlert(true);
+        return;
+      } else {
+        setAlertMessage('');
+        setShowAlert(false);
+      }
+
+      const numericValue = value.replace(/\D/g, '');
+
       setFormState(prev => ({
         ...prev,
         data: {
           ...prev.data,
           privateMetadata: {
             ...prev.data.privateMetadata,
-            phone: numericValue,
+            [name]: numericValue,
+          },
+        },
+      }));
+    } else if (
+      ['street', 'streetnumber', 'plz', 'location'].includes(name) // Check if the field belongs to `privateMetadata`
+    ) {
+      setFormState(prev => ({
+        ...prev,
+        data: {
+          ...prev.data,
+          privateMetadata: {
+            ...prev.data.privateMetadata,
+            [name]: value,
           },
         },
       }));
     } else {
-      // Update top-level fields like `firstName`, `lastName`
+      // Update top-level fields
       setFormState(prev => ({
         ...prev,
         [name]: value,

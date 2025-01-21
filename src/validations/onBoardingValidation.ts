@@ -8,6 +8,10 @@ export const workingHoursSchema = z.object({
 
 // Define the privateMetadata schema
 const privateMetadataSchema = z.object({
+  streetnumber: z.unknown(),
+  street: z.unknown(),
+  plz: z.unknown(),
+  location: z.unknown(),
   phone: z.unknown(),
   gender: z.unknown(),
   role: z.unknown(),
