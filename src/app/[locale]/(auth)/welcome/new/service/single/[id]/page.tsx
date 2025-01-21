@@ -1,10 +1,11 @@
-import { clerkClient } from '@clerk/nextjs/server';
+import { clerkClient, currentUser } from '@clerk/nextjs/server';
 import { eq } from 'drizzle-orm';
 import { getTranslations } from 'next-intl/server';
 import type { z } from 'zod';
 
 import { db } from '@/libs/DB';
 import { servicesSchema } from '@/models/Schema';
+import { constructUser } from '@/utils/Helpers';
 import type { serviceSchema } from '@/validations/serviceValidation';
 
 import SingleListing from './SingleListing';
@@ -49,9 +50,11 @@ export default async function NewServiceServer({ params }: { params: { id: strin
   // ✅ Construct full `ServiceFormData` object
   type ServiceFormData = z.infer<typeof serviceSchema>;
 
+  const user = await currentUser();
+
   const formattedService: ServiceFormData = {
     id: Number(serviceData.id),
-    userId: serviceData.userId,
+    userId: String(user?.id),
     title: serviceData.title ?? '',
     description: serviceData.description ?? '',
     price: serviceData.price ?? 0,
@@ -71,13 +74,13 @@ export default async function NewServiceServer({ params }: { params: { id: strin
   };
 
   // Fetch user details from Clerk
-  let userJSON;
+
   try {
-    const user = await clerkClient.users.getUser(serviceData.userId);
-    userJSON = JSON.parse(JSON.stringify(user));
+    const user = await clerkClient.users.getUser(formattedService.userId);
+    const constructedUsers = constructUser(user);
+
+    return <SingleListing service={formattedService} user={constructedUsers} />;
   } catch (error) {
     throw new Error(`Failed to fetch user ${error}`); // ✅ Handle Clerk API errors properly
   }
-
-  return <SingleListing service={formattedService} user={userJSON} />;
 }

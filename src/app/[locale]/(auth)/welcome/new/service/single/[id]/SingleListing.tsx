@@ -11,7 +11,6 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import type { User } from '@clerk/nextjs/server';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
@@ -19,9 +18,11 @@ import type { z } from 'zod';
 
 import { Tag } from '@/components/ui/tag';
 import { companyTypeRetriever } from '@/utils/Helpers';
+import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 import type { serviceSchema } from '@/validations/serviceValidation';
 
 type ServiceFormData = z.infer<typeof serviceSchema>;
+type User = z.infer<typeof onboardingClientUserSchema>;
 
 export default function SingleListing({ service, user }: { service: ServiceFormData; user: User }) {
   const [isVisible, setIsVisible] = useState(false);

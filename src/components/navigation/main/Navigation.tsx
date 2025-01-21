@@ -17,7 +17,7 @@ export default async function MainNavigation() {
 
           <li>
             <Link
-              href="/de/welcome/new/service"
+              href="/de/admin"
               className="flex items-center gap-x-2 border-none text-gray-700 hover:text-gray-900"
             >
               <PlusCircleIcon className="size-5" />
