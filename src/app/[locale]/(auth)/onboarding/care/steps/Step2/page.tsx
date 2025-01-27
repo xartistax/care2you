@@ -123,7 +123,12 @@ const Step2Care = () => {
 
   const handleNext = async () => {
     setIsLoading(true);
-    if (!formState.data.privateMetadata.expertise || !formState.data.privateMetadata.skill || !formState.data.privateMetadata.languages || !formState.data.privateMetadata.workingHours || !formState.data.privateMetadata.certificates) {
+    if (
+      !formState.data.privateMetadata.expertise
+      || !formState.data.privateMetadata.skill
+      || !formState.data.privateMetadata.languages
+      || !formState.data.privateMetadata.workingHours
+      || !formState.data.privateMetadata.certificates) {
       setShowAlert(true);
       setAlertMessage('Bitte alles ausfüllen');
       return;

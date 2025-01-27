@@ -33,6 +33,10 @@ export async function POST(request: NextRequest) {
         companyDescription: body.user.privateMetadata.companyDescription || undefined,
         uidst: body.user.privateMetadata.uidst || undefined,
         serviceCategory: body.user.privateMetadata.serviceCategory || undefined,
+        street: body.user.privateMetadata.street || undefined,
+        streetnumber: body.user.privateMetadata.streetnumber || undefined,
+        plz: body.user.privateMetadata.plz || undefined,
+        location: body.user.privateMetadata.location || undefined,
         credits,
 
       },

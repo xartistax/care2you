@@ -299,6 +299,10 @@ export const constructOnboardingUser = (formState: OnboardingState): OnBoardingC
       languages: formState.data.privateMetadata.languages,
       certificates: formState.data.privateMetadata.certificates,
       workingHours: formState.data.privateMetadata.workingHours,
+      street: formState.data.privateMetadata.street,
+      streetnumber: formState.data.privateMetadata.streetnumber,
+      plz: formState.data.privateMetadata.plz,
+      location: formState.data.privateMetadata.location,
 
     },
   };
@@ -335,6 +339,11 @@ export const constructUser = (user: User): OnBoardingClientUser => {
         Saturday: WorkingHours;
         Sunday: WorkingHours;
       },
+      street: user.privateMetadata.street,
+      streetnumber: user.privateMetadata.streetnumber,
+      plz: user.privateMetadata.plz,
+
+      location: user.privateMetadata.location,
     },
   };
 };
@@ -359,9 +368,6 @@ export const uploadImageToBunny = async (serviceImage: File | null) => {
     method: 'POST',
     body: formData,
   });
-
-  // const responseText = await response.text();
-  // console.log('Raw response:', responseText);
 
   const result = await response.json();
 

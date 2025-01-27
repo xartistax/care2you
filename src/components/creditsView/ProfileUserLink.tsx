@@ -34,7 +34,7 @@ export default function ProfileUserLink({ user }: ProfileUserLinkProps) {
         </MenuTrigger>
         <MenuContent>
           <MenuItem value="rename">
-            <Link href="/dashboard/user-profile">
+            <Link href="/user-profile">
               Profil
             </Link>
 
@@ -62,7 +62,13 @@ export default function ProfileUserLink({ user }: ProfileUserLinkProps) {
           </Button>
         </MenuTrigger>
         <MenuContent>
-          <MenuItem value="rename">Profil</MenuItem>
+          <MenuItem value="rename">
+
+            <Link href="/user-profile">
+              Profil
+            </Link>
+
+          </MenuItem>
           <SignOutButton redirectUrl="/sign-in">
             <MenuItem
               value="logout"

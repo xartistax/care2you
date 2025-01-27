@@ -14,6 +14,7 @@ const isProtectedRoute = createRouteMatcher([
 
 const isAuthPage = createRouteMatcher([
 
+  getI18nPath('/user-profile(.*)', ':locale'),
   getI18nPath('/onboarding(.*)', ':locale'),
   getI18nPath('/admin(.*)', ':locale'),
   getI18nPath('/sign-in(.*)', ':locale'),

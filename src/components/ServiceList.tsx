@@ -78,9 +78,8 @@ export default function ServiceList({ services }: ServiceListProps) {
   });
 
   // Dummy function to handle submission
-  const onSubmit = (data: FormValues) => {
-    // eslint-disable-next-line no-console
-    console.log('Selected Filters:', data);
+  const onSubmit = (_data: FormValues) => {
+
   };
 
   const handleSelectChange = (field: { onChange: (value: string | null) => void }, selected: { value: string; label: string } | undefined) => {

@@ -2,10 +2,16 @@ import { clerkClient } from '@clerk/nextjs/server';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import type { OnBoardingClientUser } from '@/validations/onBoardingValidation';
+
+type UserProfileProps = {
+  user: OnBoardingClientUser; // Adjust the type if needed
+};
+
 export async function POST(request: NextRequest) {
   try {
     // Parse den Body
-    const body = await request.json();
+    const body: UserProfileProps = await request.json();
 
     // Überprüfe die Felder im Body
     if (!body.user?.privateMetadata?.role || !body.user.privateMetadata.phone || !body.user.privateMetadata.gender) {
@@ -22,6 +28,7 @@ export async function POST(request: NextRequest) {
     // Nutzer-Daten aktualisieren
     await clerkClient.users.updateUser(userId, {
       privateMetadata: {
+
         role: body.user.privateMetadata.role,
         phone: body.user.privateMetadata.phone,
         gender: body.user.privateMetadata.gender,
@@ -30,6 +37,10 @@ export async function POST(request: NextRequest) {
         languages: body.user.privateMetadata.languages,
         certificates: body.user.privateMetadata.certificates,
         workingHours: body.user.privateMetadata.workingHours,
+        street: body.user.privateMetadata.street,
+        streetnumber: body.user.privateMetadata.streetnumber,
+        plz: body.user.privateMetadata.plz,
+        location: body.user.privateMetadata.location,
 
       },
     });
