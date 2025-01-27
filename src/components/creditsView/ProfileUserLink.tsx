@@ -35,7 +35,7 @@ export default function ProfileUserLink({ user }: ProfileUserLinkProps) {
         <MenuContent>
           <MenuItem value="rename">
             <Link href="/user-profile">
-              Profil
+              UserProfil
             </Link>
 
           </MenuItem>
@@ -65,7 +65,7 @@ export default function ProfileUserLink({ user }: ProfileUserLinkProps) {
           <MenuItem value="rename">
 
             <Link href="/user-profile">
-              Profil
+              Userprofil
             </Link>
 
           </MenuItem>
