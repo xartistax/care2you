@@ -35,6 +35,7 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode; initialSt
   const [formState, setFormState] = useState<OnboardingState>({
     step: 1,
     data: {
+      phone: initialState.data.phone,
       id: initialState.data.id,
       firstName: initialState.data.firstName,
       lastName: initialState.data.lastName,

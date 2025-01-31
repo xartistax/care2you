@@ -43,6 +43,7 @@ const privateMetadataSchema = z.object({
 // Define the main OnBoardingClientUser schema
 export const onboardingClientUserSchema = z.object({
   id: z.string(),
+  phone: z.string().nullable(),
   firstName: z.string().nullable(),
   lastName: z.string().nullable(),
   email: z.string().optional(),

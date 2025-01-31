@@ -282,6 +282,7 @@ export const currentUser = async (locale: string, userId: string) => {
 export const constructOnboardingUser = (formState: OnboardingState): OnBoardingClientUser => {
   return {
     id: formState.data.id,
+    phone: formState.data.privateMetadata.phone as string,
     firstName: formState.data.firstName,
     lastName: formState.data.lastName,
     email: formState.data.email,
@@ -319,6 +320,7 @@ export const constructOnboardingUser = (formState: OnboardingState): OnBoardingC
 export const constructUser = (user: User): OnBoardingClientUser => {
   return {
     id: user.id,
+    phone: user.privateMetadata.phone as string,
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.emailAddresses[0]?.emailAddress,

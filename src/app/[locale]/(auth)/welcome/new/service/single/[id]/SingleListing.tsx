@@ -29,7 +29,12 @@ import { categoryTypeRetriever, companyTypeRetriever } from '@/utils/Helpers';
 import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 import type { serviceSchema } from '@/validations/serviceValidation';
 
-type ServiceFormData = z.infer<typeof serviceSchema>;
+type ServiceFormData = z.infer<typeof serviceSchema> & {
+  serviceProvider_email: string;
+  serviceProvider_lastName: string;
+  serviceProvider_firstName: string;
+};
+
 type User = z.infer<typeof onboardingClientUserSchema>;
 
 export default function SingleListing({ service, user }: { service: ServiceFormData; user: User }) {
@@ -87,8 +92,17 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: 'demian2009@icloud.com',
-          subject: `Kontaktanfrage für ${service.title}`,
+          subject: `Terminanfrage über Care2You`,
           message,
+          service_email: service.serviceProvider_email,
+          service_lastName: service.serviceProvider_lastName,
+          service_firstName: service.serviceProvider_firstName,
+          service_title: service.title,
+          client_name: user.firstName,
+          client_vorname: user.lastName,
+          client_email: user.email,
+          client_phone: user.phone,
+
         }),
       });
 
@@ -197,7 +211,7 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
 
         {/* Calendar Link */}
         <Link fontSize="sm" href={service.calendly} target="_blank" color="blue.600">
-          Setzen Sie Ihren Termin
+          {service.calendly}
         </Link>
 
         {/* Address */}
@@ -242,7 +256,7 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
           {/* Calendly Link */}
           <Link href={`${service.calendly}`} style={{ flex: 2 }} target="_blank">
             <Button colorScheme="blue" size="md" width="100%">
-              Setzen Sie Ihren Termin
+              Zur Webseite
             </Button>
           </Link>
 

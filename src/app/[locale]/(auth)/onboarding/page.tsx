@@ -32,6 +32,7 @@ export default async function OnBoardingServer(props: { params: { locale: string
     step: 1,
     data: {
       id: user.id,
+      phone: user.privateMetadata.phone as string || '',
       firstName: user.firstName || '',
       lastName: user.lastName || '',
       email: user.emailAddresses[0]?.emailAddress || '',

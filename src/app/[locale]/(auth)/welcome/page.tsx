@@ -53,6 +53,7 @@ export default async function WelcomeServer() {
 
   const fullUser: OnBoardingClientUser = {
     id: user.id,
+    phone: user.privateMetadata.phone as string,
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.emailAddresses[0]!.emailAddress,
