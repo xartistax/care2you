@@ -11,9 +11,6 @@ export const Env = createEnv({
 
     // 🟢 Add missing Bunny variables here!
     BUNNY_API: z.string().min(1),
-    BUNNY_READONLY: z.string().optional(),
-    BUNNY_USERNAME: z.string().min(1),
-    BUNNY_HOST: z.string().min(1),
     BUNNY_ZONE: z.string().min(1),
   },
   client: {
@@ -27,9 +24,6 @@ export const Env = createEnv({
   // You need to destructure all the keys manually
   runtimeEnv: {
     BUNNY_API: process.env.BUNNY_API,
-    BUNNY_READONLY: process.env.BUNNY_READONLY,
-    BUNNY_USERNAME: process.env.BUNNY_USERNAME,
-    BUNNY_HOST: process.env.BUNNY_HOST,
     BUNNY_ZONE: process.env.BUNNY_ZONE,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     CLERK_BACKEND_BASE: process.env.CLERK_BACKEND_BASE, // Add this line

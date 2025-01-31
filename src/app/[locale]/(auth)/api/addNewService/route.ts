@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
 
     return new NextResponse(JSON.stringify({ success: true }), { status: 200 });
   } catch (error) {
+    console.error('Error occurred:', error);
     return new NextResponse(JSON.stringify({ success: false, error }), { status: 400 });
   }
 }

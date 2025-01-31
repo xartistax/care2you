@@ -11,6 +11,7 @@ import {
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
+import { ClipboardIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 // Fixed import
 import NextLink from 'next/link';
 import { useTranslations } from 'next-intl';
@@ -18,6 +19,7 @@ import { useEffect, useState } from 'react';
 import TextTruncate from 'react-text-truncate';
 import type { z } from 'zod'; // Import Zod
 
+import { categoryTypeRetriever } from '@/utils/Helpers';
 import type { serviceSchema } from '@/validations/serviceValidation';
 
 import { Tag } from './ui/tag';
@@ -91,11 +93,10 @@ export default function ListElement({ formData }: ListElementProps) {
         {/* Text Content */}
         <Stack flex="1" spaceY={0} justify="space-between" width="100%">
           {/* Title */}
-          <NextLink href={`/welcome/new/service/single/${formData.id}`}>
+          <NextLink href={`/welcome/new/service/single/${formData.internalId}`}>
             <CardTitle as="h2" fontSize="sm" fontWeight="bold" lineHeight={1}>
               {formData.title }
               {' '}
-              title
             </CardTitle>
           </NextLink>
 
@@ -129,13 +130,38 @@ export default function ListElement({ formData }: ListElementProps) {
                   truncateText="…"
                   text={formData.description}
                   textTruncateChild={(
-                    <Link as="a" href={`/welcome/new/service/single/${formData.id}`}>
+                    <Link as="a" href={`/welcome/new/service/single/${formData.internalId}`}>
                       {t('Buttons.read_more')}
                     </Link>
                   )}
                 />
               </Text>
             )}
+            <Box>
+              <br />
+
+              <Box fontSize="sm" display="flex" flexFlow="row" alignItems="center" gap={2}>
+                <GlobeAltIcon className="size-3" />
+                { categoryTypeRetriever(formData.category as string)}
+                {' '}
+                |
+                {' '}
+                <GlobeAltIcon className="size-3" />
+                {formData.companyTitle || 'no company title'}
+                {' '}
+                |
+                {' '}
+                <GlobeAltIcon className="size-3" />
+                {formData.location.city}
+                {' '}
+                |
+                {' '}
+                <ClipboardIcon className="size-3" />
+                {formData.location.postalCode}
+
+              </Box>
+
+            </Box>
           </Box>
         </Stack>
 

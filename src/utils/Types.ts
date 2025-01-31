@@ -1,3 +1,5 @@
+import { createListCollection } from '@chakra-ui/react';
+
 export type OnBoardingClientUser = {
   id: string;
   firstName: string | null;
@@ -20,13 +22,13 @@ export type OnBoardingClientUser = {
     languages: unknown[];
     certificates: unknown[];
     workingHours: {
-      Monday: WorkingHours;
-      Tuesday: WorkingHours;
-      Wednesday: WorkingHours;
-      Thursday: WorkingHours;
-      Friday: WorkingHours;
-      Saturday: WorkingHours;
-      Sunday: WorkingHours;
+      Montag: WorkingHours;
+      Dienstag: WorkingHours;
+      Mittwoch: WorkingHours;
+      Donnerstag: WorkingHours;
+      Freitag: WorkingHours;
+      Samstag: WorkingHours;
+      Sonntag: WorkingHours;
     };
   };
 };
@@ -41,13 +43,13 @@ export type ServiceFormData = {
   serviceImage: string;
   fileToUpload: File | null;
   workingHours: {
-    Monday: WorkingHours;
-    Tuesday: WorkingHours;
-    Wednesday: WorkingHours;
-    Thursday: WorkingHours;
-    Friday: WorkingHours;
-    Saturday: WorkingHours;
-    Sunday: WorkingHours;
+    Montag: WorkingHours;
+    Dienstag: WorkingHours;
+    Mittwoch: WorkingHours;
+    Donnerstag: WorkingHours;
+    Freitag: WorkingHours;
+    Samstag: WorkingHours;
+    Sonntag: WorkingHours;
   };
   serviceTitle: string;
   serviceDescription: string;
@@ -64,19 +66,34 @@ export type ServiceFormData = {
 };
 
 export const defaultWorkingHours: {
-  Monday: WorkingHours;
-  Tuesday: WorkingHours;
-  Wednesday: WorkingHours;
-  Thursday: WorkingHours;
-  Friday: WorkingHours;
-  Saturday: WorkingHours;
-  Sunday: WorkingHours;
+  Montag: WorkingHours;
+  Dienstag: WorkingHours;
+  Mittwoch: WorkingHours;
+  Donnerstag: WorkingHours;
+  Freitag: WorkingHours;
+  Samstag: WorkingHours;
+  Sonntag: WorkingHours;
 } = {
-  Monday: { enabled: false, hours: ['08:00', '16:00'] },
-  Tuesday: { enabled: false, hours: ['08:00', '16:00'] },
-  Wednesday: { enabled: false, hours: ['08:00', '16:00'] },
-  Thursday: { enabled: false, hours: ['08:00', '16:00'] },
-  Friday: { enabled: false, hours: ['08:00', '16:00'] },
-  Saturday: { enabled: false, hours: ['08:00', '16:00'] },
-  Sunday: { enabled: false, hours: ['08:00', '16:00'] },
+  Montag: { enabled: false, hours: ['08:00', '16:00'] },
+  Dienstag: { enabled: false, hours: ['08:00', '16:00'] },
+  Mittwoch: { enabled: false, hours: ['08:00', '16:00'] },
+  Donnerstag: { enabled: false, hours: ['08:00', '16:00'] },
+  Freitag: { enabled: false, hours: ['08:00', '16:00'] },
+  Samstag: { enabled: false, hours: ['08:00', '16:00'] },
+  Sonntag: { enabled: false, hours: ['08:00', '16:00'] },
 };
+
+export const categoriesList = createListCollection({
+  items: [
+    { value: '0', label: 'Alltagshilfe' },
+    { value: '1', label: 'Pflege & Gesundheitsversorgung' },
+    { value: '2', label: 'Demenzbetreuung' },
+    { value: '3', label: 'Begleitung & Gesellschaft' },
+    { value: '4', label: '24-Stunden-Betreuung' },
+    { value: '5', label: 'Haushaltsdienstleistungen' },
+    { value: '6', label: 'Mobilität & Transport' },
+    { value: '7', label: 'Essen & Ernährung' },
+    { value: '8', label: 'Technikhilfe für Senioren' },
+    { value: '9', label: 'Anträge & Bürokratie' },
+  ],
+});

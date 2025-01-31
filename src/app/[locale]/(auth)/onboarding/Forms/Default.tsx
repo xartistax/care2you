@@ -30,8 +30,8 @@ export function OnBoardingFormDefault({
   const t = useTranslations();
   const collection = createListCollection({
     items: [
-      { value: '0', label: t('Forms.DefaultForm.Labels.salutation_list.feminin') },
-      { value: '1', label: t('Forms.DefaultForm.Labels.salutation_list.masculin') },
+      { value: '0', label: t('Forms.DefaultForm.Labels.salutation_list.masculin') },
+      { value: '1', label: t('Forms.DefaultForm.Labels.salutation_list.feminin') },
     ],
   });
   const roleToRemove = 'admin';

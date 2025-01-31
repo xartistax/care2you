@@ -3,18 +3,21 @@ import '@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css';
 
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Divider } from '@chakra-ui/layout';
-import { Box, Button, Flex, HStack, Image, Input, Link, Spinner, Stack, Text, Textarea } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, Image, Input, Link, SelectContent, SelectItem, SelectTrigger, SelectValueText, Spinner, Stack, Text, Textarea } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { useRef, useState } from 'react';
 import type { z } from 'zod';
 
+import ServiceSuccess from '@/components/ServiceSuccess';
 import TopUpCredits from '@/components/TopUpCredits';
 import { Alert } from '@/components/ui/alert';
+import { RadioGroup } from '@/components/ui/radio';
+import { SelectRoot } from '@/components/ui/select';
 import { Tag } from '@/components/ui/tag';
 import { Toaster, toaster } from '@/components/ui/toaster';
 import WorkingHoursForm from '@/components/WorkingHoursForm';
-import { decreaseCreditByOne, saveNewService, uploadImageToBunny } from '@/utils/Helpers';
+import { categoryTypeRetriever, decreaseCreditByOne, saveNewService, uploadImageToBunny } from '@/utils/Helpers';
+import { categoriesList } from '@/utils/Types';
 import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 import type { serviceSchema } from '@/validations/serviceValidation';
 
@@ -25,6 +28,8 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   const [step, setStep] = useState(1);
   const credits = Number(user.privateMetadata.credits) || 0;
 
@@ -33,16 +38,18 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
   // Initialize form data with translations
   const [formData, setFormData] = useState<ServiceFormData>({
     id: '',
+    status: 'active',
+    internalId: '',
     image: '/service_placeholder.jpg',
     fileToUpload: null as File | null,
     workingHours: {
-      Monday: { enabled: false, hours: ['08:00', '16:00'] },
-      Tuesday: { enabled: false, hours: ['08:00', '16:00'] },
-      Wednesday: { enabled: false, hours: ['08:00', '16:00'] },
-      Thursday: { enabled: false, hours: ['08:00', '16:00'] },
-      Friday: { enabled: false, hours: ['08:00', '16:00'] },
-      Saturday: { enabled: false, hours: ['08:00', '16:00'] },
-      Sunday: { enabled: false, hours: ['08:00', '16:00'] },
+      Montag: { enabled: false, hours: ['08:00', '16:00'] },
+      Dienstag: { enabled: false, hours: ['08:00', '16:00'] },
+      Mittwoch: { enabled: false, hours: ['08:00', '16:00'] },
+      Donnerstag: { enabled: false, hours: ['08:00', '16:00'] },
+      Freitag: { enabled: false, hours: ['08:00', '16:00'] },
+      Samstag: { enabled: false, hours: ['08:00', '16:00'] },
+      Sonntag: { enabled: false, hours: ['08:00', '16:00'] },
     },
     title: '',
     description: '',
@@ -57,12 +64,13 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
       postalCode: '',
     },
     userId: '',
+    category: '',
   });
 
   // Preserve state on re-render
-  useEffect(() => {
-    setFormData(prev => ({ ...prev }));
-  }, [step]);
+  // useEffect(() => {
+  //   setFormData(prev => ({ ...prev }));
+  // }, [step]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -167,12 +175,10 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
     try {
       // Step 1: Upload the image to Bunny (assuming the function works as expected)
       await uploadImageToBunny(formData.fileToUpload);
-
       // Step 2: Merge the updated `userId` into the formData
-      setFormData({ ...formData, userId: user.id, id: uuidv4() });
 
       // Step 3: Use the updated data for further operations
-      await saveNewService(formData);
+      await saveNewService(formData, user.id);
 
       // Step 5: Other operations
       await decreaseCreditByOne(user.id);
@@ -185,9 +191,9 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const cursorPosition = e.target.selectionStart; // Save cursor position
     const value = e.target.value.replace(/[^0-9.,]/g, ''); // Remove invalid characters
-
-    let parsedValue = Number.parseFloat(value.replace(',', '.')); // Convert decimals properly
+    let parsedValue = Number.parseFloat(value.replace(',', '.')); // Convert to float
 
     if (Number.isNaN(parsedValue)) {
       parsedValue = 0;
@@ -195,9 +201,27 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
 
     setFormData(prev => ({
       ...prev,
-      price: parsedValue, // Ensure `price` is a number
-      formattedPrice: parsedValue.toFixed(2), // Format correctly
+      price: parsedValue, // Store numeric value
+      formattedPrice: parsedValue.toFixed(2), // Keep formatted
     }));
+
+    // Restore cursor position
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.setSelectionRange(cursorPosition, cursorPosition);
+      }
+    }, 0);
+  };
+
+  const handleCategorySelectChange = (selected?: { value: string; label: string }) => {
+    if (selected) {
+      setFormData(prev => ({
+        ...prev,
+        category: selected.value, // ✅ Store only the value, not the full object
+      }));
+    } else {
+      console.error('Invalid selection:', selected);
+    }
   };
 
   if (credits === 0) {
@@ -219,7 +243,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
   if (success) {
     return (
       <HStack justifyContent="center" alignItems="center" height="70vh">
-        {/* <ServiceSuccess formData={formData} /> */}
+        <ServiceSuccess formData={formData} />
       </HStack>
     );
   }
@@ -330,6 +354,39 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               />
             </FormControl>
 
+            <FormControl paddingBottom={8}>
+              <FormLabel fontSize="small" fontWeight="bold">
+                {' '}
+                Wählen Sie eine Servicekategorie
+                {' '}
+              </FormLabel>
+
+              <SelectRoot
+                collection={categoriesList}
+                value={formData.category ? [formData.category] : []} // ✅ Pass an array with the selected value
+                onValueChange={(details) => {
+                  const selected = details.items[0];
+                  if (!selected) {
+                    console.error('Invalid selection:', selected);
+                    return;
+                  }
+                  handleCategorySelectChange(selected);
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValueText placeholder="Bitte wählen..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {categoriesList.items.map(item => (
+                    <SelectItem key={item.value} item={item}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </SelectRoot>
+
+            </FormControl>
+
             <Divider marginY={4} />
 
             {/* Price Selection (Fix Price or Hourly Price) */}
@@ -340,26 +397,18 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 {' '}
               </FormLabel>
 
-              {/* <RadioGroup
+              <RadioGroup
                 value={formData.priceType}
-                onChange={event =>
+                onChange={(e) => {
+                  const selectedValue = (e.target as HTMLInputElement).value as 'fix' | 'hourly'; // Explicitly type the value
                   setFormData(prev => ({
                     ...prev,
-                    priceType: (event as unknown as { target: { value: string } }).target.value, // ✅ Now correctly extracts the string value
-                  }))}
+                    priceType: selectedValue, // Update priceType with the selected value
+                  }));
+                }}
               >
-                <HStack gap="6">
-                  <Radio value="Fixpreis">
-                    {' '}
-                    {t('Forms.AddServiceForm.Labels.fixprice')}
-                    {' '}
-                  </Radio>
-                  <Radio value="Stundensatz">
-                    {t('Forms.AddServiceForm.Labels.hourlyprice')}
-                    {' '}
-                  </Radio>
-                </HStack>
-              </RadioGroup> */}
+                {/* Radio options */}
+              </RadioGroup>
 
             </FormControl>
 
@@ -371,11 +420,13 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 {formData.priceType === 'fix' ? t('Forms.AddServiceForm.Labels.fixprice') : t('Forms.AddServiceForm.Labels.hourlyprice')}
               </FormLabel>
               <Input
+                ref={inputRef}
                 type="text"
                 placeholder={formData.priceType === 'fix' ? t('Forms.AddServiceForm.Labels.fixprice') : t('Forms.AddServiceForm.Labels.hourlyprice')}
                 value={formData.formattedPrice}
                 onChange={handlePriceChange}
               />
+
             </FormControl>
 
             <Flex justify="flex-end" gap={2}>
@@ -509,6 +560,11 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
             <Text fontSize="sm" marginBottom={4}>
               {formData.description}
             </Text>
+
+            <Text fontSize="sm" marginBottom={4}>
+              { categoryTypeRetriever(formData.category as string)}
+            </Text>
+
             <Text fontWeight="bold" fontSize="sm">
               {' CHF '}
               {formData.price}
@@ -525,7 +581,18 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
             <Divider marginY={1} />
 
             {/* Chosen Working Hours */}
-
+            <Box fontSize="sm">
+              {Object.entries(formData.workingHours).map(([day, { enabled, hours }]) => (
+                <div key={day}>
+                  <Box as="span" fontWeight="bold">
+                    {day}
+                    :
+                  </Box>
+                  {' '}
+                  {enabled ? `${hours[0]} - ${hours[1]}` : 'geschlossen'}
+                </div>
+              ))}
+            </Box>
             <Divider marginY={1} />
 
             <Stack spaceY={0}>

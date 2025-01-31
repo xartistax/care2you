@@ -13,30 +13,21 @@ import {
 } from '@chakra-ui/react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
 import type { z } from 'zod';
 
 import { Avatar } from '@/components/ui/avatar';
 import { CardBody } from '@/components/ui/card';
 import { Tag } from '@/components/ui/tag';
+import UserServices from '@/components/UserServices';
 import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 
 type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
 
-export default function WelcomeService({ user }: { user: OnBoardingClientUser },
-) {
-  const [isVisible, setIsVisible] = useState(false);
+export default function WelcomeService({ user }: { user: OnBoardingClientUser }) {
   const t = useTranslations('Welcome');
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
 
   return (
     <Box
-      className={`transition-opacity duration-1000 ease-in-out ${
-        isVisible ? 'opacity-100' : 'opacity-0'
-      }`}
       p={8}
       bg="white"
       borderRadius="lg"
@@ -47,13 +38,11 @@ export default function WelcomeService({ user }: { user: OnBoardingClientUser },
       <HStack alignItems="center" marginBottom="16">
         <Avatar src="" name={`${user.firstName} ${user.lastName}`} size="lg" />
         <Heading as="h1" size="2xl">
-
           {t('meta_title', { username: `${user.firstName} ${user.lastName}` })}
         </Heading>
         <Box as="span">
           <Tag>
             {String(user.privateMetadata.role || 'norole')}
-
           </Tag>
         </Box>
       </HStack>
@@ -102,10 +91,15 @@ export default function WelcomeService({ user }: { user: OnBoardingClientUser },
             </CardBody>
           </LinkBox>
         </GridItem>
-
       </Grid>
 
-      {/* <UserServices user={user} /> */}
+      {/* Placeholder for "Meine aktiven Services" */}
+      <Box mb={6} p={0} mt={10}>
+        <Heading as="h3" size="lg" color="gray.700">
+          Meine aktiven Services
+        </Heading>
+        <UserServices userId={user.id} />
+      </Box>
     </Box>
   );
 }

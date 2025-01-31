@@ -2,7 +2,7 @@ import { currentUser } from '@clerk/nextjs/server';
 import { getTranslations } from 'next-intl/server';
 import type { z } from 'zod';
 
-import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
+import type { onboardingClientUserSchema, workingHoursSchema } from '@/validations/onBoardingValidation';
 
 import Welcome_Care from './care/Welcome';
 import Welcome_Client from './client/Welcome';
@@ -41,6 +41,15 @@ export default async function WelcomeServer() {
   // Safely extract and handle private metadata
   const privateMetadata = (user.privateMetadata || {}) as Partial<UserPrivateMetadata>;
   type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
+  type WorkingHoursRecord = {
+    Montag: z.infer<typeof workingHoursSchema>;
+    Dienstag: z.infer<typeof workingHoursSchema>;
+    Mittwoch: z.infer<typeof workingHoursSchema>;
+    Donnerstag: z.infer<typeof workingHoursSchema>;
+    Freitag: z.infer<typeof workingHoursSchema>;
+    Samstag: z.infer<typeof workingHoursSchema>;
+    Sonntag: z.infer<typeof workingHoursSchema>;
+  };
 
   const fullUser: OnBoardingClientUser = {
     id: user.id,
@@ -49,6 +58,9 @@ export default async function WelcomeServer() {
     email: user.emailAddresses[0]!.emailAddress,
     imageUrl: user.imageUrl || '',
     privateMetadata: {
+      dob: privateMetadata.dob || undefined,
+      status: privateMetadata.status || undefined,
+      nationality: privateMetadata.nationality || undefined,
       phone: privateMetadata.phone!,
       gender: privateMetadata.gender!,
       role: privateMetadata.role!,
@@ -59,18 +71,9 @@ export default async function WelcomeServer() {
       serviceCategory: privateMetadata.serviceCategory || undefined,
       uidst: privateMetadata.uidst || undefined,
       credits: privateMetadata.credits || undefined,
-      workingHours: {
-        Monday: { enabled: false, hours: ['09:00', '17:00'] },
-        Tuesday: { enabled: false, hours: ['09:00', '17:00'] },
-        Wednesday: { enabled: false, hours: ['09:00', '17:00'] },
-        Thursday: { enabled: false, hours: ['09:00', '17:00'] },
-        Friday: { enabled: false, hours: ['09:00', '17:00'] },
-        Saturday: { enabled: false, hours: ['09:00', '17:00'] },
-        Sunday: { enabled: false, hours: ['09:00', '17:00'] },
-      },
-
-      skill: [],
-      languages: [],
+      workingHours: privateMetadata.workingHours as WorkingHoursRecord,
+      skill: Array.isArray(privateMetadata.skill) ? privateMetadata.skill : [],
+      languages: Array.isArray(privateMetadata.languages) ? privateMetadata.languages : [],
       certificates: [],
     },
   };

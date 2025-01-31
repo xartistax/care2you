@@ -32,7 +32,6 @@ export async function POST(request: NextRequest) {
         role: body.user.privateMetadata.role,
         phone: body.user.privateMetadata.phone,
         gender: body.user.privateMetadata.gender,
-        expertise: body.user.privateMetadata.expertise,
         skill: body.user.privateMetadata.skill,
         languages: body.user.privateMetadata.languages,
         certificates: body.user.privateMetadata.certificates,
@@ -41,6 +40,10 @@ export async function POST(request: NextRequest) {
         streetnumber: body.user.privateMetadata.streetnumber,
         plz: body.user.privateMetadata.plz,
         location: body.user.privateMetadata.location,
+        companyTitle: body.user.privateMetadata.companyTitle,
+        companyDescription: body.user.privateMetadata.companyDescription,
+        uidst: body.user.privateMetadata.uidst,
+        expertise: body.user.privateMetadata.expertise,
 
       },
     });

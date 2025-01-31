@@ -1,6 +1,6 @@
 {
-  "id": "7aadff94-dd2e-451a-89a8-1cbabbc6366e",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "426a9985-2cae-4cc0-8c5e-4ff58680d229",
+  "prevId": "7dc9829b-f94b-4fdf-b21a-de333624765c",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -32,6 +32,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "price": {
           "name": "price",
           "type": "double precision",
@@ -52,8 +58,8 @@
           "notNull": true,
           "default": "'available'"
         },
-        "user_id": {
-          "name": "user_id",
+        "userId": {
+          "name": "userId",
           "type": "text",
           "primaryKey": false,
           "notNull": true

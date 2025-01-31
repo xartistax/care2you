@@ -49,7 +49,24 @@ const Step2Care = () => {
 
   const { formState, setFormState, setAlertMessage, setShowAlert, showAlert, alertMessage, prevStep, nextStep, locale } = useOnboarding();
   const [isLoading, setIsLoading] = useState(false);
+
   // const [files, setFiles] = useState([]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+
+    // Update top-level fields like firmenname usw.`
+    setFormState(prev => ({
+      ...prev,
+      data: {
+        ...prev.data,
+        privateMetadata: {
+          ...prev.data.privateMetadata,
+          [name]: value, // Dynamically set the field
+        },
+      },
+    }));
+  };
 
   const handleToggle = (day: keyof typeof formState.data.privateMetadata.workingHours) => {
     setFormState(prev => ({
@@ -122,13 +139,18 @@ const Step2Care = () => {
   };
 
   const handleNext = async () => {
+    formState.data.privateMetadata.status = formState.data.privateMetadata.status || 'inactive';
+
     setIsLoading(true);
     if (
       !formState.data.privateMetadata.expertise
       || !formState.data.privateMetadata.skill
       || !formState.data.privateMetadata.languages
       || !formState.data.privateMetadata.workingHours
-      || !formState.data.privateMetadata.certificates) {
+      || !formState.data.privateMetadata.certificates
+      || !formState.data.privateMetadata.dob
+      || !formState.data.privateMetadata.nationality
+    ) {
       setShowAlert(true);
       setAlertMessage('Bitte alles ausfüllen');
       return;
@@ -256,11 +278,9 @@ const Step2Care = () => {
               type="text"
               width="100%"
               name="dob"
-              value=""
-              onChange={() => {
-                return 'ok';
-              }}
-              placeholder="01.01.1986"
+              value={formState.data.privateMetadata.dob as string}
+              onChange={handleInputChange}
+              placeholder="01.01.2000"
             />
           </FormControl>
 
@@ -269,17 +289,15 @@ const Step2Care = () => {
         <Stack h={85} align="stretch" w="100%">
           <FormControl flex="1">
             <FormLabel fontSize="small" fontWeight="bold">
-              Geburtsdatum
+              Nationalität
             </FormLabel>
 
             <Input
               type="text"
               width="100%"
               name="nationality"
-              value=""
-              onChange={() => {
-                return 'ok';
-              }}
+              value={formState.data.privateMetadata.nationality as string}
+              onChange={handleInputChange}
               placeholder="CH"
             />
           </FormControl>
@@ -390,7 +408,7 @@ const Step2Care = () => {
           </FormControl>
         </VStack>
 
-        <VStack w="100%" h="auto" mb={8}>
+        <Box>
 
           <WorkingHoursForm
             workingHours={formState.data.privateMetadata.workingHours}
@@ -399,7 +417,7 @@ const Step2Care = () => {
             label="Set Your Working Hours"
           />
 
-        </VStack>
+        </Box>
 
         <VStack w="100%" mb={8}>
           <FormControl flex="0.2" w="100%">

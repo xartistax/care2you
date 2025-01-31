@@ -8,6 +8,9 @@ export const workingHoursSchema = z.object({
 
 // Define the privateMetadata schema
 const privateMetadataSchema = z.object({
+  status: z.unknown().optional(),
+  dob: z.unknown(),
+  nationality: z.unknown(),
   streetnumber: z.unknown(),
   street: z.unknown(),
   plz: z.unknown(),
@@ -27,13 +30,13 @@ const privateMetadataSchema = z.object({
   languages: z.array(z.unknown()), // Array of unknown items
   certificates: z.array(z.unknown()), // Array of unknown items
   workingHours: z.object({
-    Monday: workingHoursSchema,
-    Tuesday: workingHoursSchema,
-    Wednesday: workingHoursSchema,
-    Thursday: workingHoursSchema,
-    Friday: workingHoursSchema,
-    Saturday: workingHoursSchema,
-    Sunday: workingHoursSchema,
+    Montag: workingHoursSchema,
+    Dienstag: workingHoursSchema,
+    Mittwoch: workingHoursSchema,
+    Donnerstag: workingHoursSchema,
+    Freitag: workingHoursSchema,
+    Samstag: workingHoursSchema,
+    Sonntag: workingHoursSchema,
   }),
 });
 

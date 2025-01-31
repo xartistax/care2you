@@ -17,14 +17,6 @@ const company_collection = createListCollection({
   ],
 });
 
-const service_collection = createListCollection({
-  items: [
-    { value: '0', label: 'Kategorie 1' },
-    { value: '1', label: 'Kategorie 2' },
-    { value: '2', label: 'Kategorie 3' },
-  ],
-});
-
 const Step2Service = () => {
   // const t = useTranslations();
 
@@ -49,7 +41,7 @@ const Step2Service = () => {
 
   const handleNext = async () => {
     setIsLoading(true);
-    if (!formState.data.privateMetadata.companyTitle || !formState.data.privateMetadata.companyCategory || !formState.data.privateMetadata.companyDescription || !formState.data.privateMetadata.serviceCategory) {
+    if (!formState.data.privateMetadata.companyTitle || !formState.data.privateMetadata.companyCategory || !formState.data.privateMetadata.companyDescription) {
       setShowAlert(true);
       setAlertMessage('Bitte alles ausfüllen');
       return;
@@ -76,23 +68,6 @@ const Step2Service = () => {
           privateMetadata: {
             ...prev.data.privateMetadata,
             companyCategory: selected.value as '0' | '1' | '2', // Gender wird korrekt gesetzt
-          },
-        },
-      }));
-    } else {
-      console.error('Invalid selection:', selected);
-    }
-  };
-
-  const handleServiceSelectChange = (selected?: { value: string; label: string }) => {
-    if (selected && (selected.value === '0' || selected.value === '1' || selected.value === '2')) {
-      setFormState(prev => ({
-        ...prev,
-        data: {
-          ...prev.data,
-          privateMetadata: {
-            ...prev.data.privateMetadata,
-            serviceCategory: selected.value as '0' | '1' | '2', // Gender wird korrekt gesetzt
           },
         },
       }));
@@ -209,41 +184,7 @@ const Step2Service = () => {
             />
           </FormControl>
         </VStack>
-        {/* Category Field */}
-        <VStack w="100%" h={85}>
-          <FormControl w="100%" h={85}>
-            <FormLabel fontSize="small" fontWeight="bold">
-              Servicekategorie
-            </FormLabel>
-            <SelectRoot
-              collection={service_collection}
-              value={
-                String(formState.data.privateMetadata.serviceCategory)
-                  ? [String(formState.data.privateMetadata.serviceCategory)]
-                  : []
-              }
-              onValueChange={(details) => {
-                const selected = details.items[0];
-                if (!selected) {
-                  console.error('Invalid selection:', selected);
-                  return;
-                }
-                handleServiceSelectChange(selected);
-              }}
-            >
-              <SelectTrigger>
-                <SelectValueText placeholder="Kategorie" />
-              </SelectTrigger>
-              <SelectContent>
-                {service_collection.items.map(item => (
-                  <SelectItem key={item.value} item={item}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </SelectRoot>
-          </FormControl>
-        </VStack>
+
         {/* Submit Button */}
 
         <HStack alignItems="start" justifyContent="flex-end" marginBottom={8}>

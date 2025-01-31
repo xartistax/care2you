@@ -10,7 +10,7 @@ import { HiXCircle } from 'react-icons/hi';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { getSalutation, removeCompilance, updateCompilance } from '@/utils/Helpers';
+import { getSalutation, updateCompilance } from '@/utils/Helpers';
 
 export default function Instructions({ userId, lastName, gender }: {
   userId: string;
@@ -19,52 +19,52 @@ export default function Instructions({ userId, lastName, gender }: {
 }) {
   const router = useRouter();
   const [isVisible] = useState(true);
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked] = useState(false);
   const t = useTranslations();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const setCompilance = async () => {
-    try {
-      setIsSubmitting(true);
+  // const setCompilance = async () => {
+  //   try {
+  //     setIsSubmitting(true);
 
-      const isUpdated = await updateCompilance(userId);
+  //     const isUpdated = await updateCompilance(userId);
 
-      if (!isUpdated) {
-        setErrorMessage('Failed to update compliance.');
-      }
-    } catch (error) {
-      console.error('Error during submission:', error);
-      setErrorMessage((error as Error).message || 'An unexpected error occurred.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-  const unsetCompilance = async () => {
-    try {
-      setIsSubmitting(true);
+  //     if (!isUpdated) {
+  //       setErrorMessage('Failed to update compliance.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error during submission:', error);
+  //     setErrorMessage((error as Error).message || 'An unexpected error occurred.');
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+  // const unsetCompilance = async () => {
+  //   try {
+  //     setIsSubmitting(true);
 
-      const isUpdated = await removeCompilance(userId);
-      if (!isUpdated) {
-        setErrorMessage('Failed to update compliance.');
-      }
-    } catch (error) {
-      console.error('Error during submission:', error);
-      setErrorMessage((error as Error).message || 'An unexpected error occurred.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  //     const isUpdated = await removeCompilance(userId);
+  //     if (!isUpdated) {
+  //       setErrorMessage('Failed to update compliance.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error during submission:', error);
+  //     setErrorMessage((error as Error).message || 'An unexpected error occurred.');
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
 
-  const handleCheckboxChange = () => {
-    setIsChecked(prev => !prev);
-    if (!isChecked) {
-      setCompilance();
-    } else {
-      unsetCompilance();
-    }
-  };
+  // const handleCheckboxChange = () => {
+  //   setIsChecked(prev => !prev);
+  //   if (!isChecked) {
+  //     setCompilance();
+  //   } else {
+  //     unsetCompilance();
+  //   }
+  // };
 
   const handleSubmit = async () => {
     try {
@@ -114,7 +114,7 @@ export default function Instructions({ userId, lastName, gender }: {
               {' '}
               {lastName}
             </Box>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi voluptatibus enim beatae nesciunt nostrum reiciendis nisi sit dignissimos quam. Molestias molestiae distinctio quisquam quas animi esse facere praesentium facilis. Ut.
+            Care lorem Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi voluptatibus enim beatae nesciunt nostrum reiciendis nisi sit dignissimos quam. Molestias molestiae distinctio quisquam quas animi esse facere praesentium facilis. Ut.
           </Text>
         </Box>
       </VStack>
@@ -123,7 +123,7 @@ export default function Instructions({ userId, lastName, gender }: {
       <VStack alignItems="left">
         <HStack alignItems="center" marginTop={4}>
           <Stack align="flex-start" flex="1">
-            <Checkbox checked={isChecked} onChange={handleCheckboxChange}>
+            <Checkbox checked={isChecked}>
               {t.rich('OnBoarding.checkbox_text', {
                 link: chunks => (
                   <Link href="/terms" color="blue.500">

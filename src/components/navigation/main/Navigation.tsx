@@ -17,15 +17,6 @@ export default async function MainNavigation() {
 
           <li>
             <Link
-              href="/de/admin"
-              className="flex items-center gap-x-2 border-none text-gray-700 hover:text-gray-900"
-            >
-              <PlusCircleIcon className="size-5" />
-              Caregiver Liste
-            </Link>
-          </li>
-          <li>
-            <Link
               href="/de/welcome/new/service"
               className="flex items-center gap-x-2 border-none text-gray-700 hover:text-gray-900"
             >
@@ -47,9 +38,11 @@ export default async function MainNavigation() {
         </>
       );
 
-    default:
-      return (
+    case 'care':
+      return null;
 
+    case 'client':
+      return (
         <li>
           <Link
             href="/de/welcome/new/care"
@@ -60,7 +53,9 @@ export default async function MainNavigation() {
             Services
           </Link>
         </li>
-
       );
+
+    default:
+      return null;
   }
 }

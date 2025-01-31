@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     const bunnyStorage = new BunnyStorage(BUNNY_API, STORAGE_ZONE);
     bunnyStorage.upload(tempFilePath);
 
-    return new NextResponse(JSON.stringify({ success: true, url: `https://care2you.b-cdn.net/${filename}` }), { status: 200 });
+    return new NextResponse(JSON.stringify({ success: true, url: `https://iahapullzone.b-cdn.net/${filename}` }), { status: 200 });
   } catch (error) {
     console.error('Bunny Storage Upload Error:', error);
     return new NextResponse(JSON.stringify({ success: false, error: 'Upload failed' }), { status: 500 });

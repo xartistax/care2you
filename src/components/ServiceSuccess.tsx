@@ -31,8 +31,6 @@ const ServiceSuccess: React.FC<ServiceSuccessProps> = ({ formData }) => {
             {' '}
           </Box>
           {' '}
-          {formData.title}
-          {' '}
           wurde erfolgreich eingestellt.
         </Text>
       </VStack>

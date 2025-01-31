@@ -1,4 +1,4 @@
-import { clerkClient, currentUser } from '@clerk/nextjs/server';
+import { clerkClient } from '@clerk/nextjs/server';
 import { eq } from 'drizzle-orm';
 import { getTranslations } from 'next-intl/server';
 import type { z } from 'zod';
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: { locale: string } 
 }
 
 export default async function NewServiceServer({ params }: { params: { id: string } }) {
-  const serviceId = Number(params.id);
+  const serviceId = params.id;
 
   // Ensure `id` is parsed correctly and valid
 
@@ -36,8 +36,7 @@ export default async function NewServiceServer({ params }: { params: { id: strin
   const services = await db
     .select()
     .from(servicesSchema)
-    .where(eq(servicesSchema.id, serviceId))
-
+    .where(eq(servicesSchema.internalId, serviceId))
     .limit(1);
 
   // Get the first service object
@@ -50,27 +49,27 @@ export default async function NewServiceServer({ params }: { params: { id: strin
   // ✅ Construct full `ServiceFormData` object
   type ServiceFormData = z.infer<typeof serviceSchema>;
 
-  const user = await currentUser();
+  // const user = await currentUser();
 
   const formattedService: ServiceFormData = {
     id: Number(serviceData.id),
-    userId: String(user?.id),
+    userId: serviceData.userId,
+    category: serviceData.category,
     title: serviceData.title ?? '',
     description: serviceData.description ?? '',
     price: serviceData.price ?? 0,
     priceType: serviceData.priceType ?? 'fix',
     image: serviceData.image || '/placeholder.jpeg',
     fileToUpload: null, // ✅ Ensure this is provided
-    workingHours:
-      serviceData.workingHours && typeof serviceData.workingHours === 'string'
-        ? JSON.parse(serviceData.workingHours || '{}') // ✅ Prevent `null` parsing errors
-        : serviceData.workingHours ?? {}, // ✅ Ensure it's always an object
-    location:
-      serviceData.location && typeof serviceData.location === 'string'
-        ? JSON.parse(serviceData.location || '{}') // ✅ Prevent `null` parsing errors
-        : serviceData.location ?? { street: '', number: '', city: '', postalCode: '' },
+    workingHours: serviceData.workingHours && typeof serviceData.workingHours === 'string'
+      ? JSON.parse(serviceData.workingHours || '{}') // ✅ Prevent `null` parsing errors
+      : serviceData.workingHours ?? {}, // ✅ Ensure it's always an object
+    location: serviceData.location && typeof serviceData.location === 'string'
+      ? JSON.parse(serviceData.location || '{}') // ✅ Prevent `null` parsing errors
+      : serviceData.location ?? { street: '', number: '', city: '', postalCode: '' },
     formattedPrice: `${serviceData.price ?? 0} CHF`, // ✅ Ensure it's always a string
-    calendly: serviceData.calendly ?? '', // ✅ Ensure it's a string
+    calendly: serviceData.calendly ?? '',
+    internalId: serviceData.internalId,
   };
 
   // Fetch user details from Clerk

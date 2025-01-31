@@ -1,8 +1,10 @@
 import type { User } from '@clerk/nextjs/server';
+import { v4 as uuidv4 } from 'uuid';
 import type { z } from 'zod';
 
 import type { OnboardingState } from '@/contexts/OnboardingContext';
 import { Env } from '@/libs/Env';
+import type { addressSchema } from '@/validations/addressValidation';
 import type { OnBoardingClientUser } from '@/validations/onBoardingValidation';
 import type { serviceSchema } from '@/validations/serviceValidation';
 
@@ -10,6 +12,7 @@ import { AppConfig } from './AppConfig';
 import type { WorkingHours } from './Types';
 
 type ServiceFormData = z.infer<typeof serviceSchema>;
+type AddressFormData = z.infer<typeof addressSchema>;
 
 export const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_APP_URL) {
@@ -284,11 +287,16 @@ export const constructOnboardingUser = (formState: OnboardingState): OnBoardingC
     email: formState.data.email,
     imageUrl: formState.data.imageUrl || null,
     privateMetadata: {
+
+      status: formState.data.privateMetadata.status,
+      dob: formState.data.privateMetadata.dob,
+      nationality: formState.data.privateMetadata.nationality,
+
       phone: formState.data.privateMetadata.phone,
       gender: formState.data.privateMetadata.gender,
       role: formState.data.privateMetadata.role,
       compilance: formState.data.privateMetadata.compilance,
-      companyTitle: formState.data.privateMetadata.companyTitle,
+      companyTitle: `${formState.data.privateMetadata.companyTitle}`,
       companyDescription: formState.data.privateMetadata.companyDescription,
       companyCategory: formState.data.privateMetadata.companyCategory,
       serviceCategory: formState.data.privateMetadata.serviceCategory,
@@ -316,6 +324,9 @@ export const constructUser = (user: User): OnBoardingClientUser => {
     email: user.emailAddresses[0]?.emailAddress,
     imageUrl: user.imageUrl || null,
     privateMetadata: {
+      status: user.privateMetadata.status,
+      dob: user.privateMetadata.dob,
+      nationality: user.privateMetadata.nationality,
       phone: user.privateMetadata.phone,
       gender: user.privateMetadata.gender,
       role: user.privateMetadata.role,
@@ -331,13 +342,13 @@ export const constructUser = (user: User): OnBoardingClientUser => {
       languages: user.privateMetadata.languages as unknown[],
       certificates: user.privateMetadata.certificates as unknown[],
       workingHours: user.privateMetadata.workingHours as {
-        Monday: WorkingHours;
-        Tuesday: WorkingHours;
-        Wednesday: WorkingHours;
-        Thursday: WorkingHours;
-        Friday: WorkingHours;
-        Saturday: WorkingHours;
-        Sunday: WorkingHours;
+        Montag: WorkingHours;
+        Dienstag: WorkingHours;
+        Mittwoch: WorkingHours;
+        Donnerstag: WorkingHours;
+        Freitag: WorkingHours;
+        Samstag: WorkingHours;
+        Sonntag: WorkingHours;
       },
       street: user.privateMetadata.street,
       streetnumber: user.privateMetadata.streetnumber,
@@ -378,19 +389,22 @@ export const uploadImageToBunny = async (serviceImage: File | null) => {
   return result; // This should be { success: true, url: "..." }
 };
 
-export const saveNewService = async (formData: ServiceFormData) => {
+export const saveNewService = async (formData: ServiceFormData, userId: string) => {
   try {
     const response = await fetch(`/api/addNewService`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+
       body: JSON.stringify({
+        internalId: uuidv4(),
+        userId,
         title: formData.title as string, // Ensure it's a string
         description: formData.description as string, // Ensure it's a string
+        category: formData.category as string,
         price: formData.price,
         priceType: formData.priceType === 'fix' ? 'fix' : 'hourly', // Convert to expected format
-        userId: formData.userId,
         image: formData.image,
-        calendly: formData.calendly,
+        calendly: formatLink(formData.calendly),
         workingHours: Object.keys(formData.workingHours).reduce((acc, day) => {
           const dayKey = day as keyof typeof formData.workingHours; // ✅ Cast `day` to a valid key
           acc[dayKey] = {
@@ -476,3 +490,136 @@ export const companyTypeRetriever = (companyType: string) => {
       return 'Einzelfirma';
   }
 };
+
+export const expertiseTypeRetriever = (expertise: string) => {
+  switch (expertise) {
+    case '0':
+      return 'weniger als 1-Jahr';
+    case '1':
+      return 'zwischen 1 und 3 Jahre';
+    case '2':
+      return 'über 5 Jahre';
+
+    default:
+      return 'weniger als 1-Jahr';
+  }
+};
+
+export const categoryTypeRetriever = (category: string) => {
+  switch (category) {
+    case '0':
+      return 'Alltagshilfe';
+    case '1':
+      return 'Pflege & Gesundheitsversorgung';
+    case '2':
+      return 'Demenzbetreuung';
+    case '3':
+      return 'Begleitung & Gesellschaft';
+    case '4':
+      return '24-Stunden-Betreuung';
+    case '5':
+      return 'Haushaltsdienstleistungen';
+    case '6':
+      return 'Mobilität & Transport';
+    case '7':
+      return 'Essen & Ernährung';
+    case '8':
+      return 'Technikhilfe für Senioren';
+    case '9':
+      return 'Anträge & Bürokratie';
+    default:
+      return 'Alltagshilfe'; // Default case remains the same
+  }
+};
+
+export const editAddress = async (formData: AddressFormData, userId: string) => {
+  try {
+    const response = await fetch(`/api/editAddress`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user: {
+          id: userId, // Make sure to include the user ID
+          privateMetadata: {
+            street: formData.street,
+            streetNumber: formData.streetnumber,
+            location: formData.location,
+            plz: formData.plz,
+            phone: formData.phone,
+          },
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to addressEdit cxredit: ${response.status} - ${response.statusText}\n${errorText}`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error address edit:', error);
+    throw error;
+  }
+};
+
+export const updateStatus = async (userId: string, currentStatus: string) => {
+  try {
+    const response = await fetch(`/api/change-user-status`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Header für JSON hinzufügen
+      },
+      body: JSON.stringify({ userId, currentStatus }), // JSON-Daten senden
+    });
+
+    // Prüfe den HTTP-Status
+    if (!response.ok) {
+      return false;
+    }
+    return true; // Erfolg
+  } catch (error) {
+    // Netzwerk- oder andere Fehler
+    console.error('Error in updateStatus:', error);
+    return false;
+  }
+};
+
+export const deleteUser = async (userId: string) => {
+  try {
+    const response = await fetch(`/api/change-user-status`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Header für JSON hinzufügen
+      },
+      body: JSON.stringify({ userId }), // JSON-Daten senden
+    });
+
+    // Prüfe den HTTP-Status
+    if (!response.ok) {
+      return false;
+    }
+    return true; // Erfolg
+  } catch (error) {
+    // Netzwerk- oder andere Fehler
+    console.error('Error in deleteUser:', error);
+    return false;
+  }
+};
+
+export function formatLink(input: string) {
+  // Trim any extra spaces
+  let link = input.trim();
+
+  // Check if the input already has a protocol (http:// or https://)
+  if (!link.match(/^https?:\/\//)) {
+    // If not, prepend https://www.
+    if (!link.match(/^www\./)) {
+      link = `https://www.${link}`;
+    } else {
+      link = `https://${link}`;
+    }
+  }
+
+  return link;
+}

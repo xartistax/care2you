@@ -19,18 +19,29 @@ export default function ProfileUserLink({ user }: ProfileUserLinkProps) {
 
       <MenuRoot>
         <MenuTrigger asChild>
+
           <Button variant="ghost" size="sm" fontWeight="bold">
             {`${user.lastName} ${user.firstName}`}
             {' '}
-            <span className="flex items-center">
-              {' ( '}
-              <CoinIcon />
-              {user.privateMetadata.credits as string}
-              {' '}
-              Credits
-              {' ) '}
-            </span>
+
+            {
+              user.privateMetadata.credits as number > 0
+                ? (
+                    <span className="flex items-center">
+                      {' ( '}
+                      <CoinIcon />
+                      {user.privateMetadata.credits as string}
+                      {' '}
+                      Credits
+                      {' ) '}
+                    </span>
+
+                  )
+                : (null)
+            }
+
           </Button>
+
         </MenuTrigger>
         <MenuContent>
           <MenuItem value="rename">
@@ -39,7 +50,7 @@ export default function ProfileUserLink({ user }: ProfileUserLinkProps) {
             </Link>
 
           </MenuItem>
-          <SignOutButton redirectUrl="/sign-in">
+          <SignOutButton redirectUrl="/de/sign-in">
             <MenuItem
               value="logout"
               color="fg.error"

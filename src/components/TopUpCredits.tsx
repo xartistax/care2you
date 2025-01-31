@@ -71,7 +71,7 @@ const TopUpCredits = ({ userId }: TopUpCreditsProps) => {
           disabled={loading}
         />
         <Button colorScheme="blue" onClick={handleTopUp} loading={loading}>
-          Top Up Credits
+          Credits aufladen
         </Button>
       </VStack>
 

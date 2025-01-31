@@ -1,7 +1,7 @@
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { HStack, Text } from '@chakra-ui/react';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker'; // Make sure this matches the TimeRangePicker you're using.
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Switch } from './ui/switch';
 
@@ -23,6 +23,12 @@ const WorkingHoursForm = <T extends string>({
   onTimeChange,
   label = 'Working Hours',
 }: WorkingHoursProps<T>) => {
+  useEffect(() => {
+    // Force a re-render or update state when the component mounts
+    // You can log the values to ensure they are being passed correctly
+    // console.log('Time range picker mounted with value');
+  }, []);
+
   return (
     <FormControl w="100%">
       <FormLabel fontSize="small" fontWeight="bold">
@@ -65,8 +71,9 @@ const WorkingHoursForm = <T extends string>({
               format="HH:mm"
               clearIcon={null}
               disabled={!dayData.enabled}
-              className={!dayData.enabled ? 'time-picker-disabled' : ''}
+              className={`time-picker ${!dayData.enabled ? 'time-picker-disabled' : ''}`}
             />
+
           </HStack>
         );
       })}

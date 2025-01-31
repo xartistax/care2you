@@ -2,13 +2,13 @@
 
 import {
   Box,
-  Button,
   Heading,
   HStack,
   Image as ChakraImage,
   Link,
   Stack,
   Text,
+  Textarea,
   VStack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
@@ -16,8 +16,16 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import type { z } from 'zod';
 
+import { Button } from '@/components/ui/button';
+import {
+  PopoverBody,
+  PopoverContent,
+  PopoverRoot,
+  PopoverTrigger,
+} from '@/components/ui/popover'; // Assuming you have a Popover component
 import { Tag } from '@/components/ui/tag';
-import { companyTypeRetriever } from '@/utils/Helpers';
+import { Toaster, toaster } from '@/components/ui/toaster';
+import { categoryTypeRetriever, companyTypeRetriever } from '@/utils/Helpers';
 import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 import type { serviceSchema } from '@/validations/serviceValidation';
 
@@ -26,37 +34,93 @@ type User = z.infer<typeof onboardingClientUserSchema>;
 
 export default function SingleListing({ service, user }: { service: ServiceFormData; user: User }) {
   const [isVisible, setIsVisible] = useState(false);
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [client, setClient] = useState(false);
   const t = useTranslations();
   const router = useRouter();
   let formattedPriceType = '';
 
+  useEffect(() => {
+    setClient(true);
+  }, []);
+
+  // Price Type Mapping
   switch (service.priceType) {
     case 'fix':
       formattedPriceType = 'Fixpreis';
-      break; // ✅ Stop execution after setting value
+      break;
     case 'hourly':
       formattedPriceType = 'Stundenpreis';
-      break; // ✅ Stop execution after setting value
+      break;
     default:
       formattedPriceType = 'Stundenpreis';
   }
 
-  if (!user) {
-    throw new Error('No user');
+  // Make sure the image URL is correct
+  if (!service.image) {
+    service.image = '/placeholder.jpeg';
+  } else if (!service.image.startsWith('http')) {
+    service.image = `https://iaha-pull-zone.b-cdn.net/${service.image}`;
   }
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
-  if (!service.image) {
-    service.image = '/placeholder.jpeg';
-  } else if (!service.image.startsWith('http')) {
-    // Only prepend the base URL if it's not already a full URL
-    service.image = `https://iaha-pull-zone.b-cdn.net/${service.image}`;
+  const handleSendMessage = async () => {
+    if (!message.trim()) {
+      toaster.create({
+        title: 'Nachricht erforderlich',
+        description: 'Bitte geben Sie eine Nachricht ein.',
+        type: 'error',
+        meta: { closable: true },
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: 'demian2009@icloud.com',
+          subject: `Kontaktanfrage für ${service.title}`,
+          message,
+        }),
+      });
+
+      if (response.ok) {
+        toaster.create({
+          title: 'Nachricht gesendet',
+          description: 'Ihre Nachricht wurde erfolgreich gesendet.',
+          type: 'success',
+          meta: { closable: true },
+        });
+        setMessage('');
+      } else {
+        throw new Error('Fehler beim Senden der Nachricht');
+      }
+    } catch (error) {
+      toaster.create({
+        title: 'Fehler',
+        description: `Ihre Nachricht konnte nicht gesendet werden: ${error}`,
+        type: 'error',
+        meta: { closable: true },
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!client) {
+    return null;
   }
 
   return (
+
     <Box
       className={`transition-opacity duration-1000 ease-in-out ${
         isVisible ? 'opacity-100' : 'opacity-0'
@@ -67,7 +131,6 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
       maxWidth="800px"
       margin="0 auto"
     >
-
       {/* Image */}
       <Box mb="6">
         <ChakraImage
@@ -105,85 +168,127 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
           {service.description}
         </Text>
 
+        {/* Description */}
+        <Text fontSize="sm" color="gray.600">
+          {
+            categoryTypeRetriever(service.category as string)
+          }
+
+        </Text>
+
+        {/* Service Hours */}
         <VStack align="start" spaceY={0}>
           <Heading size="sm">
             Servicezeiten
           </Heading>
           {Object.entries(service.workingHours)
-            .filter(([, details]) => details.enabled) // ✅ Only show enabled days
+            .filter(([, details]) => details.enabled) // Only show enabled days
             .map(([day, details]) => (
               <Text key={day} fontSize="sm" color="gray.600">
                 {day}
-
                 :
-                {' '}
-                {' '}
                 {details.hours[0]}
                 {' '}
                 -
                 {details.hours[1]}
               </Text>
-
             ))}
-
-          <Link fontSize="sm" href={service.calendly} target="_blank" color="blue.600">
-
-            Setzen Sie Ihren Termin
-
-          </Link>
         </VStack>
 
-        <VStack align="start" fontSize="sm" width="full">
-          <Heading size="sm">
-            Adresse
-          </Heading>
+        {/* Calendar Link */}
+        <Link fontSize="sm" href={service.calendly} target="_blank" color="blue.600">
+          Setzen Sie Ihren Termin
+        </Link>
 
+        {/* Address */}
+        <VStack align="start" fontSize="sm" width="full">
+          <Heading size="sm">Adresse</Heading>
           <HStack width="full">
-            {/* ✅ Ensures proper alignment */}
             <Text>{service.location.street}</Text>
             <Text>{service.location.number}</Text>
           </HStack>
-
           <HStack width="full">
             <Text>{service.location.postalCode}</Text>
             <Text>{service.location.city}</Text>
           </HStack>
         </VStack>
 
+        {/* Provider Info */}
         <VStack align="start" fontSize="md" width="full">
-          <Heading size="sm">
-            Anbieter
-          </Heading>
-
+          <Heading size="sm">Anbieter</Heading>
           <HStack width="full">
-            {/* ✅ Ensures proper alignment */}
             <Text fontSize="sm">
-              { user.privateMetadata.companyTitle as string }
+
+              {user.privateMetadata.companyTitle as string}
               {' '}
-              { companyTypeRetriever(user.privateMetadata.companyCategory as string)}
               {' '}
+              <Tag>
+                {' '}
+                {companyTypeRetriever(user.privateMetadata.companyCategory as string)}
+                {' '}
+              </Tag>
 
             </Text>
-
           </HStack>
-
           <VStack fontSize="sm">
             <Link href={`tel:${user.privateMetadata.phone}`} color="blue.600">
-              { user.privateMetadata.phone as string }
+              {user.privateMetadata.phone as string}
             </Link>
-
           </VStack>
-
         </VStack>
 
         {/* Actions */}
         <Stack direction="row" pt="4" width="100%">
-          {/* Confirm Button */}
+          {/* Calendly Link */}
           <Link href={`${service.calendly}`} style={{ flex: 2 }} target="_blank">
             <Button colorScheme="blue" size="md" width="100%">
               Setzen Sie Ihren Termin
             </Button>
           </Link>
+
+          {/* Popover for Contacting */}
+          <PopoverRoot>
+            <PopoverTrigger>
+              <Button
+                size="md"
+                width="100%"
+                flex="2"
+              >
+                Kontaktieren Sie den Anbieter
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverBody>
+                <Text mb={2}>
+                  Kontaktieren Sie
+                  {' '}
+                  <Box as="span" fontWeight="bold">
+                    {' '}
+                    {user.privateMetadata.companyTitle as string}
+                    {' '}
+                    {companyTypeRetriever(user.privateMetadata.companyCategory as string) !== 'Einzelfirma'
+                    && companyTypeRetriever(user.privateMetadata.companyCategory as string)}
+                  </Box>
+
+                </Text>
+                <Textarea
+                  placeholder="Geben Sie hier Ihre Nachricht ein..."
+                  value={message}
+                  onChange={e => setMessage(e.target.value)}
+                  size="sm"
+                  disabled={loading}
+                />
+                <Button
+                  colorScheme="blue"
+                  mt={3}
+                  onClick={handleSendMessage}
+                  loading={loading}
+                >
+                  Senden
+                </Button>
+              </PopoverBody>
+            </PopoverContent>
+          </PopoverRoot>
 
           {/* Go Back Button */}
           <Button
@@ -198,6 +303,8 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
           </Button>
         </Stack>
       </VStack>
+
+      <Toaster />
     </Box>
   );
 }

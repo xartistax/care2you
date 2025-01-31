@@ -9,7 +9,7 @@ import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useOnboarding } from '@/hooks/useOnboarding';
-import { constructOnboardingUser, getSalutation, updateUserDataService } from '@/utils/Helpers';
+import { constructOnboardingUser, getSalutation, updateUserDataCare, updateUserDataService } from '@/utils/Helpers';
 
 const Step3Service = () => {
   const [isComplete, setIsComplete] = useState(false);
@@ -32,10 +32,18 @@ const Step3Service = () => {
 
     try {
       // Warte auf die Fertigstellung der Updates
-      const updateSuccess = await updateUserDataService(locale, user);
 
-      if (!updateSuccess) {
-        throw new Error('Fehler beim Aktualisieren der Benutzerdaten');
+      if (user.privateMetadata.role === 'service') {
+        const updateSuccess = await updateUserDataService(locale, user);
+
+        if (!updateSuccess) {
+          throw new Error('Fehler beim Aktualisieren der Benutzerdaten');
+        }
+      } else if (user.privateMetadata.role === 'care') {
+        const updateSuccess = await updateUserDataCare(locale, user);
+        if (!updateSuccess) {
+          throw new Error('Fehler beim Aktualisieren der Benutzerdaten');
+        }
       }
 
       setAlertMessage('');
@@ -43,6 +51,8 @@ const Step3Service = () => {
       setIsComplete(true);
 
       router.push(`/${locale}/welcome`);
+
+      // console.log(user);
     } catch (error) {
       console.error('Fehler während der Anmeldung:', error);
       setAlertMessage('Bei der Anmeldung ist ein Fehler aufgetreten');

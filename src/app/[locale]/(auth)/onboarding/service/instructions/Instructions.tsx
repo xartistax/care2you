@@ -55,7 +55,6 @@ export default function Instructions({ userId, lastName, gender }: {
       setIsSubmitting(false);
     }
   };
-
   const handleCheckboxChange = () => {
     setIsChecked(prev => !prev);
     if (!isChecked) {
@@ -64,7 +63,6 @@ export default function Instructions({ userId, lastName, gender }: {
       unsetCompilance();
     }
   };
-
   const handleSubmit = async () => {
     try {
       setIsSubmitting(true);

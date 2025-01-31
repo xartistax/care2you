@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
     // Validate environment variables
 
     const { userId } = await request.json();
-    const clerkClientObject = await clerkClient();
+    const clerkClientObject = clerkClient();
     const clerkUserObject = await currentUser();
     const compilance = new Date().toISOString();
 
