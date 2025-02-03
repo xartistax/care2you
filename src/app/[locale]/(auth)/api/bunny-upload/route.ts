@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Buffer } from 'node:buffer';
 import fs from 'node:fs';
 import path, { extname } from 'node:path';
@@ -30,11 +31,15 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
     const tempFilePath = path.join('/tmp', `${filename}`);
 
-    // Save file to temporary location
+    console.log(`Saving file to ${tempFilePath}`);
     await fs.promises.writeFile(tempFilePath, buffer);
+    console.log('File saved successfully.');
 
     const bunnyStorage = new BunnyStorage(BUNNY_API, STORAGE_ZONE);
+
+    console.log('Attempting to upload to Bunny CDN...');
     bunnyStorage.upload(tempFilePath);
+    console.log('Upload initiated.');
 
     return new NextResponse(
       JSON.stringify({ success: true, url: `https://iahapullzone.b-cdn.net/${filename}` }),
