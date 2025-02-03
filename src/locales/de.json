@@ -168,7 +168,7 @@
       "Errors": {
         "noImage": "Bitte wählen Sie ein Bild aus",
         "workinghours": "Bitte wähle mindestens einen Arbeitstag aus.",
-        "calLink": "Bitte geben Sie einen Kalender an.",
+        "calLink": "Bitte geben Sie eine Webseite an.",
         "general": "Bitte füllen Sie alle Felder aus",
         "price": "Der Preis muss höher als 10.00 sein"
 
