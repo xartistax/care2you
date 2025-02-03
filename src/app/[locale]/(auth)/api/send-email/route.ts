@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
     const { data, error } = await resend.emails.send({
       from: 'Care2You - Terminanfrage <termine@care2you.ch>',
-      to: ['demian2009@icloud.com', 'rachele.wey@gmail.com'], // Dynamically set recipient
+      to: ['demian2009@icloud.com', 'office@bexolutions.ch', 'rachele.wey@gmail.com'], // Dynamically set recipient
       subject, // Use subject from the request
       react: EmailTemplate(emailData), // Pass email data to the template
     });

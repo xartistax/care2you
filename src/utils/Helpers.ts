@@ -659,3 +659,31 @@ export const uploadCertsToBunny = async (certFiles: File[]) => {
 
   return result; // This should contain the URLs from the response
 };
+
+export const SaveNote = async (note: string, user: OnBoardingClientUser) => {
+  try {
+    const response = await fetch(`/api/update-notes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Content-Type Header explizit setzen
+      },
+      body: JSON.stringify({
+        user,
+        note,
+      }),
+    });
+
+    // Prüfe den HTTP-Status der Antwort
+    if (!response.ok) {
+      const errorResponse = await response.text(); // Lese die Fehlermeldung
+      console.error(`Failed to update note: ${response.status} - ${response.statusText}`);
+      console.error(`Response body: ${errorResponse}`);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error in updateFirstAndLastName:', error);
+    return false;
+  }
+};

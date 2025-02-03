@@ -53,7 +53,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
     title: '',
     description: '',
     price: 0.00,
-    priceType: 'fix',
+    priceType: 'hourly',
     formattedPrice: '',
     calendly: '',
     location: {

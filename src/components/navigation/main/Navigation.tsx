@@ -1,12 +1,13 @@
 import { currentUser } from '@clerk/nextjs/server';
 import { ClipboardIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 export default async function MainNavigation() {
   // const t = useTranslations('RootLayout');
   const user = await currentUser();
   if (!user) {
-    throw new Error('User not found');
+    redirect('/sign-in');
   }
   const role = String(user.privateMetadata.role);
 
@@ -43,16 +44,30 @@ export default async function MainNavigation() {
 
     case 'client':
       return (
-        <li>
-          <Link
-            href="/de/welcome/new/care"
-            className="flex items-center gap-x-2 border-none text-gray-700 hover:text-gray-900"
-          >
+        <>
 
-            <ClipboardIcon className="size-5" />
-            Services
-          </Link>
-        </li>
+          <li>
+            <Link
+              href="/de/welcome/new/care"
+              className="flex items-center gap-x-2 border-none text-gray-700 hover:text-gray-900"
+            >
+
+              <ClipboardIcon className="size-5" />
+              Services
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              href="/de/welcome/new/care/calculator"
+              className="flex items-center gap-x-2 border-none text-gray-700 hover:text-gray-900"
+            >
+
+              <ClipboardIcon className="size-5" />
+              Neue Pflege
+            </Link>
+          </li>
+        </>
       );
 
     default:

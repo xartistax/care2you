@@ -79,7 +79,7 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: 'demian2009@icloud.com',
-          subject: `Terminanfrage über Care2You`,
+          subject: `Terminanfrage über Care2you`,
           message,
           service_email: service.serviceProvider_email,
           service_lastName: service.serviceProvider_lastName,

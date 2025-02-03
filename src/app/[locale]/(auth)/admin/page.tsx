@@ -1,4 +1,5 @@
 import { clerkClient, currentUser } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
 import { constructUser } from '@/utils/Helpers';
@@ -31,7 +32,7 @@ export default async function DashboardServer() {
   const serviceUsers = transformedUsers.filter(user => user.privateMetadata.role === 'care');
 
   if (!user) {
-    throw new Error('User not found');
+    redirect('/sign-in');
   }
 
   return <AdminPanel allUsers={transformedUsers} careUsers={careUsers} clientUsers={clientUsers} serviceUsers={serviceUsers} />;

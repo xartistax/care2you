@@ -7,7 +7,7 @@ const CalculatorEmbed = () => {
 
       <Heading as="h1" size="2xl">
 
-        Care2You Pflegerechner
+        Care2you Pflegerechner
       </Heading>
 
       <Text mb={10} fontSize="sm">

@@ -1,6 +1,6 @@
 'use client';
 
-import { Input, VStack } from '@chakra-ui/react';
+import { Input, Text, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -62,8 +62,10 @@ const TopUpCredits = ({ userId }: TopUpCreditsProps) => {
   return (
     <>
 
-      <VStack spaceY={4}>
+      <VStack spaceY={4} maxWidth="800px">
+        <Text textAlign="center" fontSize="sm"> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi praesentium incidunt facilis quisquam nam harum sed, eaque blanditiis amet reiciendis et provident quae minus eligendi repellendus nihil totam reprehenderit aspernatur?</Text>
         <Input
+          width="30%"
           placeholder="Anzahl Credits eingeben"
           value={amount}
           onChange={e => setAmount(e.target.value as unknown as number)}

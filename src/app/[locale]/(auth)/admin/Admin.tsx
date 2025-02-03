@@ -1,10 +1,7 @@
 /* eslint-disable no-alert */
 /* eslint-disable style/multiline-ternary */
-
 'use client';
-import { Box, Heading, Input, Spinner, Table } from '@chakra-ui/react';
-import type { Url } from 'next/dist/shared/lib/router/router';
-import Link from 'next/link';
+import { Box, Heading, Input, Link, Spinner, Table, Textarea } from '@chakra-ui/react';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import type { z } from 'zod';
@@ -17,7 +14,7 @@ import {
 } from '@/components/ui/action-bar';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { deleteUser, expertiseTypeRetriever, updateStatus } from '@/utils/Helpers';
+import { deleteUser, expertiseTypeRetriever, SaveNote, updateStatus } from '@/utils/Helpers';
 import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 
 type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
@@ -29,16 +26,16 @@ type AdminPanelProps = {
   allUsers: OnBoardingClientUser[];
 };
 
-export default function AdminPanel({ allUsers: initialUsers, clientUsers: _initialClientUsers, serviceUsers: _initialServiceUsers, careUsers: _initialCareUsers }: AdminPanelProps) {
+export default function AdminPanel({
+  allUsers: initialUsers,
+  clientUsers: _initialClientUsers,
+  serviceUsers: _initialServiceUsers,
+  careUsers: _initialCareUsers,
+}: AdminPanelProps) {
   const [allUsers, setAllUsers] = useState<OnBoardingClientUser[]>(initialUsers);
 
-  // const [clientUsers, setClientUsers] = useState<OnBoardingClientUser[]>(initialClientUsers);
-  // const [serviceUsers, setServiceUsers] = useState<OnBoardingClientUser[]>(initialServiceUsers);
-  // const [careUsers, setCareUsers] = useState<OnBoardingClientUser[]>(initialCareUsers);
-
-  // console.log(initialServiceUsers);
-  // console.log(initialCareUsers);
-  // console.log(initialClientUsers);
+  // State to store the notes for each user
+  const [notes, setNotes] = useState<Record<string, string>>({});
 
   const [selection, setSelection] = useState<string[]>([]);
   const [password, setPassword] = useState(''); // Store the entered password
@@ -48,10 +45,17 @@ export default function AdminPanel({ allUsers: initialUsers, clientUsers: _initi
   const [loadingIdsStatus, setLoadingIdsStatus] = useState<string[]>([]);
 
   const hasSelection = selection.length > 0;
-
   const indeterminate = selection.length > 0 && selection.length < allUsers.length;
-
   const selectedUsers = allUsers.filter(user => selection.includes(user.id));
+
+  // Handle updating the note for a specific user
+  const handleSaveNote = (user: OnBoardingClientUser, note: string) => {
+    // Here you can trigger a helper function or API call
+
+    // Example helper function trigger
+
+    SaveNote(note, user);
+  };
 
   const handleStatus = async () => {
     setLoadingIdsStatus(selection); // ✅ Set loading for status action
@@ -146,6 +150,7 @@ export default function AdminPanel({ allUsers: initialUsers, clientUsers: _initi
                       }}
                     />
                   </Table.ColumnHeader>
+                  <Table.ColumnHeader w={12} width={12}>Notiz</Table.ColumnHeader>
                   <Table.ColumnHeader>Status</Table.ColumnHeader>
                   <Table.ColumnHeader>Name</Table.ColumnHeader>
                   <Table.ColumnHeader>Nachname</Table.ColumnHeader>
@@ -180,6 +185,21 @@ export default function AdminPanel({ allUsers: initialUsers, clientUsers: _initi
                             />
                           )}
                     </Table.Cell>
+                    <Table.Cell>
+                      <Textarea
+                        value={notes[item.id] || ''}
+                        onChange={e => setNotes({ ...notes, [item.id]: e.target.value })}
+                        size="lg" // Set large size
+                        width="120px" // Full width
+                        resize="vertical" // Allow resizing
+                        placeholder="Notiz anfügen..."
+                        fontSize="sm"
+                        lineHeight={1}
+                      />
+                      <Link display="block" fontSize="x-small" as={Link} onClick={() => handleSaveNote(item, notes[item.id] as string)}>
+                        speichern
+                      </Link>
+                    </Table.Cell>
                     <Table.Cell>{item.privateMetadata.status as string}</Table.Cell>
                     <Table.Cell>{item.firstName}</Table.Cell>
                     <Table.Cell>{item.lastName}</Table.Cell>
@@ -198,14 +218,9 @@ export default function AdminPanel({ allUsers: initialUsers, clientUsers: _initi
                     <Table.Cell>
                       {item.privateMetadata.role === 'care' ? (
                         item.privateMetadata.certificates?.map(url => (
-
-                          <Link key={`${uuidv4()}`} href={url as Url} color="blue.500">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                            </svg>
-
+                          <Link key={`${uuidv4()}`} href={url! as string} color="blue.500">
+                            {/* SVG icon here */}
                           </Link>
-
                         ))
                       ) : (
                         'N/A'

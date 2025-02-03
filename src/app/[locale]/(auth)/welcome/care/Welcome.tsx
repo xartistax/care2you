@@ -91,13 +91,13 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
         >
           {/* New Service Card */}
 
-          {/* New Care Card */}
+          {/* New Service Card */}
           <GridItem>
             <LinkBox
               as={CardRoot}
               height="100%"
-              p="4"
               bg="gray.50"
+              p="4"
               borderRadius="md"
               _hover={{ boxShadow: 'lg', transform: 'scale(1.02)' }}
               transition="all 0.2s"
@@ -106,19 +106,18 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
                 {/* Image */}
                 <Box flexShrink={0} mb={{ base: '4', md: '0' }}>
                   <Image
-                    src="/assets/images/icon_newCare.svg"
+                    src="/assets/images/icon_newService.svg"
                     width={63.1}
                     height={81.4}
-                    alt="New Care"
+                    alt="New Service"
                   />
                 </Box>
 
                 {/* Text Content */}
                 <Box>
                   <CardTitle lineHeight={0}>
-                    <LinkOverlay fontSize="xl" color="#A0A0A0" href="/welcome/new/care/calculator">
-                      Pflegerechner
-
+                    <LinkOverlay fontSize="xl" color="#A0A0A0" href="/welcome/new/care">
+                      {t('new_service')}
                     </LinkOverlay>
                   </CardTitle>
                 </Box>

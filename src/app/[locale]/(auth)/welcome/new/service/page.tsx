@@ -1,4 +1,5 @@
 import { currentUser } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
 import { constructUser } from '@/utils/Helpers';
@@ -19,7 +20,7 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 export default async function NewServiceServer() {
   const user = await currentUser();
   if (!user) {
-    throw new Error('User not found');
+    redirect('/sign-in');
   }
 
   const constructedUser = constructUser(user);

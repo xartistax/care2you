@@ -85,15 +85,16 @@ export const defaultWorkingHours: {
 
 export const categoriesList = createListCollection({
   items: [
-    { value: '0', label: 'Alltagshilfe' },
-    { value: '1', label: 'Pflege & Gesundheitsversorgung' },
-    { value: '2', label: 'Demenzbetreuung' },
-    { value: '3', label: 'Begleitung & Gesellschaft' },
-    { value: '4', label: '24-Stunden-Betreuung' },
-    { value: '5', label: 'Haushaltsdienstleistungen' },
-    { value: '6', label: 'Mobilität & Transport' },
-    { value: '7', label: 'Essen & Ernährung' },
-    { value: '8', label: 'Technikhilfe für Senioren' },
-    { value: '9', label: 'Anträge & Bürokratie' },
+    { value: '0', label: 'Mobilität & Transport' },
+    { value: '1', label: 'Fusspflege' },
+    { value: '2', label: 'Massage' },
+    { value: '3', label: 'Physiotherapie' },
+    { value: '4', label: 'Ergotherapie' },
+    { value: '5', label: 'Coiffure' },
+    { value: '6', label: 'Begleitdienst' },
+    { value: '7', label: 'Haushaltdienstleistung' },
+    { value: '8', label: 'Hauswart und Handwerkerdienste' },
+    { value: '9', label: 'Mahlzeitendienst' },
+    { value: '10', label: 'Andere' },
   ],
 });
