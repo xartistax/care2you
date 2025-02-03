@@ -177,7 +177,7 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
         {/* Service Hours */}
         <VStack align="start" spaceY={0}>
           <Heading size="sm">
-            Servicezeiten
+            Verfügbarkeiten
           </Heading>
           {Object.entries(service.workingHours)
             .filter(([, details]) => details.enabled) // Only show enabled days
