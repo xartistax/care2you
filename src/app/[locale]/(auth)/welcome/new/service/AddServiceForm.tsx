@@ -11,7 +11,6 @@ import type { z } from 'zod';
 import ServiceSuccess from '@/components/ServiceSuccess';
 import TopUpCredits from '@/components/TopUpCredits';
 import { Alert } from '@/components/ui/alert';
-import { RadioGroup } from '@/components/ui/radio';
 import { SelectRoot } from '@/components/ui/select';
 import { Tag } from '@/components/ui/tag';
 import { Toaster, toaster } from '@/components/ui/toaster';
@@ -174,18 +173,21 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
     setIsLoading(true);
     try {
       // Step 1: Upload the image to Bunny (assuming the function works as expected)
-      await uploadImageToBunny(formData.fileToUpload);
+      const response = await uploadImageToBunny(formData.fileToUpload);
       // Step 2: Merge the updated `userId` into the formData
+      if (response.success) {
+        formData.image = response.url;
+      }
 
       // Step 3: Use the updated data for further operations
       await saveNewService(formData, user.id);
 
       // Step 5: Other operations
       await decreaseCreditByOne(user.id);
-      setSuccess(true);
     } catch (error) {
       console.error('Failed to save service:', error);
     } finally {
+      setSuccess(true);
       setIsLoading(false);
     }
   };
@@ -306,7 +308,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               workingHours={formData.workingHours}
               onToggle={handleToggle}
               onTimeChange={handleTimeChange}
-              label="Erreichbarkeit"
+              label="Verfügbarkeiten"
             />
 
             <FormControl paddingBottom={8}>
@@ -384,31 +386,6 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                   ))}
                 </SelectContent>
               </SelectRoot>
-
-            </FormControl>
-
-            <Divider marginY={4} />
-
-            {/* Price Selection (Fix Price or Hourly Price) */}
-            <FormControl as="fieldset" paddingBottom={4}>
-              <FormLabel as="legend" fontSize="small" fontWeight="bold">
-                {' '}
-                {t('Forms.AddServiceForm.Labels.priceType')}
-                {' '}
-              </FormLabel>
-
-              <RadioGroup
-                value={formData.priceType}
-                onChange={(e) => {
-                  const selectedValue = (e.target as HTMLInputElement).value as 'fix' | 'hourly'; // Explicitly type the value
-                  setFormData(prev => ({
-                    ...prev,
-                    priceType: selectedValue, // Update priceType with the selected value
-                  }));
-                }}
-              >
-                {/* Radio options */}
-              </RadioGroup>
 
             </FormControl>
 

@@ -41,6 +41,7 @@ const Step2Service = () => {
 
   const handleNext = async () => {
     setIsLoading(true);
+
     if (!formState.data.privateMetadata.companyTitle || !formState.data.privateMetadata.companyCategory || !formState.data.privateMetadata.companyDescription) {
       setShowAlert(true);
       setAlertMessage('Bitte alles ausfüllen');

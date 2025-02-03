@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     // Nutzer-Daten aktualisieren
     await clerkClient.users.updateUser(userId, {
       privateMetadata: {
-
+        status: body.user.privateMetadata.status,
         role: body.user.privateMetadata.role,
         phone: body.user.privateMetadata.phone,
         gender: body.user.privateMetadata.gender,

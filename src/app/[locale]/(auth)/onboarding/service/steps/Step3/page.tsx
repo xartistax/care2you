@@ -28,6 +28,8 @@ const Step3Service = () => {
       return;
     }
 
+    formState.data.privateMetadata.status = 'active';
+
     const user = constructOnboardingUser(formState);
 
     try {

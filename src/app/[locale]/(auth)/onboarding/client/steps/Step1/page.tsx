@@ -2,7 +2,6 @@
 
 import { Box, HStack } from '@chakra-ui/react';
 import * as EmailValidator from 'email-validator';
-import phone, { } from 'phone';
 import { HiXCircle } from 'react-icons/hi';
 
 import { Alert } from '@/components/ui/alert';
@@ -32,15 +31,17 @@ const Step1 = () => {
       return;
     }
 
-    if (!phone(String(formState.data.privateMetadata.phone), { country: 'CH' }).isValid) {
-      setAlertMessage('Invalid phone number.');
-      setShowAlert(true);
-      return;
-    }
+    // if (!phone(String(formState.data.privateMetadata.phone), { country: 'CH' }).isValid) {
+    //   setAlertMessage('Invalid phone number.');
+    //   setShowAlert(true);
+    //   return;
+    // }
 
-    const phoneNumber = phone(String(formState.data.privateMetadata.phone), { country: 'CH' });
+    // const phoneNumber = phone(String(formState.data.privateMetadata.phone), { country: 'CH' });
 
-    formState.data.privateMetadata.phone = phoneNumber.phoneNumber;
+    const phoneNumber = String(formState.data.privateMetadata.phone);
+
+    formState.data.privateMetadata.phone = phoneNumber;
 
     setAlertMessage('');
     setShowAlert(false);

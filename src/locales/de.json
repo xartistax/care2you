@@ -158,7 +158,7 @@
       "Labels": {
         "workingHours": "Arbeitsstunden",
         "priceType": "Preisart",
-        "calLink": "Kalenderlink",
+        "calLink": "Webseite",
         "service": "Geben Sie dem Service einen Titel",
         "description": "Beschreiben Sie den Service",
         "fixprice": "Fixpreis",

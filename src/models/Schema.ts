@@ -1,8 +1,6 @@
-import { doublePrecision, jsonb, pgEnum, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
+import { doublePrecision, jsonb, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
 
 // Define the enum type explicitly first
-
-export const PriceType = pgEnum('priceType', ['fix', 'hourly']);
 
 export const servicesSchema = pgTable('services', {
   id: serial('id').primaryKey(),
@@ -11,7 +9,7 @@ export const servicesSchema = pgTable('services', {
   description: text('description').notNull(), // Detailed service description
   category: text('category').notNull(),
   price: doublePrecision('price').notNull(), // Price of the service in cents (or adjust as needed)
-  priceType: PriceType('priceType').notNull(), // Use the defined enum
+  priceType: text('priceType').notNull().default('fix'), // Use the defined enum
   status: text('status').default('active').notNull(), // Status of the service (e.g., available, unavailable)
   userId: text('userId').notNull(), // Foreign key to associate a service with a user
   image: text('image'),

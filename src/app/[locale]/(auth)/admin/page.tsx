@@ -27,10 +27,12 @@ export default async function DashboardServer() {
 
   const transformedUsers = users.data.map(user => constructUser(user));
   const careUsers = transformedUsers.filter(user => user.privateMetadata.role === 'care');
+  const clientUsers = transformedUsers.filter(user => user.privateMetadata.role === 'care');
+  const serviceUsers = transformedUsers.filter(user => user.privateMetadata.role === 'care');
 
   if (!user) {
     throw new Error('User not found');
   }
 
-  return <AdminPanel userList={careUsers} />;
+  return <AdminPanel allUsers={transformedUsers} careUsers={careUsers} clientUsers={clientUsers} serviceUsers={serviceUsers} />;
 }

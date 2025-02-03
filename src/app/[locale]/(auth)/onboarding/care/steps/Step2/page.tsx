@@ -2,10 +2,11 @@
 
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Wrap } from '@chakra-ui/layout';
-import { Box, CheckboxGroup, createListCollection, Fieldset, HStack, Input, Spinner, Stack, VStack } from '@chakra-ui/react';
+import { Box, CheckboxGroup, createListCollection, Fieldset, type FileUploadFileAcceptDetails, HStack, Input, Spinner, Stack, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import { HiXCircle } from 'react-icons/hi';
 
+import DatePickerHero from '@/components/DatePicker';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -13,7 +14,7 @@ import { FileUploadDropzone, FileUploadList, FileUploadRoot } from '@/components
 import { SelectContent, SelectItem, SelectRoot, SelectTrigger, SelectValueText } from '@/components/ui/select';
 import WorkingHoursForm from '@/components/WorkingHoursForm';
 import { useOnboarding } from '@/contexts/OnboardingContext';
-import { constructOnboardingUser, updateUserDataCare } from '@/utils/Helpers';
+import { constructOnboardingUser, updateUserDataCare, uploadCertsToBunny } from '@/utils/Helpers';
 
 const expertise_collection = createListCollection({
   items: [
@@ -49,8 +50,31 @@ const Step2Care = () => {
 
   const { formState, setFormState, setAlertMessage, setShowAlert, showAlert, alertMessage, prevStep, nextStep, locale } = useOnboarding();
   const [isLoading, setIsLoading] = useState(false);
+  const [acceptedFiles, setAcceptedFiles] = useState<File[]>([]);
+
+  // const fileUpload = useFileUpload();
 
   // const [files, setFiles] = useState([]);
+
+  const handleAcceptedFiles = (fileDetails: FileUploadFileAcceptDetails) => {
+    const maxSize = 5 * 1024 * 1024; // 5MB limit
+
+    // Ensure acceptedFiles exists and is an array
+    if (Array.isArray(fileDetails.files)) {
+      const validFiles = fileDetails.files.filter((file) => {
+        if (file.size > maxSize) {
+          console.error(`File ${file.name} exceeds the 5MB size limit.`);
+          return false; // Exclude file if it's too large
+        }
+        return true; // Include valid files
+      });
+
+      // Update the state with the valid files
+      setAcceptedFiles(validFiles);
+    } else {
+      console.error('No accepted files found');
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -87,35 +111,6 @@ const Step2Care = () => {
     }));
   };
 
-  // const handleFileDrop = (newFiles) => {
-  //   const filteredFiles = newFiles.filter(
-  //     file => file.size <= 5 * 1024 * 1024 && file.type === 'application/pdf',
-  //   );
-
-  //   const currentCertificates = formState.data.privateMetadata.certificates || [];
-
-  //   if (filteredFiles.length + currentCertificates.length > 10) {
-  //     setAlertMessage('You can only upload up to 10 files.');
-  //     setShowAlert(true);
-  //     return;
-  //   }
-
-  //   setFormState((prev) => {
-  //     const updatedState = {
-  //       ...prev,
-  //       data: {
-  //         ...prev.data,
-  //         privateMetadata: {
-  //           ...prev.data.privateMetadata,
-  //           certificates: [...currentCertificates, ...filteredFiles],
-  //         },
-  //       },
-  //     };
-
-  //     return updatedState;
-  //   });
-  // };
-
   const handleTimeChange = (
     day: keyof typeof formState.data.privateMetadata.workingHours,
     value: [string, string],
@@ -138,10 +133,32 @@ const Step2Care = () => {
     }));
   };
 
-  const handleNext = async () => {
-    formState.data.privateMetadata.status = formState.data.privateMetadata.status || 'inactive';
+  const handleDateChange = (date: Date | null) => {
+    // Ensure date is not null and is a valid date
+    if (date) {
+      setFormState(prevState => ({
+        ...prevState,
+        data: {
+          ...prevState.data,
+          privateMetadata: {
+            ...prevState.data.privateMetadata,
+            dob: date.toISOString(), // Store in ISO format
+          },
+        },
+      }));
+    } else {
+      console.error('Invalid date:', date); // Optional: Log invalid date for debugging
+    }
+  };
 
+  const handleNext = async () => {
     setIsLoading(true);
+    if (formState.data.privateMetadata.role === 'care') {
+      formState.data.privateMetadata.status = formState.data.privateMetadata.status || 'inactive';
+    } else {
+      formState.data.privateMetadata.status = formState.data.privateMetadata.status || 'active';
+    }
+
     if (
       !formState.data.privateMetadata.expertise
       || !formState.data.privateMetadata.skill
@@ -156,10 +173,30 @@ const Step2Care = () => {
       return;
     }
 
-    const user = constructOnboardingUser(formState);
+    if (acceptedFiles.length > 0) {
+      formState.data.privateMetadata.certificates = acceptedFiles;
+    }
 
     try {
-      const updateSuccess = await updateUserDataCare(locale, user);
+      const user = constructOnboardingUser(formState);
+      const uploadedFiles = await uploadCertsToBunny(formState.data.privateMetadata.certificates as File[]);
+      const certificates = Object.values(uploadedFiles).map(url => ({ url }));
+
+      const extractedFilesArray = certificates
+        .map(item => item.url) // Extract `url` property
+        .filter(url => typeof url === 'object' && url !== null) // Ensure it's an object
+        .flatMap(url => Object.values(url)) // Extract all URLs from the object
+        .filter(url => typeof url === 'string' && url.startsWith('http')); // Ensure only valid URLs are included
+
+      const updatedUser = {
+        ...user,
+        privateMetadata: {
+          ...user.privateMetadata,
+          certificates: extractedFilesArray, // Assign the certificates array to the user object
+        },
+      };
+
+      const updateSuccess = await updateUserDataCare(locale, updatedUser);
 
       if (!updateSuccess) {
         throw new Error('Fehler beim Aktualisieren der Benutzerdaten');
@@ -274,14 +311,15 @@ const Step2Care = () => {
               Geburtsdatum
             </FormLabel>
 
-            <Input
-              type="text"
-              width="100%"
-              name="dob"
-              value={formState.data.privateMetadata.dob as string}
-              onChange={handleInputChange}
-              placeholder="01.01.2000"
+            <DatePickerHero
+              selectedDate={
+                formState.data.privateMetadata.dob
+                  ? new Date(formState.data.privateMetadata.dob as string) // Convert the ISO string to a Date object
+                  : null
+              }
+              onChange={date => handleDateChange(date)}
             />
+
           </FormControl>
 
         </Stack>
@@ -344,7 +382,7 @@ const Step2Care = () => {
         <VStack w="100%" h={85}>
           <FormControl flex="0.2" w="100%" h={85}>
             <FormLabel fontSize="small" fontWeight="bold">
-              Tätigkeitsbereich - Skill
+              {'Tätigkeitsbereich - Skill (Mehrfachauswahl) '}
             </FormLabel>
             <SelectRoot
               multiple
@@ -414,7 +452,7 @@ const Step2Care = () => {
             workingHours={formState.data.privateMetadata.workingHours}
             onToggle={handleToggle}
             onTimeChange={handleTimeChange}
-            label="Set Your Working Hours"
+            label="Setzen Sie Ihre Verfügbarkeiten"
           />
 
         </Box>
@@ -426,12 +464,20 @@ const Step2Care = () => {
               {' '}
             </FormLabel>
 
-            <FileUploadRoot maxW="xl" alignItems="stretch" maxFiles={10}>
+            <FileUploadRoot
+              accept="application/pdf"
+              maxW="xl"
+              alignItems="stretch"
+              maxFiles={3}
+              onFileAccept={((files) => {
+                handleAcceptedFiles(files);
+              })}
+            >
               <FileUploadDropzone
-                label="Datei hier rein ziehen"
-                description="PDF Dateien bis zu 5MB"
+                label="Ziehen Sie die Dateien hierher"
+                description=".pdf bis zu 5MB"
               />
-              <FileUploadList />
+              <FileUploadList clearable />
             </FileUploadRoot>
 
           </FormControl>

@@ -1,3 +1,6 @@
+import '@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css';
+import 'react-clock/dist/Clock.css';
+
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { HStack, Text } from '@chakra-ui/react';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker'; // Make sure this matches the TimeRangePicker you're using.
@@ -21,7 +24,7 @@ const WorkingHoursForm = <T extends string>({
   workingHours,
   onToggle,
   onTimeChange,
-  label = 'Working Hours',
+  label = 'Verfügbarkeiten',
 }: WorkingHoursProps<T>) => {
   useEffect(() => {
     // Force a re-render or update state when the component mounts
@@ -43,7 +46,7 @@ const WorkingHoursForm = <T extends string>({
         }
 
         return (
-          <HStack key={`${day}-${dayData.enabled}`} w="100%" justify="space-between" paddingBottom={4}>
+          <HStack key={`${day}-${dayData.enabled}`} w="100%" paddingBottom={4}>
             <HStack w="100%" opacity={1}>
               <Switch
                 defaultChecked={dayData.enabled}
@@ -52,6 +55,7 @@ const WorkingHoursForm = <T extends string>({
               />
               <Text fontSize="sm">{day}</Text>
             </HStack>
+
             <TimeRangePicker
               value={dayData.hours ?? ['08:00', '16:00']}
               onChange={(value) => {
@@ -68,6 +72,7 @@ const WorkingHoursForm = <T extends string>({
                 }
               }}
               disableClock
+              locale="de-DE"
               format="HH:mm"
               clearIcon={null}
               disabled={!dayData.enabled}

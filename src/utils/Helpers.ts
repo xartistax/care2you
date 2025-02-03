@@ -1,4 +1,5 @@
 import type { User } from '@clerk/nextjs/server';
+import { format } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import type { z } from 'zod';
 
@@ -288,11 +289,9 @@ export const constructOnboardingUser = (formState: OnboardingState): OnBoardingC
     email: formState.data.email,
     imageUrl: formState.data.imageUrl || null,
     privateMetadata: {
-
       status: formState.data.privateMetadata.status,
       dob: formState.data.privateMetadata.dob,
       nationality: formState.data.privateMetadata.nationality,
-
       phone: formState.data.privateMetadata.phone,
       gender: formState.data.privateMetadata.gender,
       role: formState.data.privateMetadata.role,
@@ -625,3 +624,38 @@ export function formatLink(input: string) {
 
   return link;
 }
+
+export const get18YearsAgoDate = () => {
+  const today = new Date();
+  today.setFullYear(today.getFullYear() - 18); // Subtract 18 years
+  return format(today, 'dd.MM.yyyy');
+};
+
+export const uploadCertsToBunny = async (certFiles: File[]) => {
+  if (!certFiles || certFiles.length < 1) {
+    throw new Error('No file provided for upload.');
+  }
+
+  // Create a new FormData object to append the files
+  const formData = new FormData();
+
+  // Append each file to the FormData object
+  certFiles.forEach((file, index) => {
+    formData.append(`file${index}`, file); // Ensure the field name matches on the server side
+  });
+
+  // Make the API request with the FormData as the body
+  const response = await fetch('/api/caregiver-file-upload', {
+    method: 'POST',
+    body: formData, // The body contains the FormData with files
+  });
+
+  // Parse the response and check for success
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(`Upload failed: ${result.error || response.statusText}`);
+  }
+
+  return result; // This should contain the URLs from the response
+};

@@ -44,23 +44,10 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
   const [client, setClient] = useState(false);
   const t = useTranslations();
   const router = useRouter();
-  let formattedPriceType = '';
 
   useEffect(() => {
     setClient(true);
   }, []);
-
-  // Price Type Mapping
-  switch (service.priceType) {
-    case 'fix':
-      formattedPriceType = 'Fixpreis';
-      break;
-    case 'hourly':
-      formattedPriceType = 'Stundenpreis';
-      break;
-    default:
-      formattedPriceType = 'Stundenpreis';
-  }
 
   // Make sure the image URL is correct
   if (!service.image) {
@@ -172,9 +159,6 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
             {' '}
             {service.price}
           </Text>
-          <Tag>
-            {formattedPriceType}
-          </Tag>
         </HStack>
 
         {/* Description */}

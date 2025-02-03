@@ -238,7 +238,7 @@ export default function UserProfile({ user }: UserProfileProps) {
           <Divider my={4} />
 
           {/* Working Hours */}
-          <Heading size="sm" mb={4}>Erreichbarkeit</Heading>
+          <Heading size="sm" mb={4}>Verfügbarkeiten</Heading>
           <Grid templateColumns="repeat(2, 1fr)" gap={4}>
             {workingHours
             && Object.entries(workingHours).map(([day, { enabled, hours }]) => (

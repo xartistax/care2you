@@ -22,8 +22,6 @@ import type { z } from 'zod'; // Import Zod
 import { categoryTypeRetriever } from '@/utils/Helpers';
 import type { serviceSchema } from '@/validations/serviceValidation';
 
-import { Tag } from './ui/tag';
-
 // Extract TypeScript type from Zod Schema
 type ServiceProps = z.infer<typeof serviceSchema>;
 
@@ -37,19 +35,6 @@ export default function ListElement({ formData }: ListElementProps) {
   const currency = t('RootLayout.currency');
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [isReady, setIsReady] = useState(false);
-
-  let formattedPriceType = '';
-
-  switch (formData.priceType) {
-    case 'fix':
-      formattedPriceType = 'Fixpreis';
-      break; // ✅ Stop execution after setting value
-    case 'hourly':
-      formattedPriceType = 'Stundenpreis';
-      break; // ✅ Stop execution after setting value
-    default:
-      formattedPriceType = 'Stundenpreis';
-  }
 
   useEffect(() => {
     setIsReady(true);
@@ -108,16 +93,13 @@ export default function ListElement({ formData }: ListElementProps) {
             {currency}
             {' '}
             {formData.price}
+
             {formData.priceType === 'hourly' && ' /h'}
             {' '}
             {/* ✅ Add "/h" if priceType is hourly */}
 
             {' '}
-            <Tag fontWeight="normal">
-              {' '}
-              {formattedPriceType}
-              {' '}
-            </Tag>
+
           </Box>
 
           {/* Description */}

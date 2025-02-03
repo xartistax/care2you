@@ -9,6 +9,7 @@
 
 .react-timerange-picker__inputGroup {
   min-width: unset !important;
+  flex-grow: 0 !important;
 }
 
 .react-timerange-picker {

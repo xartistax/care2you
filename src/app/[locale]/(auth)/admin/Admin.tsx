@@ -2,10 +2,11 @@
 /* eslint-disable style/multiline-ternary */
 
 'use client';
-
 import { Box, Heading, Input, Spinner, Table } from '@chakra-ui/react';
+import type { Url } from 'next/dist/shared/lib/router/router';
 import Link from 'next/link';
 import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import type { z } from 'zod';
 
 import {
@@ -22,11 +23,23 @@ import type { onboardingClientUserSchema } from '@/validations/onBoardingValidat
 type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
 
 type AdminPanelProps = {
-  userList: OnBoardingClientUser[];
+  clientUsers: OnBoardingClientUser[];
+  serviceUsers: OnBoardingClientUser[];
+  careUsers: OnBoardingClientUser[];
+  allUsers: OnBoardingClientUser[];
 };
 
-export default function AdminPanel({ userList }: AdminPanelProps) {
-  const [users, setUsers] = useState<OnBoardingClientUser[]>(userList);
+export default function AdminPanel({ allUsers: initialUsers, clientUsers: _initialClientUsers, serviceUsers: _initialServiceUsers, careUsers: _initialCareUsers }: AdminPanelProps) {
+  const [allUsers, setAllUsers] = useState<OnBoardingClientUser[]>(initialUsers);
+
+  // const [clientUsers, setClientUsers] = useState<OnBoardingClientUser[]>(initialClientUsers);
+  // const [serviceUsers, setServiceUsers] = useState<OnBoardingClientUser[]>(initialServiceUsers);
+  // const [careUsers, setCareUsers] = useState<OnBoardingClientUser[]>(initialCareUsers);
+
+  // console.log(initialServiceUsers);
+  // console.log(initialCareUsers);
+  // console.log(initialClientUsers);
+
   const [selection, setSelection] = useState<string[]>([]);
   const [password, setPassword] = useState(''); // Store the entered password
   const [passwordIsCorrect, setPasswordIsCorrect] = useState(false); // Flag to check if password is correct
@@ -36,9 +49,9 @@ export default function AdminPanel({ userList }: AdminPanelProps) {
 
   const hasSelection = selection.length > 0;
 
-  const indeterminate = selection.length > 0 && selection.length < users.length;
+  const indeterminate = selection.length > 0 && selection.length < allUsers.length;
 
-  const selectedUsers = users.filter(user => selection.includes(user.id));
+  const selectedUsers = allUsers.filter(user => selection.includes(user.id));
 
   const handleStatus = async () => {
     setLoadingIdsStatus(selection); // ✅ Set loading for status action
@@ -47,7 +60,7 @@ export default function AdminPanel({ userList }: AdminPanelProps) {
       selectedUsers.map(async (selectedUser) => {
         const success = await updateStatus(selectedUser.id, selectedUser.privateMetadata.status as string);
         if (success) {
-          setUsers(prevUsers =>
+          setAllUsers(prevUsers =>
             prevUsers.map(user =>
               user.id === selectedUser.id
                 ? {
@@ -76,7 +89,7 @@ export default function AdminPanel({ userList }: AdminPanelProps) {
         const success = await deleteUser(userId); // ✅ Await the function
 
         if (success) {
-          setUsers(prevUsers => prevUsers.filter(user => user.id !== userId)); // ✅ Remove user from state
+          setAllUsers(prevUsers => prevUsers.filter(user => user.id !== userId)); // ✅ Remove user from state
         }
       }),
     );
@@ -96,7 +109,7 @@ export default function AdminPanel({ userList }: AdminPanelProps) {
   };
 
   return (
-    <Box p={8} bg="white" borderRadius="lg" maxWidth="800px" margin="0 auto">
+    <Box p={8} bg="white" borderRadius="lg" maxWidth="1200px" margin="0 auto">
       {!passwordIsCorrect ? (
         <Box>
           <Heading as="h1" size="2xl" mb={4}>
@@ -126,10 +139,10 @@ export default function AdminPanel({ userList }: AdminPanelProps) {
                     <Checkbox
                       top="1"
                       aria-label="Select all rows"
-                      checked={indeterminate ? 'indeterminate' : selection.length === users.length}
+                      checked={indeterminate ? 'indeterminate' : selection.length === allUsers.length}
                       onChange={(e) => {
                         const target = e.target as HTMLInputElement; // Type assertion to HTMLInputElement
-                        setSelection(target.checked ? users.map(item => item.id) : []);
+                        setSelection(target.checked ? allUsers.map(item => item.id) : []);
                       }}
                     />
                   </Table.ColumnHeader>
@@ -137,14 +150,16 @@ export default function AdminPanel({ userList }: AdminPanelProps) {
                   <Table.ColumnHeader>Name</Table.ColumnHeader>
                   <Table.ColumnHeader>Nachname</Table.ColumnHeader>
                   <Table.ColumnHeader>E-Mail</Table.ColumnHeader>
+                  <Table.ColumnHeader>Telefon</Table.ColumnHeader>
                   <Table.ColumnHeader>Geb. Datum</Table.ColumnHeader>
                   <Table.ColumnHeader>Skills</Table.ColumnHeader>
                   <Table.ColumnHeader>Expertise</Table.ColumnHeader>
                   <Table.ColumnHeader>Rolle</Table.ColumnHeader>
+                  <Table.ColumnHeader>d</Table.ColumnHeader>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {users.map(item => (
+                {allUsers.map(item => (
                   <Table.Row key={item.id} data-selected={selection.includes(item.id) ? '' : undefined}>
                     <Table.Cell>
                       {loadingIdsDelete.includes(item.id) || loadingIdsStatus.includes(item.id)
@@ -171,12 +186,31 @@ export default function AdminPanel({ userList }: AdminPanelProps) {
                     <Table.Cell>
                       <Link href={`mailto:${item.email}`}>{item.email}</Link>
                     </Table.Cell>
+                    <Table.Cell>
+                      <Link href={`tel:${item.phone}`}>{item.phone}</Link>
+                    </Table.Cell>
                     <Table.Cell>{item.privateMetadata.dob as string}</Table.Cell>
                     <Table.Cell>{item.privateMetadata.skill as string[]}</Table.Cell>
                     <Table.Cell>
                       {expertiseTypeRetriever((item.privateMetadata.expertise as string[])[0] as string)}
                     </Table.Cell>
                     <Table.Cell>{item.privateMetadata.role as string}</Table.Cell>
+                    <Table.Cell>
+                      {item.privateMetadata.role === 'care' ? (
+                        item.privateMetadata.certificates?.map(url => (
+
+                          <Link key={`${uuidv4()}`} href={url as Url} color="blue.500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                            </svg>
+
+                          </Link>
+
+                        ))
+                      ) : (
+                        'N/A'
+                      )}
+                    </Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>

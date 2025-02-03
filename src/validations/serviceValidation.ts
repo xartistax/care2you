@@ -11,7 +11,7 @@ export const serviceSchema = z.object({
   title: z.string(), // Ensure the field name matches the DB schema
   description: z.string(),
   price: z.number(),
-  priceType: z.enum(['fix', 'hourly']),
+  priceType: z.string(),
   userId: z.string(),
   image: z.string().optional(),
   calendly: z.string(),
