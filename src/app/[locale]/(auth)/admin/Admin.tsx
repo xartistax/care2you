@@ -212,8 +212,13 @@ export default function AdminPanel({
                     <Table.Cell>{item.privateMetadata.dob as string}</Table.Cell>
                     <Table.Cell>{item.privateMetadata.skill as string[]}</Table.Cell>
                     <Table.Cell>
-                      {expertiseTypeRetriever((item.privateMetadata.expertise as string[])[0] as string)}
+                      {Array.isArray(item.privateMetadata.expertise) && item.privateMetadata.expertise.length > 0
+                        ? expertiseTypeRetriever(item.privateMetadata.expertise[0] as string)
+                        : null}
+                      {' '}
+                      {/* or a fallback value like "No expertise" */}
                     </Table.Cell>
+
                     <Table.Cell>{item.privateMetadata.role as string}</Table.Cell>
                     <Table.Cell>
                       {item.privateMetadata.role === 'care' ? (
