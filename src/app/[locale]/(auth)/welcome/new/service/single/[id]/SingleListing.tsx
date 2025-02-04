@@ -167,7 +167,7 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
         </Text>
 
         {/* Description */}
-        <Text fontSize="sm" color="gray.600">
+        <Text fontSize="sm" fontWeight="bold" color="gray.600">
           {
             categoryTypeRetriever(service.category as string)
           }

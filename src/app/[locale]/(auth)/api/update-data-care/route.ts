@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     await clerkClient.users.updateUser(userId, {
       privateMetadata: {
         status: 'inactive',
-        certificates: body.user.privateMetadata.certificates || undefined,
+        certificates: body.user.privateMetadata.certificates,
         dob: body.user.privateMetadata.dob || undefined,
         nationality: body.user.privateMetadata.nationality || undefined,
         role: body.user.privateMetadata.role || undefined,

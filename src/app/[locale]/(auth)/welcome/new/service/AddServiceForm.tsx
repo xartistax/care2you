@@ -421,8 +421,9 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
           <>
             {/* Street Address & Street Number in One Row */}
             <HStack spaceY={4} w="100%" alignItems="center">
-              <FormControl flex={3} marginTop={0}>
-                <FormLabel fontSize="small" fontWeight="bold">Street Address</FormLabel>
+
+              <FormControl flex={2}>
+                <FormLabel fontSize="small" fontWeight="bold">Adrresse</FormLabel>
                 <Input
                   type="text"
                   h="40px" // ✅ Ensures same height
@@ -434,8 +435,8 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 />
               </FormControl>
 
-              <FormControl flex={1} marginTop={0}>
-                <FormLabel fontSize="small" fontWeight="bold">Street Number</FormLabel>
+              <FormControl flex={2}>
+                <FormLabel fontSize="small" fontWeight="bold">Nummer</FormLabel>
                 <Input
                   type="text"
                   h="40px" // ✅ Ensures same height
@@ -446,6 +447,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                   }))}
                 />
               </FormControl>
+
             </HStack>
 
             {/* Zip Code & City in One Row */}

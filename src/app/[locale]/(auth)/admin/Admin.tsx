@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/action-bar';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { deleteUser, expertiseTypeRetriever, SaveNote, updateStatus } from '@/utils/Helpers';
+import { deleteUser, expertiseTypeRetriever, formatDate, SaveNote, updateStatus } from '@/utils/Helpers';
 import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 
 type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
@@ -187,7 +187,7 @@ export default function AdminPanel({
                     </Table.Cell>
                     <Table.Cell>
                       <Textarea
-                        value={notes[item.id] || ''}
+                        value={notes[item.id] || item.privateMetadata.note as string || ''}
                         onChange={e => setNotes({ ...notes, [item.id]: e.target.value })}
                         size="lg" // Set large size
                         width="120px" // Full width
@@ -209,14 +209,12 @@ export default function AdminPanel({
                     <Table.Cell>
                       <Link href={`tel:${item.phone}`}>{item.phone}</Link>
                     </Table.Cell>
-                    <Table.Cell>{item.privateMetadata.dob as string}</Table.Cell>
+                    <Table.Cell>{formatDate(item.privateMetadata.dob as string)}</Table.Cell>
                     <Table.Cell>{item.privateMetadata.skill as string[]}</Table.Cell>
                     <Table.Cell>
-                      {Array.isArray(item.privateMetadata.expertise) && item.privateMetadata.expertise.length > 0
-                        ? expertiseTypeRetriever(item.privateMetadata.expertise[0] as string)
-                        : null}
-                      {' '}
-                      {/* or a fallback value like "No expertise" */}
+                      {
+                        expertiseTypeRetriever(item.privateMetadata.expertise as string)
+                      }
                     </Table.Cell>
 
                     <Table.Cell>{item.privateMetadata.role as string}</Table.Cell>
@@ -224,7 +222,10 @@ export default function AdminPanel({
                       {item.privateMetadata.role === 'care' ? (
                         item.privateMetadata.certificates?.map(url => (
                           <Link key={`${uuidv4()}`} href={url! as string} color="blue.500">
-                            {/* SVG icon here */}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                            </svg>
+
                           </Link>
                         ))
                       ) : (

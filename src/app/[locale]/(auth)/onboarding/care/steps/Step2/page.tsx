@@ -180,19 +180,18 @@ const Step2Care = () => {
     try {
       const user = constructOnboardingUser(formState);
       const uploadedFiles = await uploadCertsToBunny(formState.data.privateMetadata.certificates as File[]);
+
       const certificates = Object.values(uploadedFiles).map(url => ({ url }));
 
-      const extractedFilesArray = certificates
-        .map(item => item.url) // Extract `url` property
-        .filter(url => typeof url === 'object' && url !== null) // Ensure it's an object
-        .flatMap(url => Object.values(url)) // Extract all URLs from the object
-        .filter(url => typeof url === 'string' && url.startsWith('http')); // Ensure only valid URLs are included
+      const extraxtedFiles = Object.values(certificates[1]?.url || []);
+
+      formState.data.privateMetadata.certificates = extraxtedFiles;
 
       const updatedUser = {
         ...user,
         privateMetadata: {
           ...user.privateMetadata,
-          certificates: extractedFilesArray, // Assign the certificates array to the user object
+          certificates: extraxtedFiles, // Assign the certificates array to the user object
         },
       };
 

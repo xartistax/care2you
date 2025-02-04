@@ -509,27 +509,27 @@ export const expertiseTypeRetriever = (expertise: string) => {
 export const categoryTypeRetriever = (category: string) => {
   switch (category) {
     case '0':
-      return 'Alltagshilfe';
+      return 'Mobilität & Transport';
     case '1':
       return 'Pflege & Gesundheitsversorgung';
     case '2':
-      return 'Demenzbetreuung';
+      return 'Massage';
     case '3':
-      return 'Begleitung & Gesellschaft';
+      return 'Physiotherapie';
     case '4':
-      return '24-Stunden-Betreuung';
+      return 'Ergotherapie';
     case '5':
-      return 'Haushaltsdienstleistungen';
+      return 'Coiffure';
     case '6':
-      return 'Mobilität & Transport';
+      return 'Begleitdienst';
     case '7':
-      return 'Essen & Ernährung';
+      return 'Haushaltdienstleistung';
     case '8':
-      return 'Technikhilfe für Senioren';
+      return 'Hauswart und Handwerkerdienste';
     case '9':
-      return 'Anträge & Bürokratie';
+      return 'Mahlzeitendienst';
     default:
-      return 'Alltagshilfe'; // Default case remains the same
+      return 'Andere'; // Default aligns with your categoriesList
   }
 };
 
@@ -686,4 +686,17 @@ export const SaveNote = async (note: string, user: OnBoardingClientUser) => {
     console.error('Error in updateFirstAndLastName:', error);
     return false;
   }
+};
+
+export const formatDate = (dateString: string) => {
+  if (!dateString) {
+    return 'N/A';
+  } // Handle missing dates
+  const timeZone = 'Europe/Berlin'; // Equivalent to Europe/Bern
+  return new Intl.DateTimeFormat('de-CH', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone,
+  }).format(new Date(dateString));
 };
