@@ -42,6 +42,7 @@ const Step1 = () => {
     const phoneNumber = String(formState.data.privateMetadata.phone);
 
     formState.data.privateMetadata.phone = phoneNumber;
+    formState.data.privateMetadata.status = 'active';
 
     setAlertMessage('');
     setShowAlert(false);

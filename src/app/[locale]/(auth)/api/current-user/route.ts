@@ -1,10 +1,9 @@
-import { clerkClient } from '@clerk/nextjs/server';
+import { currentUser } from '@clerk/nextjs/server';
 import { type NextRequest, NextResponse } from 'next/server';
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
-    const { userId } = await request.json();
-    const user = await clerkClient.users.getUser(userId);
+    const user = await currentUser();
 
     // If role does not exist, return false
     if (!user) {

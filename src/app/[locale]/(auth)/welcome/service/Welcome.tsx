@@ -10,6 +10,7 @@ import {
   HStack,
   LinkBox,
   LinkOverlay,
+  Text,
 } from '@chakra-ui/react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
@@ -25,6 +26,37 @@ type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
 
 export default function WelcomeService({ user }: { user: OnBoardingClientUser }) {
   const t = useTranslations('Welcome');
+
+  if (user.privateMetadata.status === 'inactive') {
+    return (
+      <Box
+
+        p={8}
+        bg="white"
+        borderRadius="lg"
+        maxWidth="800px"
+        margin="0 auto"
+      >
+        {/* Header Section */}
+        <HStack alignItems="center" marginBottom="8">
+          <Avatar src="" name={`${user.firstName} ${user.lastName}`} size="lg" />
+          <Heading as="h1" size="2xl">
+
+            {t('meta_title', { username: `${user.firstName} ${user.lastName}` })}
+          </Heading>
+          <Box as="span">
+            <Tag>
+              {String(user.privateMetadata.role || 'norole')}
+
+            </Tag>
+          </Box>
+        </HStack>
+
+        <Text fontSize="sm"> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex qui perspiciatis laudantium blanditiis rem ratione ullam, porro in cupiditate dolorum nihil odit, consectetur quo atque mollitia, sit beatae nobis sapiente.</Text>
+
+      </Box>
+    );
+  }
 
   return (
     <Box

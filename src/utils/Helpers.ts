@@ -261,11 +261,10 @@ export const chekCompilance = async (locale: string, userId: string) => {
   }
 };
 
-export const currentUser = async (locale: string, userId: string) => {
+export const currentUser = async (locale: string) => {
   try {
     const response = await fetch(`${getBaseUrl()}/${locale}/api/current-user`, {
       method: 'POST',
-      body: JSON.stringify({ userId }),
     });
 
     if (!response.ok) {
