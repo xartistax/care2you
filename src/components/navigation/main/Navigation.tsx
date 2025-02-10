@@ -7,7 +7,7 @@ export default async function MainNavigation() {
   // const t = useTranslations('RootLayout');
   const user = await currentUser();
   if (!user) {
-    redirect('/sign-in');
+    redirect('/good-bye');
   }
   const role = String(user.privateMetadata.role);
 

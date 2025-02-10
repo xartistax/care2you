@@ -20,13 +20,13 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 
   const t = await getTranslations({
     locale: props.params.locale,
-    namespace: 'Welcome',
+    namespace: 'Willkommen',
   });
 
   const username = user.firstName || 'Guest';
 
   return {
-    title: t('meta_title', { username }),
+    title: t('Begrüssung', { username }),
   };
 }
 

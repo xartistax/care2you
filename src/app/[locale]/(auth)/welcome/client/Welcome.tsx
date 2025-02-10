@@ -26,7 +26,7 @@ type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
 
 export default function Welcome({ user }: { user: OnBoardingClientUser }) {
   const [isVisible, setIsVisible] = useState(false);
-  const t = useTranslations('Welcome');
+  const t = useTranslations('Willkommen');
 
   useEffect(() => {
     setIsVisible(true);
@@ -47,7 +47,7 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
           <Avatar src="" name={`${user.firstName} ${user.lastName}`} size="lg" />
           <Heading as="h1" size="2xl">
 
-            {t('meta_title', { username: `${user.firstName} ${user.lastName}` })}
+            {t('Begrüssung', { username: `${user.firstName} ${user.lastName}` })}
           </Heading>
           <Box as="span">
             <Tag>
@@ -57,7 +57,11 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
           </Box>
         </HStack>
 
-        <Text fontSize="sm"> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex qui perspiciatis laudantium blanditiis rem ratione ullam, porro in cupiditate dolorum nihil odit, consectetur quo atque mollitia, sit beatae nobis sapiente.</Text>
+        <Text fontSize="sm">
+          {' '}
+          { t('Inaktiv.Client.Text') }
+          {' '}
+        </Text>
 
       </Box>
     );
@@ -79,7 +83,7 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
         <Avatar src="" name={`${user.firstName} ${user.lastName}`} size="lg" />
         <Heading as="h1" size="2xl">
 
-          {t('meta_title', { username: `${user.firstName} ${user.lastName}` })}
+          {t('Begrüssung', { username: `${user.firstName} ${user.lastName}` })}
         </Heading>
         <Box as="span">
           <Tag>
@@ -91,7 +95,7 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
 
       {/* Subheading */}
       <Heading as="h2" size="xl" marginBottom="4" lineHeight={1.3}>
-        {t('hello_message_client')}
+        {t('Titel.Client')}
       </Heading>
 
       {/* Grid with Cards */}
@@ -126,7 +130,7 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
               <Box>
                 <CardTitle lineHeight={0}>
                   <LinkOverlay fontSize="xl" color="#A0A0A0" href="/welcome/new/care">
-                    {t('new_service')}
+                    {t('Neuer Service')}
                   </LinkOverlay>
                 </CardTitle>
               </Box>
@@ -160,7 +164,7 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
               <Box>
                 <CardTitle lineHeight={0}>
                   <LinkOverlay fontSize="xl" color="#A0A0A0" href="/welcome/new/care/calculator">
-                    {t('new_care')}
+                    {t('Neue Pflege')}
 
                   </LinkOverlay>
                 </CardTitle>

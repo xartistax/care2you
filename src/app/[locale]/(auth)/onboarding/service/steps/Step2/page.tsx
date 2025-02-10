@@ -2,6 +2,7 @@
 
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Box, createListCollection, HStack, Input, SelectContent, SelectItem, SelectRoot, SelectTrigger, SelectValueText, Spinner, Stack, Textarea, VStack } from '@chakra-ui/react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { HiXCircle } from 'react-icons/hi';
 
@@ -9,19 +10,19 @@ import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { useOnboarding } from '@/contexts/OnboardingContext';
 
-const company_collection = createListCollection({
-  items: [
-    { value: '0', label: 'AG' },
-    { value: '1', label: 'GmbH' },
-    { value: '2', label: 'Einzelfirma' },
-  ],
-});
-
 const Step2Service = () => {
-  // const t = useTranslations();
+  const t = useTranslations('OnBoarding');
 
   const { formState, setFormState, setAlertMessage, setShowAlert, showAlert, alertMessage, prevStep, nextStep } = useOnboarding();
   const [isLoading, setIsLoading] = useState(false);
+
+  const company_collection = createListCollection({
+    items: [
+      { value: '0', label: t('Service.Unternehmensform.AG') },
+      { value: '1', label: t('Service.Unternehmensform.GMBH') },
+      { value: '2', label: t('Service.Unternehmensform.Einzelfirma') },
+    ],
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -109,7 +110,9 @@ const Step2Service = () => {
 
           <FormControl flex="0.2" w="100%" h={85}>
             <FormLabel fontSize="small" fontWeight="bold">
-              Unternehmensform
+              {
+                t('Service.Unternehmensform.Feld')
+              }
             </FormLabel>
             <SelectRoot
               collection={company_collection}
@@ -128,7 +131,10 @@ const Step2Service = () => {
               }}
             >
               <SelectTrigger>
-                <SelectValueText placeholder="Bitte wählen..." />
+                <SelectValueText placeholder={
+                  t('Service.Unternehmensform.Platzhalter')
+                }
+                />
               </SelectTrigger>
               <SelectContent>
                 {company_collection.items.map(item => (
@@ -145,13 +151,14 @@ const Step2Service = () => {
         <VStack w="100%" h={85}>
           <FormControl flex="1" w="100%" h={85}>
             <FormLabel fontSize="small" fontWeight="bold">
-              Firmenname
+              { t('Service.Firmenname.Feld') }
             </FormLabel>
             <Input
               type="text"
               name="companyTitle"
               defaultValue={formState.data.privateMetadata.companyTitle as string}
               onChange={handleInputChange}
+              placeholder={t('Service.Firmenname.Platzhalter')}
             />
           </FormControl>
         </VStack>
@@ -159,13 +166,14 @@ const Step2Service = () => {
         <VStack w="100%" h={85}>
           <FormControl flex="1" w="100%" h={85}>
             <FormLabel fontSize="small" fontWeight="bold">
-              UID Steuernummer
+              { t('Service.UID Steuernummer.Feld') }
             </FormLabel>
             <Input
               type="text"
               name="uidst"
               defaultValue={formState.data.privateMetadata.uidst as string}
               onChange={handleInputChange}
+              placeholder={t('Service.UID Steuernummer.Platzhalter')}
             />
           </FormControl>
         </VStack>
@@ -174,10 +182,10 @@ const Step2Service = () => {
         <VStack w="100%" h={100}>
           <FormControl w="100%" h={100}>
             <FormLabel fontSize="small" fontWeight="bold">
-              Tätigkeitsbeschreib
+              { t('Service.Tätigkeitsbeschreib.Feld') }
             </FormLabel>
             <Textarea
-              placeholder="..."
+              placeholder={t('Service.Tätigkeitsbeschreib.Platzhalter')}
               defaultValue={formState.data.privateMetadata.companyDescription as string}
               name="companyDescription"
               w="100%"
@@ -190,10 +198,10 @@ const Step2Service = () => {
 
         <HStack alignItems="start" justifyContent="flex-end" marginBottom={8}>
           <Button colorScheme="gray" onClick={prevStep} variant="outline">
-            Zurück
+            { t('Zurück') }
           </Button>
           <Button colorScheme="blue" onClick={handleNext}>
-            Anmeldung bestätigen
+            { t('Bestätigen') }
           </Button>
         </HStack>
 

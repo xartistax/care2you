@@ -510,7 +510,7 @@ export const categoryTypeRetriever = (category: string) => {
     case '0':
       return 'Mobilität & Transport';
     case '1':
-      return 'Pflege & Gesundheitsversorgung';
+      return 'Fusspflege';
     case '2':
       return 'Massage';
     case '3':

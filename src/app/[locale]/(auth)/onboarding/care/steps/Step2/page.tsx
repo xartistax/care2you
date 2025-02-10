@@ -3,6 +3,7 @@
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Wrap } from '@chakra-ui/layout';
 import { Box, CheckboxGroup, createListCollection, Fieldset, type FileUploadFileAcceptDetails, HStack, Input, Spinner, Stack, VStack } from '@chakra-ui/react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { HiXCircle } from 'react-icons/hi';
 
@@ -46,7 +47,7 @@ const skill_collection = createListCollection({
 });
 
 const Step2Care = () => {
-  // const t = useTranslations();
+  const t = useTranslations('OnBoarding');
 
   const { formState, setFormState, setAlertMessage, setShowAlert, showAlert, alertMessage, prevStep, nextStep, locale } = useOnboarding();
   const [isLoading, setIsLoading] = useState(false);
@@ -307,7 +308,7 @@ const Step2Care = () => {
         <Stack h={85} align="stretch" w="100%">
           <FormControl flex="1">
             <FormLabel fontSize="small" fontWeight="bold">
-              Geburtsdatum
+              { t('Care.Geburtsdatum.Feld') }
             </FormLabel>
 
             <DatePickerHero
@@ -326,7 +327,7 @@ const Step2Care = () => {
         <Stack h={85} align="stretch" w="100%">
           <FormControl flex="1">
             <FormLabel fontSize="small" fontWeight="bold">
-              Nationalität
+              { t('Care.Nationalität.Feld') }
             </FormLabel>
 
             <Input
@@ -335,7 +336,7 @@ const Step2Care = () => {
               name="nationality"
               value={formState.data.privateMetadata.nationality as string}
               onChange={handleInputChange}
-              placeholder="CH"
+              placeholder={t('Care.Nationalität.Platzhalter')}
             />
           </FormControl>
 
@@ -345,7 +346,7 @@ const Step2Care = () => {
 
           <FormControl flex="0.2" w="100%" h={85}>
             <FormLabel fontSize="small" fontWeight="bold">
-              Erfahrung als Caregiver
+              { t('Care.Erfahrung.Feld') }
             </FormLabel>
             <SelectRoot
               collection={expertise_collection}
@@ -364,7 +365,7 @@ const Step2Care = () => {
               }}
             >
               <SelectTrigger>
-                <SelectValueText placeholder="Bitte wählen..." />
+                <SelectValueText placeholder={t('Care.Erfahrung.Platzhalter')} />
               </SelectTrigger>
               <SelectContent>
                 {expertise_collection.items.map(item => (
@@ -381,7 +382,8 @@ const Step2Care = () => {
         <VStack w="100%" h={85}>
           <FormControl flex="0.2" w="100%" h={85}>
             <FormLabel fontSize="small" fontWeight="bold">
-              {'Tätigkeitsbereich - Skill (Mehrfachauswahl) '}
+
+              { t('Care.Tätigkeitsbereich.Feld') }
             </FormLabel>
             <SelectRoot
               multiple
@@ -399,7 +401,7 @@ const Step2Care = () => {
               }}
             >
               <SelectTrigger>
-                <SelectValueText placeholder="Bitte wählen...">
+                <SelectValueText placeholder={t('Care.Tätigkeitsbereich.Platzhalter')}>
                   {items =>
                     (items?.filter(item => item?.label) || [])
                       .map(item => item.label)
@@ -421,7 +423,7 @@ const Step2Care = () => {
         <VStack w="100%" mb={8}>
           <FormControl flex="0.2" w="100%">
             <FormLabel fontSize="small" fontWeight="bold">
-              Gesprochene Sprachen
+              { t('Care.Gesprochene Sprachen.Feld') }
             </FormLabel>
 
             <Fieldset.Root>
@@ -451,7 +453,7 @@ const Step2Care = () => {
             workingHours={formState.data.privateMetadata.workingHours}
             onToggle={handleToggle}
             onTimeChange={handleTimeChange}
-            label="Setzen Sie Ihre Verfügbarkeiten"
+            label={t('Care.Verfügbarkeiten.Platzhalter')}
           />
 
         </Box>
@@ -459,8 +461,7 @@ const Step2Care = () => {
         <VStack w="100%" mb={8}>
           <FormControl flex="0.2" w="100%">
             <FormLabel fontSize="small" fontWeight="bold">
-              Zertifikate und andere Dateien
-              {' '}
+              { t('Care.Upload.Feld') }
             </FormLabel>
 
             <FileUploadRoot
@@ -473,8 +474,8 @@ const Step2Care = () => {
               })}
             >
               <FileUploadDropzone
-                label="Ziehen Sie die Dateien hierher"
-                description=".pdf bis zu 5MB"
+                label={t('Care.Upload.Platzhalter')}
+
               />
               <FileUploadList clearable />
             </FileUploadRoot>
@@ -485,10 +486,10 @@ const Step2Care = () => {
 
         <HStack alignItems="start" justifyContent="flex-end" marginBottom={8}>
           <Button colorScheme="gray" onClick={prevStep} variant="outline">
-            Zurück
+            { t('Zurück') }
           </Button>
           <Button colorScheme="blue" onClick={handleNext}>
-            Anmeldung bestätigen
+            { t('Bestätigen') }
           </Button>
         </HStack>
 

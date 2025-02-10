@@ -27,11 +27,11 @@ export function OnBoardingFormDefault({
   handleSelectChange: (selected?: { value: string; label: string }) => void;
   roles: string[];
 }) {
-  const t = useTranslations();
+  const t = useTranslations('OnBoarding');
   const collection = createListCollection({
     items: [
-      { value: '0', label: t('Forms.DefaultForm.Labels.salutation_list.masculin') },
-      { value: '1', label: t('Forms.DefaultForm.Labels.salutation_list.feminin') },
+      { value: '0', label: t('Allgemein.Anrede.Maskulin') },
+      { value: '1', label: t('Allgemein.Anrede.Feminim') },
     ],
   });
   const roleToRemove = 'admin';
@@ -44,7 +44,7 @@ export function OnBoardingFormDefault({
         <FormControl flex="1">
           <FormLabel fontSize="small" fontWeight="bold">
             {' '}
-            {t('Forms.DefaultForm.Labels.choose_role')}
+            {t('Allgemein.Rolle.Feld')}
             {' '}
           </FormLabel>
           <Stack direction="row" align="stretch" w="100%">
@@ -74,7 +74,9 @@ export function OnBoardingFormDefault({
         <FormControl flex="1">
           <FormLabel fontSize="small" fontWeight="bold" width="100%">
 
-            {t('Forms.DefaultForm.Labels.salutation') }
+            {
+              t('Allgemein.Anrede.Feld')
+            }
 
           </FormLabel>
 
@@ -92,7 +94,7 @@ export function OnBoardingFormDefault({
             }}
           >
             <SelectTrigger>
-              <SelectValueText placeholder={t('Forms.DefaultForm.Labels.choose_gender')} />
+              <SelectValueText placeholder={t('Allgemein.Anrede.Platzhalter')} />
             </SelectTrigger>
             <SelectContent>
               {collection.items.map(item => (
@@ -108,7 +110,7 @@ export function OnBoardingFormDefault({
 
       <Stack h={85} align="stretch" w="100%">
         <FormControl flex="1">
-          <FormLabel fontSize="small" fontWeight="bold">{t('Forms.DefaultForm.Labels.first_name')}</FormLabel>
+          <FormLabel fontSize="small" fontWeight="bold">{t('Allgemein.Vorname.Feld')}</FormLabel>
           <Input
             disabled
             type="text"
@@ -116,14 +118,16 @@ export function OnBoardingFormDefault({
             name="firstName"
             value={formState.data.firstName || ''}
             onChange={handleInputChange}
+            placeholder={t('Allgemein.Vorname.Platzhalter')}
           />
         </FormControl>
       </Stack>
 
       <Stack h={85} align="stretch" w="100%">
         <FormControl flex="1">
-          <FormLabel fontSize="small" fontWeight="bold">{t('Forms.DefaultForm.Labels.last_name')}</FormLabel>
+          <FormLabel fontSize="small" fontWeight="bold">{t('Allgemein.Nachname.Feld')}</FormLabel>
           <Input
+            placeholder={t('Allgemein.Nachname.Platzhalter')}
             disabled
             type="text"
             width="100%"
@@ -138,7 +142,7 @@ export function OnBoardingFormDefault({
         <FormControl flex="1">
           <FormLabel fontSize="small" fontWeight="bold">
             {' '}
-            {t('Forms.DefaultForm.Labels.email')}
+            {t('Allgemein.E-Mail.Feld')}
             {' '}
           </FormLabel>
           <Input
@@ -146,6 +150,7 @@ export function OnBoardingFormDefault({
             disabled
             width="100%"
             name="email"
+            placeholder={t('Allgemein.E-Mail.Platzhalter')}
             value={formState.data.email || ''}
             onChange={handleInputChange}
           />
@@ -156,7 +161,7 @@ export function OnBoardingFormDefault({
         <FormControl flex="1">
           <FormLabel fontSize="small" fontWeight="bold">
             {' '}
-            {t('Forms.DefaultForm.Labels.mobile')}
+            {t('Allgemein.Telefon.Feld')}
             {' '}
           </FormLabel>
 
@@ -166,7 +171,7 @@ export function OnBoardingFormDefault({
             name="phone"
             value={String(formState?.data.privateMetadata?.phone || '')}
             onChange={handleInputChange}
-            placeholder="078 888 88 88"
+            placeholder={t('Allgemein.Telefon.Platzhalter')}
           />
         </FormControl>
 
@@ -178,7 +183,7 @@ export function OnBoardingFormDefault({
 
           <FormControl flex="3">
             <FormLabel fontSize="small" fontWeight="bold">
-              Strasse
+              {t('Allgemein.Strasse.Feld')}
             </FormLabel>
 
             <Input
@@ -186,14 +191,15 @@ export function OnBoardingFormDefault({
               width="100%"
               name="street"
               value={String(formState?.data.privateMetadata?.street || '')}
-              placeholder="Seestrasse"
+              placeholder={t('Allgemein.Strasse.Platzhalter')}
               onChange={handleInputChange}
+
             />
           </FormControl>
 
           <FormControl flex="1">
             <FormLabel fontSize="small" fontWeight="bold">
-              Nr.
+              {t('Allgemein.Strasse.Nr')}
             </FormLabel>
 
             <Input
@@ -201,7 +207,7 @@ export function OnBoardingFormDefault({
               width="100%"
               name="streetnumber"
               value={String(formState?.data.privateMetadata?.streetnumber || '')}
-              placeholder="12"
+              placeholder={t('Allgemein.Strasse.Nr')}
               onChange={handleInputChange}
             />
           </FormControl>
@@ -216,7 +222,7 @@ export function OnBoardingFormDefault({
 
           <FormControl flex="1">
             <FormLabel fontSize="small" fontWeight="bold">
-              Postleitzahl
+              {t('Allgemein.Postleitzahl.Feld')}
             </FormLabel>
 
             <Input
@@ -224,14 +230,14 @@ export function OnBoardingFormDefault({
               width="100%"
               name="plz"
               value={String(formState?.data.privateMetadata?.plz || '')}
-              placeholder="8000"
+              placeholder={t('Allgemein.Postleitzahl.Platzhalter')}
               onChange={handleInputChange}
             />
           </FormControl>
 
           <FormControl flex="3">
             <FormLabel fontSize="small" fontWeight="bold">
-              Ort
+              {t('Allgemein.Ortschaft.Feld')}
             </FormLabel>
 
             <Input
@@ -239,7 +245,7 @@ export function OnBoardingFormDefault({
               width="100%"
               name="location"
               value={String(formState?.data.privateMetadata?.location || '')}
-              placeholder="Zürich"
+              placeholder={t('Allgemein.Ortschaft.Platzhalter')}
               onChange={handleInputChange}
             />
           </FormControl>
@@ -254,7 +260,7 @@ export function OnBoardingFormDefault({
           colorScheme="blue"
           size="md" // Control button size
         >
-          {t('OnBoarding.submit_button')}
+          {t('Allgemein.Button')}
         </Button>
       </Stack>
 

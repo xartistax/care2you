@@ -20,7 +20,7 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 export default async function NewServiceServer() {
   const user = await currentUser();
   if (!user) {
-    redirect('/sign-in');
+    redirect('/good-bye');
   }
 
   const constructedUser = constructUser(user);

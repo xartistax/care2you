@@ -50,7 +50,7 @@ export default function ProfileUserLink({ user }: ProfileUserLinkProps) {
             </Link>
 
           </MenuItem>
-          <SignOutButton redirectUrl="/de/sign-in">
+          <SignOutButton redirectUrl="/good-bye">
             <MenuItem
               value="logout"
               color="fg.error"
@@ -80,7 +80,7 @@ export default function ProfileUserLink({ user }: ProfileUserLinkProps) {
             </Link>
 
           </MenuItem>
-          <SignOutButton redirectUrl="/sign-in">
+          <SignOutButton redirectUrl="/good-bye">
             <MenuItem
               value="logout"
               color="fg.error"

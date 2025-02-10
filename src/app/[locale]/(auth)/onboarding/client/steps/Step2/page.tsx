@@ -13,7 +13,7 @@ import { constructOnboardingUser, getSalutation, updateUserDataService } from '@
 
 const Step2Client = () => {
   const [isComplete, setIsComplete] = useState(false);
-  const t = useTranslations();
+  const t = useTranslations('OnBoarding');
   const router = useRouter(); // Initialisiere den Router
   const { formState, prevStep, setFormState, showAlert, alertMessage, setAlertMessage, setShowAlert, locale } = useOnboarding();
   const [isLoading, setIsLoading] = useState(false);
@@ -72,6 +72,9 @@ const Step2Client = () => {
       </HStack>
     );
   } else {
+    const salutation = getSalutation(formState.data.privateMetadata.gender as '0' | '1');
+    const lastName = formState.data.lastName;
+
     return (
 
       <Box p={8} bg="white" borderRadius="lg" maxWidth="800px" width="100%" margin="0 auto">
@@ -86,24 +89,24 @@ const Step2Client = () => {
 
         <VStack alignItems="left" marginBottom={8}>
           <Heading as="h1" size="2xl">
-            {t('OnBoarding.client_instructions_title')}
+            {t('Allgemein.Compliance.Titel')}
           </Heading>
         </VStack>
         <VStack alignItems="left" marginBottom={8} fontSize="sm">
           <Text marginBottom={4}>
             <Box as="span" display="block" fontWeight="bold">
-              {getSalutation(formState.data.privateMetadata.gender as '0' | '1')}
-              {' '}
-              {formState.data.lastName}
+
+              {t('Allgemein.Compliance.Untertitel', { salutation, lastName })}
+
             </Box>
-            Care2you bietet Ausbildungsangebote im Gesundheitsbereich und unterstützt häusliche Betreuung mit Beratungs-, Koordinations- und Servicedienstleistungen.
+            {t('Allgemein.Compliance.Text')}
           </Text>
         </VStack>
         <VStack alignItems="left" marginBottom={8}>
           <HStack alignItems="center">
             <Stack align="flex-start" flex="1" key={0}>
               <Checkbox checked={formState.data.privateMetadata.compilance as true | false} onChange={handleCheckboxChange}>
-                {t.rich('OnBoarding.checkbox_text', {
+                {t.rich('Checkbox', {
                   link: chunks => (
                     <Link href="#" target="_blank" color="blue.500">
                       {chunks}

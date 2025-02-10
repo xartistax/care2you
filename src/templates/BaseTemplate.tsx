@@ -1,4 +1,5 @@
 import { currentUser } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
@@ -15,7 +16,7 @@ export async function BaseTemplate({
   const user = await currentUser();
 
   if (!user) {
-    throw new Error('User not found');
+    redirect('/de/good-bye');
   }
 
   const constructedUser = constructUser(user);

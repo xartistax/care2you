@@ -1,15 +1,13 @@
-import { BaseTemplate } from '@/templates/BaseTemplate';
+import { BaseTemplateAlt } from '@/templates/BaseTemplateAlt';
 
 export default function Layout({
-  children,
-  params, // ✅ Get params to extract locale
+  children, // ✅ Get params to extract locale
 }: {
-  children: React.ReactNode;
-  params: { locale: string }; // ✅ Ensure locale is available
+  children: React.ReactNode; // ✅ Ensure locale is available
 }) {
   return (
-    <BaseTemplate locale={params.locale}>
+    <BaseTemplateAlt>
       {children}
-    </BaseTemplate>
+    </BaseTemplateAlt>
   );
 }

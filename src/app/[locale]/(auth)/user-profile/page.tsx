@@ -10,7 +10,7 @@ import UserProfile from './UserProfile';
 export async function generateMetadata(props: { params: { locale: string } }) {
   const t = await getTranslations({
     locale: props.params.locale,
-    namespace: 'Dashboard',
+    namespace: 'Index',
   });
 
   return {
@@ -23,7 +23,7 @@ export default async function DashboardServer() {
   const user = await currentUser();
 
   if (!user) {
-    redirect('/sign-in'); // Redirect to login if user is not found
+    redirect('/'); // Redirect to login if user is not found
   }
 
   const constructedUser = constructUser(user);

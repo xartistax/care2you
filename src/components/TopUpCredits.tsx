@@ -2,6 +2,7 @@
 
 import { Input, Text, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Toaster, toaster } from '@/components/ui/toaster';
@@ -17,6 +18,7 @@ const TopUpCredits = ({ userId }: TopUpCreditsProps) => {
   const [amount, setAmount] = useState(0);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const t = useTranslations('Service');
 
   const handleTopUp = async () => {
     if (!amount || amount <= 0) {
@@ -63,17 +65,20 @@ const TopUpCredits = ({ userId }: TopUpCreditsProps) => {
     <>
 
       <VStack spaceY={4} maxWidth="800px">
-        <Text textAlign="center" fontSize="sm"> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi praesentium incidunt facilis quisquam nam harum sed, eaque blanditiis amet reiciendis et provident quae minus eligendi repellendus nihil totam reprehenderit aspernatur?</Text>
+        <Text textAlign="center" fontSize="sm">
+          {' '}
+          { t('Kredit.Notiz') }
+        </Text>
         <Input
           width="30%"
-          placeholder="Anzahl Credits eingeben"
+          placeholder={t('Kredit.Platzhalter')}
           value={amount}
           onChange={e => setAmount(e.target.value as unknown as number)}
           type="number"
           disabled={loading}
         />
         <Button colorScheme="blue" onClick={handleTopUp} loading={loading}>
-          Credits aufladen
+          {t('Kredit.Button')}
         </Button>
       </VStack>
 

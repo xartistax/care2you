@@ -2,8 +2,8 @@
 # Your Crowdin credentials
 #
 # No need modify CROWDIN_PROJECT_ID and CROWDIN_PERSONAL_TOKEN, you can set them in GitHub Actions secrets
-project_id_env: CROWDIN_PROJECT_ID
-api_token_env: CROWDIN_PERSONAL_TOKEN
+project_id_env: 743617
+api_token_env: 8ccdd1895667268ae7c38c89348f56a26907213c788c2ea00c0de30f67eb53103bf331bcbdb93f36
 base_path: .
 base_url: 'https://api.crowdin.com' # https://{organization-name}.crowdin.com for Crowdin Enterprise
 

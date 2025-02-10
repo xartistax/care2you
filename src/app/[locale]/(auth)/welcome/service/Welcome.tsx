@@ -25,7 +25,7 @@ import type { onboardingClientUserSchema } from '@/validations/onBoardingValidat
 type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
 
 export default function WelcomeService({ user }: { user: OnBoardingClientUser }) {
-  const t = useTranslations('Welcome');
+  const t = useTranslations('Willkommen');
 
   if (user.privateMetadata.status === 'inactive') {
     return (
@@ -42,7 +42,7 @@ export default function WelcomeService({ user }: { user: OnBoardingClientUser })
           <Avatar src="" name={`${user.firstName} ${user.lastName}`} size="lg" />
           <Heading as="h1" size="2xl">
 
-            {t('meta_title', { username: `${user.firstName} ${user.lastName}` })}
+            {t('Begrüssung', { username: `${user.firstName} ${user.lastName}` })}
           </Heading>
           <Box as="span">
             <Tag>
@@ -52,7 +52,9 @@ export default function WelcomeService({ user }: { user: OnBoardingClientUser })
           </Box>
         </HStack>
 
-        <Text fontSize="sm"> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex qui perspiciatis laudantium blanditiis rem ratione ullam, porro in cupiditate dolorum nihil odit, consectetur quo atque mollitia, sit beatae nobis sapiente.</Text>
+        <Text fontSize="sm">
+          { t('Inaktiv.Service.Text') }
+        </Text>
 
       </Box>
     );
@@ -70,7 +72,7 @@ export default function WelcomeService({ user }: { user: OnBoardingClientUser })
       <HStack alignItems="center" marginBottom="16">
         <Avatar src="" name={`${user.firstName} ${user.lastName}`} size="lg" />
         <Heading as="h1" size="2xl">
-          {t('meta_title', { username: `${user.firstName} ${user.lastName}` })}
+          {t('Begrüssung', { username: `${user.firstName} ${user.lastName}` })}
         </Heading>
         <Box as="span">
           <Tag>
@@ -81,7 +83,7 @@ export default function WelcomeService({ user }: { user: OnBoardingClientUser })
 
       {/* Subheading */}
       <Heading as="h2" size="xl" marginBottom="4" lineHeight={1.3}>
-        {t('hello_message_service')}
+        {t('Titel.Service')}
       </Heading>
 
       {/* Grid with Cards */}
@@ -116,7 +118,7 @@ export default function WelcomeService({ user }: { user: OnBoardingClientUser })
               <Box>
                 <CardTitle lineHeight={0}>
                   <LinkOverlay fontSize="xl" color="#A0A0A0" href="/welcome/new/service">
-                    {t('add_service')}
+                    {t('Service anbieten')}
                   </LinkOverlay>
                 </CardTitle>
               </Box>
@@ -128,7 +130,7 @@ export default function WelcomeService({ user }: { user: OnBoardingClientUser })
       {/* Placeholder for "Meine aktiven Services" */}
       <Box mb={6} p={0} mt={10}>
         <Heading as="h3" size="lg" color="gray.700">
-          Meine aktiven Services
+          {t('aktive Services')}
         </Heading>
         <UserServices userId={user.id} />
       </Box>

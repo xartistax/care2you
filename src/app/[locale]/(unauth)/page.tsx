@@ -1,4 +1,7 @@
-import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
+import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
+
+import Entrance from '@/components/Entrance';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
   const t = await getTranslations({
@@ -12,14 +15,16 @@ export async function generateMetadata(props: { params: { locale: string } }) {
   };
 }
 
-const Index = (props: { params: { locale: string } }) => {
-  unstable_setRequestLocale(props.params.locale);
-  // const t = useTranslations('Index');
+const Index = () => {
+  const t = useTranslations('Entry');
 
   return (
-    <>
-      Home
-    </>
+    <Entrance
+      title={t('Titel')}
+      text={t('Text')}
+      linkTo="/sign-up"
+      linkTitle={t('Button')}
+    />
   );
 };
 

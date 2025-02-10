@@ -9,7 +9,7 @@ import AdminPanel from './Admin';
 export async function generateMetadata(props: { params: { locale: string } }) {
   const t = await getTranslations({
     locale: props.params.locale,
-    namespace: 'Dashboard',
+    namespace: 'Index',
   });
 
   return {
@@ -32,7 +32,7 @@ export default async function DashboardServer() {
   const serviceUsers = transformedUsers.filter(user => user.privateMetadata.role === 'care');
 
   if (!user) {
-    redirect('/sign-in');
+    redirect('/good-bye');
   }
 
   return <AdminPanel allUsers={transformedUsers} careUsers={careUsers} clientUsers={clientUsers} serviceUsers={serviceUsers} />;

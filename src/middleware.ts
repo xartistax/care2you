@@ -47,7 +47,7 @@ export default function middleware(
 
         // return NextResponse.redirect(getI18nPath(`${getBaseUrl()}/onboarding`, locale));
 
-        const signInUrl = new URL(`/sign-in`, req.url);
+        const signInUrl = new URL(`/good-bye`, req.url);
 
         auth().protect({
           unauthenticatedUrl: signInUrl.toString(),

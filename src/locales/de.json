@@ -1,4 +1,170 @@
 {
+  "Entry": {
+    "Titel": " Willkommen bei Care2you",
+    "Text": "Care2you bietet Ausbildungsangebote im Gesundheitsbereich und unterstützt häusliche Betreuung mit Beratungs-, Koordinations- und Servicedienstleistungen.",
+    "Button": "Anmelden"
+  },
+
+  "GoodBye": {
+    "Titel": "Auf Wiedersehen!",
+    "Text": " Danke für deinen Besuch. Bis bald!",
+    "Button": "Anmelden"
+  },
+
+  "OnBoarding": {
+    "Allgemein": {
+      "Rolle": {
+        "Feld": "Rollenwahl"
+      },
+      "Anrede": {
+        "Feld": "Anrede",
+        "Platzhalter": "Bitte wählen Sie Ihre Anrede",
+        "Maskulin": "Herr",
+        "Feminim": "Frau"
+      },
+      "Vorname": {
+        "Feld": "Vorname",
+        "Platzhalter": "Geben Sie Ihren Vornamen ein"
+      },
+      "Nachname": {
+        "Feld": "Nachname",
+        "Platzhalter": "Geben Sie Ihren Nachnamen ein"
+      },
+      "E-Mail": {
+        "Feld": "E-Mail-Adresse",
+        "Platzhalter": "name@beispiel.com"
+      },
+      "Telefon": {
+        "Feld": "Telefonnummer",
+        "Platzhalter": "+41 79 123 45 67"
+      },
+      "Strasse": {
+        "Feld": "Strasse",
+        "Platzhalter": "Geben Sie Ihre Strasse ein",
+        "Nr": "Nr"
+      },
+      "Postleitzahl": {
+        "Feld": "Postleitzahl",
+        "Platzhalter": "Geben Sie Ihre PLZ ein"
+      },
+      "Ortschaft": {
+        "Feld": "Ortschaft",
+        "Platzhalter": "Geben Sie Ihre Ortschaft ein"
+      },
+      "Compliance": {
+        "Titel": "Willkommen bei Care2you",
+        "Untertitel": "{salutation} {lastName}",
+        "Text": "Care2you bietet Ausbildungsangebote im Gesundheitsbereich und unterstützt häusliche Betreuung mit Beratungs-, Koordinations- und Servicedienstleistungen."
+      },
+      "Button": "Weiter"
+
+    },
+
+    "Service": {
+      "Unternehmensform": {
+        "Feld": "Unternehmensform",
+        "Platzhalter": "Wählen Sie die Unternehmensform",
+        "AG": "AG",
+        "GMBH": "GmbH",
+        "Einzelfirma": "Einzelfirma"
+      },
+      "Firmenname": {
+        "Feld": "Firmenname",
+        "Platzhalter": "Geben Sie den Firmennamen ein"
+      },
+      "UID Steuernummer": {
+        "Feld": "UID-/Steuernummer",
+        "Platzhalter": "Geben Sie Ihre UID- oder Steuernummer ein"
+      },
+      "Tätigkeitsbeschreib": {
+        "Feld": "Tätigkeitsbeschreibung",
+        "Platzhalter": "Beschreiben Sie Ihre Tätigkeit"
+      }
+    },
+
+    "Care": {
+      "Geburtsdatum": {
+        "Feld": "Geburtsdatum",
+        "Platzhalter": "Geben Sie Ihr Geburtsdatum ein"
+      },
+      "Nationalität": {
+        "Feld": "Nationalität",
+        "Platzhalter": "Wählen Sie Ihre Nationalität"
+      },
+      "Erfahrung": {
+        "Feld": "Erfahrung",
+        "Platzhalter": "Geben Sie Ihre Erfahrung an"
+      },
+      "Tätigkeitsbereich": {
+        "Feld": "Tätigkeitsbereich",
+        "Platzhalter": "Geben Sie Ihren Tätigkeitsbereich an"
+      },
+      "Gesprochene Sprachen": {
+        "Feld": "Gesprochene Sprachen",
+        "Platzhalter": "Wählen Sie Ihre gesprochenen Sprachen"
+      },
+      "Verfügbarkeiten": {
+        "Feld": "Verfügbarkeiten",
+        "Platzhalter": "Geben Sie Ihre Verfügbarkeiten an"
+      },
+      "Upload": {
+        "Feld": "Zertifikate und andere Dateien",
+        "Platzhalter": "Ziehen Sie die Dateien hierher.pdf bis zu 5MB"
+      }
+    },
+
+    "Care und Service Compilance": {
+      "Titel": "Willkommen bei Care2you",
+      "Untertitel": "{salutation} {lastName}",
+      "Text": "Care2you bietet Ausbildungsangebote im Gesundheitsbereich und unterstützt häusliche Betreuung mit Beratungs-, Koordinations- und Servicedienstleistungen."
+    },
+
+    "Zurück": "Zurück",
+    "Checkbox": "Ich stimme den <link>Nutzungsbedingungen</link> zu.",
+    "Bestätigen": "Anmeldung bestätigen"
+  },
+
+  "Willkommen": {
+    "Begrüssung": "Grüezi {username}",
+    "Titel": {
+      "Client": "Welche Art von Dienstleistung benötigen Sie heute?",
+      "Care": "Welche Art von Dienstleistung benötigen Sie heute?",
+      "Service": "Welche Art von Dienstleistung möchten Sie anbieten?"
+    },
+    "Neuer Service": "Neuer Service",
+    "Service anbieten": "Service anbieten",
+    "aktive Services": "Meine aktiven Services",
+    "Neue Pflege": "Neue Pflege",
+
+    "Inaktiv": {
+      "Client": {
+        "Text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+      },
+      "Service": {
+        "Text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+      },
+      "Care": {
+        "Text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+      }
+    }
+  },
+
+  "Service": {
+    "Kredit": {
+      "Notiz": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi praesentium incidunt facilis quisquam nam harum sed, eaque blanditiis amet reiciendis et provident quae minus eligendi repellendus nihil totam reprehenderit aspernatur?",
+      "Button": "Credits aufladen",
+      "Platzhalter": "Credits aufladen"
+    }
+  },
+
+  "Client": {
+    "Pflegerechner": {
+      "Titel": "Care2you Pflegerechner",
+      "Text": " Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aspernatur eos quasi ducimus excepturi architecto, eius optio magni voluptatibus nemo illum placeat voluptas earum, beatae laborum. Ducimus aut tempore debitis dignissimos?"
+    }
+
+  },
+
   "RootLayout": {
     "services_link": "Services",
     "history_link": "Verlauf",
@@ -42,54 +208,7 @@
     "meta_description": "Die Care2you AG ist ein Beratungs- und Serviceunternehmen mit Sitz in Zürich. Für unsere Kunden planen, entwickeln und bieten wir digitale Ausbildungs- und Koordinationslösungen im Gesundheitswesen an.",
     "sponsors_title": "Sponsoren"
   },
-  "Counter": {
-    "meta_title": "Zähler",
-    "meta_description": "Ein Beispiel für eine Datenbankoperation",
-    "loading_counter": "Zähler wird geladen...",
-    "error_reporting_powered_by": "Fehlerbericht unterstützt von"
-  },
-  "CounterForm": {
-    "presentation": "Der Zähler wird in der Datenbank gespeichert und um den angegebenen Wert erhöht.",
-    "label_increment": "Erhöhen um",
-    "button_increment": "Erhöhen"
-  },
-  "CurrentCount": {
-    "count": "Zählerstand: {count}"
-  },
-  "About": {
-    "meta_title": "Über uns",
-    "meta_description": "Beschreibung der Über-uns-Seite",
-    "about_paragraph": "Willkommen auf unserer Über-uns-Seite! Wir sind ein Team von engagierten Personen, die großartige Software erstellen möchten.",
-    "translation_powered_by": "Übersetzung unterstützt von"
-  },
-  "Portfolio": {
-    "meta_title": "Portfolio",
-    "meta_description": "Willkommen auf meiner Portfolio-Seite!",
-    "presentation": "Willkommen auf meiner Portfolio-Seite! Hier findest du eine sorgfältig kuratierte Sammlung meiner Arbeiten und Erfolge. Mit diesem Portfolio möchte ich meine Expertise, Kreativität und den Mehrwert präsentieren, den ich zu deinen Projekten beitragen kann.",
-    "portfolio_name": "Portfolio {name}",
-    "error_reporting_powered_by": "Fehlerbericht unterstützt von",
-    "coverage_powered_by": "Codeabdeckung unterstützt von"
-  },
-  "PortfolioSlug": {
-    "meta_title": "Portfolio {slug}",
-    "meta_description": "Beschreibung des Portfolios {slug}",
-    "header": "Portfolio {slug}",
-    "content": "Erstellung einer Reihe von Werbematerialien und Branding-Elementen für eine Firmenveranstaltung. Entwicklung eines visuell einheitlichen Themas, das ein Logo, Poster, Banner und digitale Assets umfasst. Integration der Markenidentität des Kunden mit einem zeitgemäßen und innovativen Ansatz. Positive Resonanz von den Veranstaltungsteilnehmern, was zu einer erfolgreichen Veranstaltung mit erhöhter Teilnehmerbindung und gesteigerter Markenbekanntheit führte.",
-    "log_management_powered_by": "Log-Management unterstützt von"
-  },
-  "SignIn": {
-    "meta_title": "Anmelden",
-    "meta_description": "Melde dich nahtlos bei deinem Konto an mit unserem benutzerfreundlichen Anmeldeprozess."
-  },
-  "SignUp": {
-    "meta_title": "Registrieren",
-    "meta_description": "Erstelle mühelos ein Konto mit unserem intuitiven Registrierungsprozess."
-  },
-  "Dashboard": {
-    "meta_title": "Dashboard",
-    "hello_message": "Hallo {email}!",
-    "request_title": "Service Anfragen"
-  },
+
   "Welcome": {
     "meta_title": "Grüezi {username}",
     "hello_message_client": "Welche Art von Dienstleistung benötigen Sie heute?",
@@ -110,14 +229,6 @@
   },
   "UserProfile": {
     "meta_title": "Benutzerprofil"
-  },
-
-  "OnBoarding": {
-    "meta_title": "Onboarding",
-    "greetings": "Hallo, Bitte vervollständigen Sie ihr Benutzerprofil",
-    "client_instructions_title": "Willkommen bei Care2You",
-    "checkbox_text": "Ich stimme den <link>Nutzungsbedingungen</link> zu.",
-    "submit_button": "bestätigen"
   },
 
   "Buttons": {
