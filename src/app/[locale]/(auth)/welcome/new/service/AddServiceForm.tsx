@@ -32,7 +32,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
   const [step, setStep] = useState(1);
   const credits = Number(user.privateMetadata.credits) || 0;
 
-  const t = useTranslations();
+  const t = useTranslations('Service');
 
   // Initialize form data with translations
   const [formData, setFormData] = useState<ServiceFormData>({
@@ -132,19 +132,19 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
       if (!hasActiveHours) {
         toaster.create({
           type: 'error',
-          title: t('Forms.AddServiceForm.Errors.workinghours'),
+          title: t('Errors.Verfügbarkeiten'),
         });
         return;
       } else if (formData.image === '/service_placeholder.jpg') {
         toaster.create({
           type: 'error',
-          title: t('Forms.AddServiceForm.Errors.noImage'),
+          title: t('Errors.Kein Bild'),
         });
         return;
       } else if (!formData.calendly) {
         toaster.create({
           type: 'error',
-          title: t('Forms.AddServiceForm.Errors.calLink'),
+          title: t('Errors.Webseite'),
         });
         return;
       }
@@ -152,13 +152,13 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
       if (!formData.title || !formData.description || !formData.priceType) {
         toaster.create({
           type: 'error',
-          title: t('Forms.AddServiceForm.Errors.general'),
+          title: t('Errors.Allgemein'),
         });
         return;
       } else if (Number.parseFloat(String(formData.price)) < 10.00) {
         toaster.create({
           type: 'error',
-          title: t('Forms.AddServiceForm.Errors.price'),
+          title: t('Errors.Preis'),
         });
         return;
       }
@@ -308,14 +308,14 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               workingHours={formData.workingHours}
               onToggle={handleToggle}
               onTimeChange={handleTimeChange}
-              label="Verfügbarkeiten"
+              label={t('Verfügbarkeiten.Platzhalter')}
             />
 
             <FormControl paddingBottom={8}>
-              <FormLabel fontSize="small" fontWeight="bold">{t('Forms.AddServiceForm.Labels.calLink')}</FormLabel>
+              <FormLabel fontSize="small" fontWeight="bold">{t('Webseite.Feld')}</FormLabel>
               <Input
                 type="text"
-                placeholder={t('Forms.AddServiceForm.Labels.calLink')}
+                placeholder={t('Webseite.Platzhalter')}
                 value={formData.calendly}
                 onChange={e => setFormData(prev => ({ ...prev, calendly: e.target.value }))}
               />
@@ -323,7 +323,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
 
             <Flex justify="flex-end">
               <Button colorScheme="blue" onClick={handleNextStep}>
-                {t('Forms.AddServiceForm.Buttons.next')}
+                {t('Buttons.Weiter')}
               </Button>
             </Flex>
           </>
@@ -333,10 +333,10 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
           <>
             {/* Step 2: Service Details */}
             <FormControl paddingBottom={8}>
-              <FormLabel fontSize="small" fontWeight="bold">{t('Forms.AddServiceForm.Labels.service')}</FormLabel>
+              <FormLabel fontSize="small" fontWeight="bold">{t('Service Titel.Feld')}</FormLabel>
               <Input
                 type="text"
-                placeholder={t('Forms.AddServiceForm.Labels.service')}
+                placeholder={t('Service Titel.Platzhalter')}
                 value={formData.title}
                 onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))}
               />
@@ -345,12 +345,12 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
             <FormControl paddingBottom={8}>
               <FormLabel fontSize="small" fontWeight="bold">
                 {' '}
-                {t('Forms.AddServiceForm.Labels.description')}
+                {t('Service Beschreibung.Feld')}
                 {' '}
               </FormLabel>
               <Textarea
                 rows={10}
-                placeholder={t('Forms.AddServiceForm.Labels.description')}
+                placeholder={t('Service Beschreibung.Platzhalter')}
                 value={formData.description}
                 onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
               />
@@ -359,7 +359,9 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
             <FormControl paddingBottom={8}>
               <FormLabel fontSize="small" fontWeight="bold">
                 {' '}
-                Wählen Sie eine Servicekategorie
+                {
+                  t('Servicekategorie.Feld')
+                }
                 {' '}
               </FormLabel>
 
@@ -376,7 +378,10 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 }}
               >
                 <SelectTrigger>
-                  <SelectValueText placeholder="Bitte wählen..." />
+                  <SelectValueText placeholder={
+                    t('Servicekategorie.Platzhalter')
+                  }
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {categoriesList.items.map(item => (
@@ -394,12 +399,12 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
             {/* Price Input (Changes Label Based on Selection) */}
             <FormControl paddingBottom={8}>
               <FormLabel fontSize="small" fontWeight="bold">
-                {formData.priceType === 'fix' ? t('Forms.AddServiceForm.Labels.fixprice') : t('Forms.AddServiceForm.Labels.hourlyprice')}
+                {formData.priceType === 'fix' ? t('Fixpreis.Feld') : t('Stundensatz.Feld')}
               </FormLabel>
               <Input
                 ref={inputRef}
                 type="text"
-                placeholder={formData.priceType === 'fix' ? t('Forms.AddServiceForm.Labels.fixprice') : t('Forms.AddServiceForm.Labels.hourlyprice')}
+                placeholder={formData.priceType === 'fix' ? t('Fixpreis.Feld') : t('Stundensatz.Feld')}
                 value={formData.formattedPrice}
                 onChange={handlePriceChange}
               />
@@ -408,10 +413,10 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
 
             <Flex justify="flex-end" gap={2}>
               <Button onClick={handlePreviousStep} colorScheme="gray">
-                {t('Forms.AddServiceForm.Buttons.back')}
+                {t('Buttons.Zurück')}
               </Button>
               <Button onClick={handleNextStep} colorScheme="green">
-                {t('Forms.AddServiceForm.Buttons.next')}
+                {t('Buttons.Weiter')}
               </Button>
             </Flex>
           </>
@@ -482,10 +487,10 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
             {/* Navigation Buttons */}
             <Flex justify="flex-end" gap={2} marginTop={6}>
               <Button onClick={handlePreviousStep} colorScheme="gray">
-                {t('Forms.AddServiceForm.Buttons.back')}
+                {t('Buttons.Zurück')}
               </Button>
               <Button onClick={handleNextStep} colorScheme="green">
-                {t('Forms.AddServiceForm.Buttons.next')}
+                {t('Buttons.Weiter')}
               </Button>
             </Flex>
           </>
@@ -550,7 +555,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               {' '}
               <Tag fontWeight="initial">
                 {
-                  (formData.priceType === 'fix') ? (t('Forms.AddServiceForm.Labels.fixprice')) : (t('Forms.AddServiceForm.Labels.hourlyprice'))
+                  (formData.priceType === 'fix') ? (t('Fixpreis.Feld')) : (t('Stundensatz.Feld'))
                 }
 
               </Tag>
@@ -625,9 +630,9 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               <HStack alignItems="center" marginBottom={{ base: 0, md: '4' }} w="100%">
                 <Alert status="warning" w="100%">
                   <Text fontWeight="bold" fontSize="sm">
-                    {t('Forms.AddServiceForm.Info.cost')}
+                    {t('Info.Kosten')}
                     <Box as="span" fontWeight={100} display="block">
-                      {t('Forms.AddServiceForm.Info.recharge_info')}
+                      {t('Info.Notiz')}
                     </Box>
                   </Text>
                 </Alert>
@@ -636,10 +641,10 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               {/* Right-aligned buttons (stacks below warning on mobile) */}
               <HStack gap={2} w="100%" justify={{ base: 'center', md: 'flex-end' }}>
                 <Button onClick={handlePreviousStep} colorScheme="gray">
-                  {t('Forms.AddServiceForm.Buttons.back')}
+                  {t('Buttons.Zurück')}
                 </Button>
                 <Button onClick={handleSubmit} colorScheme="green">
-                  {t('Forms.AddServiceForm.Buttons.submit')}
+                  {t('Buttons.Bestätigen')}
                 </Button>
               </HStack>
             </Flex>

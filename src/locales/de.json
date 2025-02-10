@@ -151,9 +151,71 @@
 
   "Service": {
     "Kredit": {
+      "Feld": "Kredit",
       "Notiz": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi praesentium incidunt facilis quisquam nam harum sed, eaque blanditiis amet reiciendis et provident quae minus eligendi repellendus nihil totam reprehenderit aspernatur?",
       "Button": "Credits aufladen",
       "Platzhalter": "Credits aufladen"
+    },
+    "Verfügbarkeiten": {
+      "Feld": "Verfügbarkeiten",
+      "Platzhalter": "Geben Sie Ihre Verfügbarkeiten an"
+    },
+    "Webseite": {
+      "Feld": "Webseite",
+      "Platzhalter": "Geben Sie Ihre Webseite an"
+    },
+    "Service Titel": {
+      "Feld": "Service Titel",
+      "Platzhalter": "Geben Sie dem Service einen Titel"
+    },
+    "Service Beschreibung": {
+      "Feld": "Service Beschreibung",
+      "Platzhalter": "Beschreiben Sie den Service"
+    },
+    "Servicekategorie": {
+      "Feld": "Servicekategorie",
+      "Platzhalter": "Wählen Sie eine Servicekategorie"
+    },
+    "Stundensatz": {
+      "Feld": "Stundensatz",
+      "Platzhalter": "Geben Sie Ihren Stundensatz an"
+    },
+    "Fixpreis": {
+      "Feld": "Fixpreis",
+      "Platzhalter": "Geben Sie Ihren Fixpreis an"
+    },
+    "Adresse": {
+      "Feld": "Adresse",
+      "Platzhalter": "Geben Sie Ihre Adresse an"
+    },
+    "Adresse Nr": {
+      "Feld": "Adresse Nr",
+      "Platzhalter": "Nr"
+    },
+    "Postleitzahl": {
+      "Feld": "Postleitzahl",
+      "Platzhalter": "Postleitzahl"
+    },
+    "Stadt": {
+      "Feld": "Stadt",
+      "Platzhalter": "Stadt"
+    },
+    "Buttons": {
+      "Weiter": "Weiter",
+      "Zurück": "Zurück",
+      "Bestätigen": "Service einstellen"
+    },
+    "Info": {
+      "Kosten": "Dieses Inserat kostet 1 Credit",
+      "Notiz": "Sie können Ihre Credits jederzeit aufladen!"
+    },
+    "Errors": {
+      "Kein Bild": "Bitte wählen Sie ein Bild aus",
+      "Verfügbarkeiten": "Bitte wähle mindestens einen Arbeitstag aus.",
+      "Webseite": "Bitte geben Sie eine Webseite an.",
+      "Allgemein": "Bitte füllen Sie alle Felder aus",
+      "Preis": "Der Preis muss höher als 10.00 sein"
+
     }
   },
 
