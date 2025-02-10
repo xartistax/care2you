@@ -30,9 +30,9 @@ export type ListElementProps = {
 };
 
 export default function ListElement({ formData }: ListElementProps) {
-  const t = useTranslations();
+  const t = useTranslations('Service');
   // const buttonLabel = t('Buttons.confirm');
-  const currency = t('RootLayout.currency');
+  const currency = 'CHF';
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [isReady, setIsReady] = useState(false);
 
@@ -113,7 +113,7 @@ export default function ListElement({ formData }: ListElementProps) {
                   text={formData.description}
                   textTruncateChild={(
                     <Link as="a" href={`/welcome/new/service/single/${formData.internalId}`}>
-                      {t('Buttons.read_more')}
+                      {t('Einzelansicht')}
                     </Link>
                   )}
                 />

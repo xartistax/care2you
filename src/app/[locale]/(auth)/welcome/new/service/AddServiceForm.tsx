@@ -425,11 +425,16 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
         {step === 3 && (
           <>
             {/* Street Address & Street Number in One Row */}
-            <HStack spaceY={4} w="100%" alignItems="center">
+            <HStack w="100%" alignItems="center">
 
               <FormControl flex={2}>
-                <FormLabel fontSize="small" fontWeight="bold">Adrresse</FormLabel>
+
+                <FormLabel fontSize="small" fontWeight="bold">
+                  {' '}
+                  {t('Adresse.Feld')}
+                </FormLabel>
                 <Input
+                  placeholder={t('Adresse.Platzhalter')}
                   type="text"
                   h="40px" // ✅ Ensures same height
                   value={formData.location.street}
@@ -456,10 +461,14 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
             </HStack>
 
             {/* Zip Code & City in One Row */}
-            <HStack spaceY={4} w="100%" alignItems="center">
+            <HStack w="100%" alignItems="center">
               <FormControl flex={2} marginTop={0}>
-                <FormLabel fontSize="small" fontWeight="bold">Zip Code</FormLabel>
+                <FormLabel fontSize="small" fontWeight="bold">
+                  {' '}
+                  {t('Postleitzahl.Feld')}
+                </FormLabel>
                 <Input
+                  placeholder={t('Postleitzahl.Platzhalter')}
                   type="text"
                   h="40px" // ✅ Ensures same height
                   value={formData.location.postalCode}

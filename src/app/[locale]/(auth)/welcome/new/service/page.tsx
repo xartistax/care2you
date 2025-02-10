@@ -9,11 +9,11 @@ import AddServiceForm from './AddServiceForm';
 export async function generateMetadata(props: { params: { locale: string } }) {
   const t = await getTranslations({
     locale: props.params.locale,
-    namespace: 'Welcome',
+    namespace: 'Index',
   });
 
   return {
-    title: t('search_new_service'),
+    title: t('meta_title'),
   };
 }
 

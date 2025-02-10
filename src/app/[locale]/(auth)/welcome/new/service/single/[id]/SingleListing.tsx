@@ -42,7 +42,7 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [client, setClient] = useState(false);
-  const t = useTranslations();
+  const t = useTranslations('Service');
   const router = useRouter();
 
   useEffect(() => {
@@ -155,7 +155,7 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
         <HStack>
           <Text fontSize="sm" fontWeight="bold" color="blue.600">
             {'ab '}
-            {t('RootLayout.currency')}
+            CHF
             {' '}
             {service.price}
           </Text>
@@ -297,7 +297,7 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
             width="100%"
             onClick={() => router.back()}
           >
-            {t('Buttons.go_back')}
+            {t('Zurück')}
           </Button>
         </Stack>
       </VStack>

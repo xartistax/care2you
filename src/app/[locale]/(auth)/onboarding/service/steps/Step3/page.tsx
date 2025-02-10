@@ -120,7 +120,7 @@ const Step3Service = () => {
               <Checkbox checked={formState.data.privateMetadata.compilance as true | false} onChange={handleCheckboxChange}>
                 {t.rich('Checkbox', {
                   link: chunks => (
-                    <Link href="#" target="_blank" color="blue.500">
+                    <Link href="/nutzerbedingungen" target="_blank" color="blue.500">
                       {chunks}
                     </Link>
                   ),

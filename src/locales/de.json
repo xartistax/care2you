@@ -216,7 +216,10 @@
       "Allgemein": "Bitte füllen Sie alle Felder aus",
       "Preis": "Der Preis muss höher als 10.00 sein"
 
-    }
+    },
+
+    "Einzelansicht": "Zum Service",
+    "Zurück": "Zurück"
   },
 
   "Client": {
