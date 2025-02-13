@@ -1,16 +1,14 @@
 {
   "Entry": {
-    "Titel": "Willkommen bei Care2you",
+    "Titel": "",
     "Text": "Care2you bietet Ausbildungsangebote im Gesundheitsbereich und unterstützt häusliche Betreuung mit Beratungs-, Koordinations- und Servicedienstleistungen.",
     "Button": "Anmelden"
   },
-
   "GoodBye": {
     "Titel": "Auf Wiedersehen!",
     "Text": " Danke für deinen Besuch. Bis bald!",
     "Button": "Anmelden"
   },
-
   "OnBoarding": {
     "Allgemein": {
       "Rolle": {
@@ -57,9 +55,7 @@
         "Text": "Care2you bietet Ausbildungsangebote im Gesundheitsbereich und unterstützt häusliche Betreuung mit Beratungs-, Koordinations- und Servicedienstleistungen."
       },
       "Button": "Weiter"
-
     },
-
     "Service": {
       "Unternehmensform": {
         "Feld": "Unternehmensform",
@@ -81,7 +77,6 @@
         "Platzhalter": "Beschreiben Sie Ihre Tätigkeit"
       }
     },
-
     "Care": {
       "Geburtsdatum": {
         "Feld": "Geburtsdatum",
@@ -112,18 +107,15 @@
         "Platzhalter": "Ziehen Sie die Dateien hierher.pdf bis zu 5MB"
       }
     },
-
     "Care und Service Compilance": {
       "Titel": "Willkommen bei Care2you",
       "Untertitel": "{salutation} {lastName}",
       "Text": "Care2you bietet Ausbildungsangebote im Gesundheitsbereich und unterstützt häusliche Betreuung mit Beratungs-, Koordinations- und Servicedienstleistungen."
     },
-
     "Zurück": "Zurück",
     "Checkbox": "Ich stimme den <link>Nutzungsbedingungen</link> zu.",
     "Bestätigen": "Anmeldung bestätigen"
   },
-
   "Willkommen": {
     "Begrüssung": "Grüezi {username}",
     "Titel": {
@@ -135,7 +127,6 @@
     "Service anbieten": "Service anbieten",
     "aktive Services": "Meine aktiven Services",
     "Neue Pflege": "Neue Pflege",
-
     "Inaktiv": {
       "Client": {
         "Text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
@@ -148,7 +139,6 @@
       }
     }
   },
-
   "Service": {
     "Kredit": {
       "Feld": "Kredit",
@@ -215,21 +205,16 @@
       "Webseite": "Bitte geben Sie eine Webseite an.",
       "Allgemein": "Bitte füllen Sie alle Felder aus",
       "Preis": "Der Preis muss höher als 10.00 sein"
-
     },
-
     "Einzelansicht": "Zum Service",
     "Zurück": "Zurück"
   },
-
   "Client": {
     "Pflegerechner": {
       "Titel": "Care2you Pflegerechner",
       "Text": " Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aspernatur eos quasi ducimus excepturi architecto, eius optio magni voluptatibus nemo illum placeat voluptas earum, beatae laborum. Ducimus aut tempore debitis dignissimos?"
     }
-
   },
-
   "RootLayout": {
     "services_link": "Services",
     "history_link": "Verlauf",
@@ -273,5 +258,4 @@
     "meta_description": "Die Care2you AG ist ein Beratungs- und Serviceunternehmen mit Sitz in Zürich. Für unsere Kunden planen, entwickeln und bieten wir digitale Ausbildungs- und Koordinationslösungen im Gesundheitswesen an.",
     "sponsors_title": "Sponsoren"
   }
-
 }
