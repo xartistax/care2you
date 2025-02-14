@@ -2,10 +2,10 @@ name: Crowdin Action
 
 on:
   push:
-    branches: [main] # Run on push to the main branch
+    branches: [main]
   schedule:
-    - cron: '0 5 * * *' # Run every day at 5am
-  workflow_dispatch: # Run manually
+    - cron: '0 5 * * *'
+  workflow_dispatch:
 
 jobs:
   synchronize-with-crowdin:
@@ -15,18 +15,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: crowdin action
+      - name: Configure Git
+        run: |
+          git config --global user.email "support+bot@crowdin.com"
+          git config --global user.name "Crowdin Bot"
+
+      - name: Crowdin Action
         uses: crowdin/github-action@v2
         with:
           upload_sources: true
           upload_translations: true
           download_translations: true
-          localization_branch_name: main # Push directly to the main branch
-          push_translations: true # Enable pushing translations
-          push_sources: true # Enable pushing sources
-          create_pull_request: false
+          localization_branch_name: main # Push translations directly to main
+          push_translations: true
+          push_sources: true
+          create_pull_request: false # Prevent PR creation
           commit_message: 'chore: new Crowdin translations by GitHub Action'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+
+      - name: Check Git Status
+        run: git status
+
+      - name: Commit and Push Changes
+        run: |
+          git add .
+          git commit -m "chore: new Crowdin translations by GitHub Action" || echo "No changes to commit"
+          git push
