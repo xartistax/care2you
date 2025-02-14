@@ -24,6 +24,7 @@ jobs:
           localization_branch_name: main # Push directly to the main branch
           push_translations: true # Enable pushing translations
           push_sources: true # Enable pushing sources
+          create_pull_request: false
           commit_message: 'chore: new Crowdin translations by GitHub Action'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
