@@ -3,7 +3,7 @@ name: Crowdin Auto-Merge
 on:
   push:
     branches:
-      - crowdin_main_branch # Ersetze dies mit dem Namen des Branches, den Crowdin verwendet
+      - crowdin_main_branch # Der Branch, den Crowdin verwendet
 
 jobs:
   merge:
@@ -19,5 +19,5 @@ jobs:
           git config --global user.email "actions@github.com"
           git fetch origin
           git checkout main
-          git merge origin/crowdin-branch --no-ff --no-edit
+          git merge origin/crowdin_main_branch --no-ff --no-edit
           git push origin main
