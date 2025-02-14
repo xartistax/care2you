@@ -21,8 +21,9 @@ jobs:
           upload_sources: true
           upload_translations: true
           download_translations: true
-          localization_branch_name: l10n_crowdin_translations
-          push_translations: true
+          localization_branch_name: main # Push directly to the main branch
+          push_translations: true # Enable pushing translations
+          push_sources: true # Enable pushing sources
           commit_message: 'chore: new Crowdin translations by GitHub Action'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
