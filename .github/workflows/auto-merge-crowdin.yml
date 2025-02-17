@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Enable auto-merge for Crowdin PRs
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
