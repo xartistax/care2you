@@ -14,6 +14,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: l10n_main2 # Checkout Crowdin branch
+
+      - name: Merge Crowdin updates into main
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git checkout main
+          git pull origin main
+          git merge --no-edit l10n_main2
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: crowdin action
         uses: crowdin/github-action@v2
@@ -22,12 +35,9 @@ jobs:
           upload_translations: true
           download_translations: true
           localization_branch_name: l10n_main2
-          create_pull_request: true
-          pull_request_title: New Crowdin Translations
-          pull_request_body: 'New Crowdin translations by [Crowdin GH Action](https://github.com/crowdin/github-action)'
-          pull_request_base_branch_name: main
-          commit_message: 'chore: new Crowdin translations by GitHub Action'
+          create_pull_request: false # No PR, direct push to main
+          commit_message: 'chore: updated translations from Crowdin'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CROWDIN_PROJECT_ID: 763741
-          CROWDIN_PERSONAL_TOKEN: cfba523293b5feb4261069cfad34d33dd846d332cb2cef2ddeba17f1c98e4629e98d213bb1c62613
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
