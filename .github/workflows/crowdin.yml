@@ -1,5 +1,4 @@
 name: Crowdin Action
-verbose: true
 
 on:
   push:
