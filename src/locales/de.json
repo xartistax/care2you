@@ -1,7 +1,7 @@
 {
   "Entry": {
-    "Titel": "TestTitel",
-    "Text": "",
+    "Titel": "TestTitel 000",
+    "Text": "Hello",
     "Button": "Anmelden"
   },
   "GoodBye": {
