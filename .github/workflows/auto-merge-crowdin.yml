@@ -2,7 +2,7 @@ name: Auto-Merge Crowdin PR
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main] # Triggers when the PR targets the main branch
     types: [opened, synchronize, reopened]
   workflow_dispatch: # Run manually
 
@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Ensures the full history is fetched, so the PR can be merged
 
       - name: Enable auto-merge for Crowdin PRs
         uses: peter-evans/enable-pull-request-automerge@v3
