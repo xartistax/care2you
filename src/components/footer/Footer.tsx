@@ -15,17 +15,6 @@ export default function Footer() {
       >
         {t('copyright')}
       </a>
-      {' '}
-      {t.rich('made_with', {
-        author: () => (
-          <a
-            href="https://www.bexolutions.ch"
-            className="text-blue-700 hover:border-b hover:border-blue-700"
-          >
-            Bexolutions GmbH
-          </a>
-        ),
-      })}
 
     </footer>
   );
