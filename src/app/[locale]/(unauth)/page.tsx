@@ -21,7 +21,6 @@ const Index = () => {
   return (
     <Entrance
       title={t('Titel')}
-      text={t('Text')}
       linkTo="/sign-up"
       linkTitle={t('Button')}
     />
