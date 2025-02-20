@@ -1,7 +1,7 @@
 {
   "Entry": {
-    "Titel": "Willkommen bei Care2you New",
-    "Text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+    "Titel": "Willkommen bei Care2you",
+    "Text": "Willkommen auf unserer Service-Plattform!\n\nHier haben Sie die Möglichkeit, sich als Kunde, Dienstleistungsanbieter oder private Pflegeperson zu registrieren.\n\nAls Kunde finden Sie zahlreiche Dienstleistungen, übersichtlich kategorisiert nach Art der Dienstleistung und Distanz zu Ihrem Wohnort. So können Sie schnell und einfach passende Angebote in Ihrer Nähe entdecken.\n\nAls Dienstleister (Service) können Sie Ihre Dienstleistungen auf unserer Plattform anbieten und direkt mit Kunden Termine vereinbaren. Erstellen Sie Ihr Inserat einfach und unkompliziert – wir bieten Ihnen die ideale Plattform, um Ihre Reichweite zu erhöhen und neue Kunden zu gewinnen.\n\nAls private Pflegeperson (Care) haben Sie die Möglichkeit, sich in unserem Pool zu registrieren und Ihre Bewerbung direkt auf der Plattform hochzuladen. So werden Sie von potenziellen Auftraggebern gefunden und können flexibel Pflegeeinsätze übernehmen.\n\nWir freuen uns, Sie auf unserer Plattform begrüssen zu dürfen! ",
     "Button": "Anmelden"
   },
   "GoodBye": {
@@ -142,7 +142,7 @@
   "Service": {
     "Kredit": {
       "Feld": "Kredit",
-      "Notiz": "",
+      "Notiz": "Bei Nutzung der Plattform hat der Serviceanbieter die Möglichkeit, seine Dienstleistung anzubieten und von interessierten Kunden gefunden zu werden. Kunden können Sie direkt über unsere Plattform per Telefon oder E-Mail kontaktieren. Um einen reibungslosen Ablauf zu gewährleisten, bitten wir Sie, sich innerhalb von 24 Stunden beim Kunden zu melden, um einen Termin zu vereinbaren.\n\nEin Credit kostet CHF 5.00. Zur Begrüssung schenken wir Ihnen 10 Credits, damit Sie unsere Plattform unverbindlich ausprobieren können. Jedes Inserat entspricht einem Credit.\n\nWir danken Ihnen herzlich für Ihre Unterstützung und freuen uns, Sie auf unserer Plattform willkommen zu heissen!",
       "Button": "Credits aufladen",
       "Platzhalter": "Credits aufladen"
     },
