@@ -66,8 +66,34 @@ const TopUpCredits = ({ userId }: TopUpCreditsProps) => {
 
       <VStack spaceY={4} maxWidth="800px">
         <Text textAlign="center" fontSize="sm">
+
+          Bei Nutzung der Plattform hat der Serviceanbieter die Möglichkeit,
+          seine Dienstleistung anzubieten und von interessierten Kunden gefunden zu werden.
           {' '}
-          { t('Kredit.Notiz') }
+          <br />
+          <br />
+
+          Kunden können Sie direkt über unsere Plattform per Telefon oder E-Mail kontaktieren.
+          {' '}
+          <br />
+          <br />
+
+          Um einen reibungslosen Ablauf zu gewährleisten, bitten wir Sie, sich innerhalb von 24 Stunden beim Kunden zu melden, um einen Termin zu vereinbaren.
+
+          <br />
+          <br />
+          <strong> Ein Credit kostet CHF 5.00. </strong>
+          <br />
+          <br />
+
+          Zur Begrüssung schenken wir Ihnen 10 Credits, damit Sie unsere Plattform unverbindlich ausprobieren können.
+
+          Jedes Inserat entspricht einem Credit.
+          <br />
+          <br />
+
+          <strong>Wir danken Ihnen herzlich für Ihre Unterstützung und freuen uns, Sie auf unserer Plattform willkommen zu heissen!</strong>
+
         </Text>
         <Input
           width="30%"
