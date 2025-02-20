@@ -13,7 +13,15 @@ const CalculatorEmbed = () => {
       </Heading>
 
       <Text mb={10} fontSize="sm">
-        { t('Pflegerechner.Text') }
+
+        Bitte beantworten Sie die neun Fragen, um eine Einschätzung Ihres Pflegebedarfs sowie die entsprechende Entlohnung zu erhalten. Sobald Ihre Angaben eingegangen sind, werden wir diese prüfen und uns zeitnah bei Ihnen melden.
+        {' '}
+        <br />
+        <br />
+        {' '}
+        Bei Fragen stehen wir Ihnen jederzeit gerne zur Verfügung.
+
+        Vielen Dank für Ihr Vertrauen!
       </Text>
       <Iframe
         url="https://iaha-pflege-rechner.vercel.app/"

@@ -51,9 +51,16 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
         </HStack>
 
         <Text fontSize="sm">
+          <strong> Vielen Dank für Ihre Anmeldung auf unserer Plattform! </strong>
           {' '}
-          { t('Inaktiv.Care.Text') }
-          {' '}
+          <br />
+
+          Wir werden Ihre Unterlagen prüfen und uns in Kürze bei Ihnen melden. Bei Fragen stehen wir Ihnen jederzeit gerne zur Verfügung.
+          <br />
+          <br />
+
+          Wir schätzen Ihr Vertrauen und freuen uns auf die Zusammenarbeit!
+
         </Text>
 
       </Box>

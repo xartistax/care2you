@@ -23,28 +23,35 @@ export default function Entrance({ title, linkTo, linkTitle }: { title: string; 
           <Text fontSize="3xl" fontWeight="bold">
             {title}
           </Text>
-          <Text fontSize="sm" textAlign="center">
 
-            Hier haben Sie die Möglichkeit, sich als Kunde, Dienstleistungsanbieter oder private Pflegeperson zu registrieren.
-            <br />
+          <VStack>
+            <Text fontSize="sm" textAlign="center">
+              Hier haben Sie die Möglichkeit, sich als Kunde, Dienstleistungsanbieter oder private Pflegeperson zu registrieren.
+            </Text>
+            <Text fontSize="sm" fontWeight="bold">
+              Als Kunde
+            </Text>
+            <Text fontSize="sm" textAlign="center">
+              Finden Sie zahlreiche Dienstleistungen, übersichtlich kategorisiert nach Art der Dienstleistung und Distanz zu Ihrem Wohnort. So können Sie schnell und einfach passende Angebote in Ihrer Nähe entdecken.
+            </Text>
+            <Text fontSize="sm" fontWeight="bold">
+              Als Dienstleister (Service)
+            </Text>
+            <Text fontSize="sm" textAlign="center">
+              Bieten Sie Ihre Dienstleistungen auf unserer Plattform an und vereinbaren Sie direkt Termine mit Kunden. Erstellen Sie Ihr Inserat einfach und unkompliziert – wir bieten Ihnen die ideale Plattform, um Ihre Reichweite zu erhöhen und neue Kunden zu gewinnen.
+            </Text>
+            <Text fontSize="sm" fontWeight="bold">
+              Als private Pflegeperson (Care)
+            </Text>
+            <Text fontSize="sm" textAlign="center">
+              Registrieren Sie sich in unserem Pool und laden Sie Ihre Bewerbung direkt auf der Plattform hoch. So werden Sie von potenziellen Auftraggebern gefunden und können flexibel Pflegeeinsätze übernehmen.
+            </Text>
+            <Text fontSize="sm" textAlign="center">
+              Wir freuen uns, Sie auf unserer Plattform begrüssen zu dürfen!
+            </Text>
 
-            Als Kunde finden Sie zahlreiche Dienstleistungen, übersichtlich kategorisiert nach Art der Dienstleistung und Distanz zu Ihrem Wohnort.
-            So können Sie schnell und einfach passende Angebote in Ihrer Nähe entdecken.
-            {' '}
-            <br />
-            <br />
+          </VStack>
 
-            Als Dienstleister (Service) können Sie Ihre Dienstleistungen auf unserer Plattform anbieten und direkt mit Kunden Termine vereinbaren.
-            Erstellen Sie Ihr Inserat einfach und unkompliziert – wir bieten Ihnen die ideale Plattform, um Ihre Reichweite zu erhöhen und neue Kunden zu gewinnen.
-            <br />
-            <br />
-            Als private Pflegeperson (Care) haben Sie die Möglichkeit, sich in unserem Pool zu registrieren und Ihre Bewerbung direkt auf der Plattform hochzuladen.
-            So werden Sie von potenziellen Auftraggebern gefunden und können flexibel Pflegeeinsätze übernehmen.
-            <br />
-            <br />
-            <strong> Wir freuen uns, Sie auf unserer Plattform begrüssen zu dürfen!! </strong>
-
-          </Text>
           <Button
             mt={12}
             colorScheme="teal"
