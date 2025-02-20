@@ -42,7 +42,7 @@ export default function Entrance({ title, linkTo, linkTitle }: { title: string; 
             So werden Sie von potenziellen Auftraggebern gefunden und können flexibel Pflegeeinsätze übernehmen.
             <br />
             <br />
-            <strong> Wir freuen uns, Sie auf unserer Plattform begrüssen zu dürfen! </strong>
+            <strong> Wir freuen uns, Sie auf unserer Plattform begrüssen zu dürfen!! </strong>
 
           </Text>
           <Button
