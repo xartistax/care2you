@@ -385,6 +385,7 @@ const Step2Care = () => {
 
               { t('Care.Tätigkeitsbereich.Feld') }
             </FormLabel>
+
             <SelectRoot
               multiple
               collection={skill_collection}

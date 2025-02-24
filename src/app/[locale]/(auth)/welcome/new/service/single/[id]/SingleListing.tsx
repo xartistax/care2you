@@ -74,7 +74,7 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
     setLoading(true);
 
     try {
-      const response = await fetch('/api/send-email', {
+      const response = await fetch('/api/send-email-service-request', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

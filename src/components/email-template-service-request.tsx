@@ -12,7 +12,7 @@ type EmailTemplateProps = {
   client_message: string;
 };
 
-export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = (
+export const EmailTemplateServiceRequest: React.FC<Readonly<EmailTemplateProps>> = (
   {
     service_name,
     service_vorname,
@@ -25,59 +25,51 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = (
   },
 ) => (
   <div>
-    <h1>
-      Sie haben eine Terminanfrage über Care2you erhalten
-    </h1>
+    <h1>Betreff: Terminanfrage über Care2you – Bitte kontaktieren Sie den Kunden umgehend</h1>
     <p>
       Hallo
-      {' '}
       {service_vorname}
       {' '}
       {service_name}
       ,
     </p>
     <p>
-      Wir haben eine Terminanfrage für den Service "
-      {service_title}
-      " erhalten. Die Details der Anfrage sind wie folgt:
+      Sie haben eine neue Terminanfrage über Care2you erhalten. Bitte setzen Sie sich so schnell wie möglich mit dem potenziellen Kunden in Verbindung, um Ihre Dienstleistung anzubieten.
     </p>
+    <h2>Details der Anfrage:</h2>
     <ul>
       <li>
         <strong>Service:</strong>
         {' '}
         {service_title}
-        {' '}
-
       </li>
-
       <li>
-        <strong>Client Name:</strong>
+        <strong>Kundenname:</strong>
         {' '}
         {client_vorname}
         {' '}
         {client_name}
       </li>
       <li>
-        <strong>Client Email:</strong>
+        <strong>E-Mail:</strong>
         {' '}
         {client_email}
       </li>
       <li>
-        <strong>Client Telefonnummer:</strong>
+        <strong>Telefonnummer:</strong>
         {' '}
         {client_phone}
       </li>
-
       <li>
         <strong>Nachricht des Kunden:</strong>
         {' '}
         {client_message}
       </li>
-
     </ul>
-
     <p>
-      Vielen Erfolg!
+      Bitte beachten Sie, dass Care2you eine reine Serviceplattform ist. Die Terminvereinbarung und die Erbringung der Dienstleistung erfolgen direkt zwischen Ihnen und dem Kunden.
     </p>
+    <p>Vielen Dank!</p>
+    <p>Ihr Care2you-Team</p>
   </div>
 );

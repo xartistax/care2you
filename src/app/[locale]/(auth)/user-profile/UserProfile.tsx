@@ -1,9 +1,10 @@
 'use client';
 
 import { Divider } from '@chakra-ui/layout';
-import { Box, Flex, Grid, GridItem, Heading, IconButton, Input, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Box, createListCollection, Flex, Grid, GridItem, Heading, IconButton, Input, Link, SelectContent, SelectItem, SelectRoot, SelectTrigger, SelectValueText, Spinner, Text, VStack } from '@chakra-ui/react';
 import { ClipboardIcon } from '@heroicons/react/24/outline'; // Icons you requested
 import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import type { z } from 'zod';
 
 import { Avatar } from '@/components/ui/avatar';
@@ -19,10 +20,21 @@ type UserProfileProps = {
   user: OnBoardingClientUser;
 };
 
+const skill_collection = createListCollection({
+  items: [
+    { value: 'Betreuung älterer Menschen', label: 'Betreuung älterer Menschen' },
+    { value: 'Unterstützung bei Behinderungen', label: 'Unterstützung bei Behinderungen' },
+    { value: 'Medizinische Hilfe', label: 'Medizinische Hilfe' },
+    { value: 'Haushalt', label: 'Haushalt' },
+  ],
+});
+
 export default function UserProfile({ user }: UserProfileProps) {
   const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
   const [loading, setLoading] = useState(false);
   const [isClient, setClient] = useState(false);
+
+  const [editSkillsMode, setEditSkillsMode] = useState(false);
 
   const { privateMetadata } = user;
   const {
@@ -51,13 +63,22 @@ export default function UserProfile({ user }: UserProfileProps) {
     plz: string;
     location: string;
     phone: string;
+
   }>({
     street: street as string,
     streetnumber: streetnumber as string,
     plz: plz as string,
     location: location as string,
     phone: phone as string,
+
   });
+
+  const handleSkillSelectChange = (selectedItems: string[]) => {
+    setFormData(prev => ({
+      ...prev,
+      skill: selectedItems, // Update skill directly
+    }));
+  };
 
   useEffect(() => {
     setClient(true);
@@ -82,6 +103,19 @@ export default function UserProfile({ user }: UserProfileProps) {
       setLoading(false); // Stop loading in all cases
     }
   };
+
+  const handleSaveSkills = async () => {
+    setLoading(true);
+    try {
+      // await editAddress({ skill: skills }, user.id);
+      setEditSkillsMode(false);
+    } catch (error) {
+      console.error('Error saving skills:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (!isClient) {
     return null;
   }
@@ -217,10 +251,68 @@ export default function UserProfile({ user }: UserProfileProps) {
       {role === 'care' && (
         <>
           <VStack align="start" mb={6}>
-            <Heading size="sm">Skills</Heading>
+            <Heading size="sm">
+              <Flex align="center">
+                <Text> Skills </Text>
+
+                <IconButton
+                  aria-label="Edit skills"
+                  variant="outline"
+                  size="xs"
+                  onClick={() => setEditSkillsMode(true)}
+                >
+                  <ClipboardIcon />
+                </IconButton>
+              </Flex>
+
+            </Heading>
+
             <Text fontSize="sm" marginBottom="8px">
-              {skill && skill.length > 0 ? skill.join(', ') : 'N/A'}
+              {skill && skill.length > 0 ? skill.join(', ') : null}
             </Text>
+
+            {!editSkillsMode
+              ? (
+                  <Text fontSize="sm">{skill.length > 0 ? skill.join(', ') : null}</Text>
+
+                )
+              : (
+                  <>
+                    <SelectRoot
+                      multiple
+                      collection={skill_collection}
+                      value={['']} // Use the array of selected skills directly
+                      onValueChange={(details) => {
+                        if (details?.items && Array.isArray(details.items)) {
+                          const selected = details.items
+                            .filter(item => item && 'value' in item) // Ensure `item` and `value` exist
+                            .map(item => item.value);
+                          handleSkillSelectChange(selected);
+                        } else {
+                          handleSkillSelectChange([]); // Fallback for invalid `details`
+                        }
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValueText placeholder="Skills">
+                          select
+                        </SelectValueText>
+                      </SelectTrigger>
+
+                      <SelectContent>
+                        {skill_collection.items.map(item => (
+                          <SelectItem key={item.value} item={item}>
+                            {item.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </SelectRoot>
+                    <Button onClick={handleSaveSkills} disabled={loading}>
+                      {loading ? <Spinner size="sm" /> : 'Speichern'}
+                    </Button>
+                  </>
+                )}
+
             <Heading size="sm">Expertise</Heading>
             <Text fontSize="sm" marginBottom="8px">
               {expertiseTypeRetriever(expertise as string)}
@@ -230,9 +322,21 @@ export default function UserProfile({ user }: UserProfileProps) {
               {languages && languages.length > 0 ? languages.join(', ') : 'N/A'}
             </Text>
             <Heading size="sm">Zertifikate</Heading>
-            <Text marginBottom="8px" fontSize="sm">
-              {certificates && certificates.length > 0 ? certificates.join(', ') : 'N/A'}
-            </Text>
+
+            {certificates.length > 0
+              ? (
+                  certificates.map((cert, index) => (
+                    <Link key={uuidv4()} href={cert as string} target="_blank" fontSize="sm">
+
+                      Zertifikat
+                      {' '}
+                      {index + 1}
+
+                    </Link>
+                  ))
+                )
+              : null}
+
           </VStack>
 
           <Divider my={4} />

@@ -49,6 +49,27 @@ const Step2Client = () => {
       setShowAlert(true);
     } finally {
       setIsLoading(false);
+
+      /// SEND SIGNUP MAIL HERE
+
+      const response = await fetch('/api/send-email-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: 'demian@bexolutions.ch',
+          subject: `Neue Anmledung bei care2you`,
+          user_name: user.firstName,
+          user_vorname: user.lastName,
+          user_email: user.email,
+          user_phone: user.phone,
+          user_role: user.privateMetadata.role,
+
+        }),
+      });
+
+      if (!response.ok) {
+        console.error('Fehler beim Senden der Nachricht');
+      }
     }
   };
 
