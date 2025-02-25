@@ -6,6 +6,8 @@ import type { z } from 'zod';
 import type { OnboardingState } from '@/contexts/OnboardingContext';
 import { Env } from '@/libs/Env';
 import type { addressSchema } from '@/validations/addressValidation';
+import type { careSchema } from '@/validations/careValidation';
+import type { companySchema } from '@/validations/companyValidation';
 import type { OnBoardingClientUser } from '@/validations/onBoardingValidation';
 import type { serviceSchema } from '@/validations/serviceValidation';
 
@@ -14,6 +16,8 @@ import type { WorkingHours } from './Types';
 
 type ServiceFormData = z.infer<typeof serviceSchema>;
 type AddressFormData = z.infer<typeof addressSchema>;
+type CompanyFormData = z.infer<typeof companySchema>;
+type CareFormData = z.infer<typeof careSchema>;
 
 export const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_APP_URL) {
@@ -542,7 +546,7 @@ export const editAddress = async (formData: AddressFormData, userId: string) => 
           id: userId, // Make sure to include the user ID
           privateMetadata: {
             street: formData.street,
-            streetNumber: formData.streetnumber,
+            streetnumber: formData.streetnumber,
             location: formData.location,
             plz: formData.plz,
             phone: formData.phone,
@@ -554,6 +558,66 @@ export const editAddress = async (formData: AddressFormData, userId: string) => 
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`Failed to addressEdit cxredit: ${response.status} - ${response.statusText}\n${errorText}`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error address edit:', error);
+    throw error;
+  }
+};
+
+export const editCompany = async (formData: CompanyFormData, userId: string) => {
+  try {
+    const response = await fetch(`/api/editCompany`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user: {
+          id: userId, // Make sure to include the user ID
+          privateMetadata: {
+            companyTitle: formData.companyTitle,
+            companyCategory: formData.companyCategory,
+            uidst: formData.uidst,
+            companyDescription: formData.companyDescription,
+          },
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to addressEdit cxredit: ${response.status} - ${response.statusText}\n${errorText}`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error address edit:', error);
+    throw error;
+  }
+};
+
+export const editCare = async (formData: CareFormData, userId: string) => {
+  try {
+    const response = await fetch(`/api/editCare`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user: {
+          id: userId, // Make sure to include the user ID
+          privateMetadata: {
+            skill: formData.skill,
+            expertise: formData.expertise,
+            workingHours: formData.workingHours,
+            certificates: formData.certificates,
+          },
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to editCare: ${response.status} - ${response.statusText}\n${errorText}`);
     }
 
     return true;

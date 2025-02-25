@@ -42,8 +42,10 @@ export async function POST(request: NextRequest) {
         location: body.user.privateMetadata.location,
         companyTitle: body.user.privateMetadata.companyTitle,
         companyDescription: body.user.privateMetadata.companyDescription,
+        companyCategory: body.user.privateMetadata.companyCategory,
         uidst: body.user.privateMetadata.uidst,
         expertise: body.user.privateMetadata.expertise,
+        credits: 10,
 
       },
     });

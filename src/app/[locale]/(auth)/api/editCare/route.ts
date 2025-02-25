@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ result: false, error: 'Invalid request structure' }, { status: 400 });
     }
 
-    if (!body.user.privateMetadata.phone || !body.user.privateMetadata.street || !body.user.privateMetadata.plz || !body.user.privateMetadata.location || !body.user.privateMetadata.streetnumber) {
+    if (!body.user.privateMetadata.skill || !body.user.privateMetadata.expertise || !body.user.privateMetadata.certificates || !body.user.privateMetadata.workingHours) {
       return NextResponse.json({ result: false, error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -26,11 +26,10 @@ export async function POST(request: NextRequest) {
     // Merge existing metadata with new address data
     const updatedMetadata = {
       ...existingMetadata, // Keep all existing fields
-      street: body.user.privateMetadata.street,
-      plz: body.user.privateMetadata.plz,
-      location: body.user.privateMetadata.location,
-      streetnumber: body.user.privateMetadata.streetnumber,
-      phone: body.user.privateMetadata.phone,
+      skill: body.user.privateMetadata.skill,
+      expertise: body.user.privateMetadata.expertise,
+      workingHours: body.user.privateMetadata.workingHours,
+      certificates: body.user.privateMetadata.certificates,
     };
 
     // Update user while preserving existing data
