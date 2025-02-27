@@ -90,12 +90,14 @@ export default function AdminPanel({
 
     await Promise.all(
       selection.map(async (userId) => {
-        const success = await deleteUser(userId); // ✅ Await the function
+        const user = allUsers.find(user => user.id === userId);
+        const success = await deleteUser(userId, user?.privateMetadata.role as string); // ✅ Await the function
 
         if (success) {
           setAllUsers(prevUsers => prevUsers.filter(user => user.id !== userId)); // ✅ Remove user from state
         }
-      }),
+      },
+      ),
     );
 
     setLoadingIdsDelete([]); // ✅ Reset loading state for delete
@@ -212,9 +214,14 @@ export default function AdminPanel({
                     <Table.Cell>{formatDate(item.privateMetadata.dob as string)}</Table.Cell>
                     <Table.Cell>{item.privateMetadata.skill as string[]}</Table.Cell>
                     <Table.Cell>
-                      {
+
+                      {item.privateMetadata.role === 'care' ? (
+
                         expertiseTypeRetriever(item.privateMetadata.expertise as string)
-                      }
+                      )
+                        : (
+                            'N/A'
+                          )}
                     </Table.Cell>
 
                     <Table.Cell>{item.privateMetadata.role as string}</Table.Cell>

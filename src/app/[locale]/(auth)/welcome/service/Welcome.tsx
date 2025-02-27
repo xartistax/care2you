@@ -44,12 +44,7 @@ export default function WelcomeService({ user }: { user: OnBoardingClientUser })
 
             {t('Begrüssung', { username: `${user.firstName} ${user.lastName}` })}
           </Heading>
-          <Box as="span">
-            <Tag>
-              {String(user.privateMetadata.role || 'norole')}
 
-            </Tag>
-          </Box>
         </HStack>
 
         <Text fontSize="sm">

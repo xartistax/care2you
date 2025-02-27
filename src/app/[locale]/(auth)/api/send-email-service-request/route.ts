@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
     const { data, error } = await resend.emails.send({
       from: 'Care2You - Terminanfrage <termine@care2you.ch>',
-      to: ['demian@bexolutions.ch'], // Dynamically set recipient
+      to: [service_email, 'info@care2you.ch'], // Dynamically set recipient
       subject: 'Terminanfrage über Care2you – Bitte kontaktieren Sie den Kunden umgehend', // Use subject from the request
       react: EmailTemplateServiceRequest(emailData), // Pass email data to the template
     });

@@ -649,14 +649,14 @@ export const updateStatus = async (userId: string, currentStatus: string) => {
   }
 };
 
-export const deleteUser = async (userId: string) => {
+export const deleteUser = async (userId: string, role: string) => {
   try {
-    const response = await fetch(`/api/change-user-status`, {
+    const response = await fetch(`/api/delete-user`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Header für JSON hinzufügen
       },
-      body: JSON.stringify({ userId }), // JSON-Daten senden
+      body: JSON.stringify({ userId, role }), // JSON-Daten senden
     });
 
     // Prüfe den HTTP-Status

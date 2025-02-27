@@ -1,13 +1,17 @@
 import { clerkClient } from '@clerk/nextjs/server';
+import { eq } from 'drizzle-orm';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+
+import { db } from '@/libs/DB';
+import { servicesSchema } from '@/models/Schema';
 
 export async function POST(request: NextRequest) {
   try {
     // Parse den Body
     const body = await request.json();
 
-    // Nutzer-ID aus dem Clerk Context (ersetze durch eine gültige ID-Quelle)
+    // Nutzer-ID aus dem Clerk Context
     const userId = body.userId; // Muss aus deinem Request-Body oder einer anderen Quelle kommen
     const currentStatus = body.currentStatus;
     const newStatus = (currentStatus ?? 'inactive') === 'inactive' ? 'active' : 'inactive';
@@ -24,6 +28,11 @@ export async function POST(request: NextRequest) {
         status: newStatus, // Update only status
       },
     });
+
+    // Alle zugehörigen Services auf den neuen Status setzen
+    await db.update(servicesSchema)
+      .set({ status: newStatus })
+      .where(eq(servicesSchema.userId, userId));
 
     return NextResponse.json({ result: true }, { status: 200 });
   } catch (error) {
