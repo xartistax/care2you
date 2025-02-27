@@ -17,7 +17,6 @@ import { useTranslations } from 'next-intl';
 import type { z } from 'zod';
 
 import { Avatar } from '@/components/ui/avatar';
-import { Tag } from '@/components/ui/tag';
 import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 
 type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
@@ -76,12 +75,7 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
 
             {t('Begrüssung', { username: `${user.firstName} ${user.lastName}` })}
           </Heading>
-          <Box as="span">
-            <Tag>
-              {String(user.privateMetadata.role || 'norole')}
 
-            </Tag>
-          </Box>
         </HStack>
 
         {/* Subheading */}

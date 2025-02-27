@@ -18,7 +18,6 @@ import type { z } from 'zod';
 
 import { Avatar } from '@/components/ui/avatar';
 import { CardBody } from '@/components/ui/card';
-import { Tag } from '@/components/ui/tag';
 import UserServices from '@/components/UserServices';
 import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 
@@ -69,11 +68,7 @@ export default function WelcomeService({ user }: { user: OnBoardingClientUser })
         <Heading as="h1" size="2xl">
           {t('Begrüssung', { username: `${user.firstName} ${user.lastName}` })}
         </Heading>
-        <Box as="span">
-          <Tag>
-            {String(user.privateMetadata.role || 'norole')}
-          </Tag>
-        </Box>
+
       </HStack>
 
       {/* Subheading */}
