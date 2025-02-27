@@ -23,9 +23,15 @@ export async function BaseTemplate({
 
   return (
     <div className="w-full px-1 text-gray-700 antialiased">
-      {constructedUser?.privateMetadata?.status === 'active' && (
-        <Header leftNav={<MainNavigation />} user={constructedUser} locale={locale} />
-      )}
+
+      <Header
+        leftNav={
+          constructedUser?.privateMetadata?.status === 'active' ? <MainNavigation /> : null
+        }
+        user={constructedUser}
+        locale={locale}
+      />
+
       <div className="mx-auto max-w-screen-xl">
         <main>{children}</main>
         <Footer />
