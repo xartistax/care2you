@@ -20,6 +20,8 @@ type WorkingHoursProps<T extends string> = {
   label?: string; // Optional label for customization
 };
 
+const officialOrder = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+
 const WorkingHoursForm = <T extends string>({
   workingHours,
   onToggle,
@@ -37,51 +39,53 @@ const WorkingHoursForm = <T extends string>({
       <FormLabel fontSize="small" fontWeight="bold">
         {label}
       </FormLabel>
-      {Object.keys(workingHours).map((day) => {
-        const dayKey = day as T; // Explicitly cast `day` to `T`
-        const dayData = workingHours[dayKey];
+      {Object.keys(workingHours)
+        .sort((a, b) => officialOrder.indexOf(a) - officialOrder.indexOf(b))
+        .map((day) => {
+          const dayKey = day as T; // Explicitly cast `day` to `T`
+          const dayData = workingHours[dayKey];
 
-        if (!dayData) {
-          return null;
-        }
+          if (!dayData) {
+            return null;
+          }
 
-        return (
-          <HStack key={`${day}-${dayData.enabled}`} w="100%" paddingBottom={4}>
-            <HStack w="100%" opacity={1}>
-              <Switch
-                defaultChecked={dayData.enabled}
-                onChange={() => onToggle(dayKey)}
-                colorScheme="blue"
+          return (
+            <HStack key={`${day}-${dayData.enabled}`} w="100%" paddingBottom={4}>
+              <HStack w="100%" opacity={1}>
+                <Switch
+                  defaultChecked={dayData.enabled}
+                  onChange={() => onToggle(dayKey)}
+                  colorScheme="blue"
+                />
+                <Text fontSize="sm">{day}</Text>
+              </HStack>
+
+              <TimeRangePicker
+                value={dayData.hours ?? ['08:00', '16:00']}
+                onChange={(value) => {
+                  if (
+                    Array.isArray(value)
+                    && value.length === 2
+                    && typeof value[0] === 'string'
+                    && typeof value[1] === 'string'
+                  ) {
+                    onTimeChange(dayKey, value as [string, string]);
+                  } else {
+                    console.warn('Invalid time range value:', value);
+                    onTimeChange(dayKey, ['08:00', '16:00']);
+                  }
+                }}
+                disableClock
+                locale="de-DE"
+                format="HH:mm"
+                clearIcon={null}
+                disabled={!dayData.enabled}
+                className={`time-picker ${!dayData.enabled ? 'time-picker-disabled' : ''}`}
               />
-              <Text fontSize="sm">{day}</Text>
+
             </HStack>
-
-            <TimeRangePicker
-              value={dayData.hours ?? ['08:00', '16:00']}
-              onChange={(value) => {
-                if (
-                  Array.isArray(value)
-                  && value.length === 2
-                  && typeof value[0] === 'string'
-                  && typeof value[1] === 'string'
-                ) {
-                  onTimeChange(dayKey, value as [string, string]);
-                } else {
-                  console.warn('Invalid time range value:', value);
-                  onTimeChange(dayKey, ['08:00', '16:00']);
-                }
-              }}
-              disableClock
-              locale="de-DE"
-              format="HH:mm"
-              clearIcon={null}
-              disabled={!dayData.enabled}
-              className={`time-picker ${!dayData.enabled ? 'time-picker-disabled' : ''}`}
-            />
-
-          </HStack>
-        );
-      })}
+          );
+        })}
     </FormControl>
   );
 };
