@@ -13,7 +13,7 @@ import { constructOnboardingUser, getSalutation, updateUserDataCare, updateUserD
 
 const Step3Service = () => {
   const [isComplete, setIsComplete] = useState(false);
-  const t = useTranslations('OnBoarding');
+  const t = useTranslations();
   const router = useRouter(); // Initialisiere den Router
   const { formState, prevStep, setFormState, showAlert, alertMessage, setAlertMessage, setShowAlert, locale } = useOnboarding();
   const [isLoading, setIsLoading] = useState(false);
@@ -119,7 +119,7 @@ const Step3Service = () => {
 
         <VStack alignItems="left" marginBottom={8}>
           <Heading as="h1" size="2xl">
-            {t('Care und Service Compilance.Titel')}
+            {t('OnBoarding.Care und Service Compilance.Titel')}
 
           </Heading>
         </VStack>
@@ -127,17 +127,23 @@ const Step3Service = () => {
           <Text marginBottom={4}>
             <Box as="span" display="block" fontWeight="bold">
 
-              {t('Care und Service Compilance.Untertitel', { salutation, lastName })}
+              {t('OnBoarding.Care und Service Compilance.Untertitel', { salutation, lastName })}
 
             </Box>
-            {t('Care und Service Compilance.Text')}
+            Bei Nutzung der Plattform hat der Serviceanbieter die Möglichkeit, seine Dienstleistung anzubieten und von interessierten Kunden gefunden zu werden. Kunden können Sie direkt über unsere Plattform per Telefon oder E-Mail kontaktieren. Um einen reibungslosen Ablauf zu gewährleisten, bitten wir Sie, sich innerhalb von 24 Stunden beim Kunden zu melden, um einen Termin zu vereinbaren.\n\nEin Credit kostet CHF 5.00. Zur Begrüssung schenken wir Ihnen 10 Credits, damit Sie unsere Plattform unverbindlich ausprobieren können. Jedes Inserat entspricht einem Credit.
+            <br />
+            <br />
+            Wir danken Ihnen herzlich für Ihre Unterstützung und freuen uns, Sie auf unserer Plattform willkommen zu heissen!
+            <br />
+            <br />
+            {t('OnBoarding.Care und Service Compilance.Text')}
           </Text>
         </VStack>
         <VStack alignItems="left" marginBottom={8}>
           <HStack alignItems="center">
             <Stack align="flex-start" flex="1" key={0}>
               <Checkbox checked={formState.data.privateMetadata.compilance as true | false} onChange={handleCheckboxChange}>
-                {t.rich('Checkbox', {
+                {t.rich('OnBoarding.Checkbox', {
                   link: chunks => (
                     <Link href="/nutzerbedingungen" target="_blank" color="blue.500">
                       {chunks}
