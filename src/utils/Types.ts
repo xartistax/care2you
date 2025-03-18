@@ -85,6 +85,7 @@ export const defaultWorkingHours: {
 
 export const categoriesList = createListCollection({
   items: [
+    { value: 'all', label: 'Alle Services' },
     { value: '0', label: 'Mobilität & Transport' },
     { value: '1', label: 'Fusspflege' },
     { value: '2', label: 'Massage' },
