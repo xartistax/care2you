@@ -490,6 +490,8 @@ export const companyTypeRetriever = (companyType: string) => {
     case '2':
       return 'Einzelfirma';
     case '3':
+      return 'Verein';
+    case '4':
       return 'Andere';
 
     default:
@@ -766,4 +768,11 @@ export const formatDate = (dateString: string) => {
     day: '2-digit',
     timeZone,
   }).format(new Date(dateString));
+};
+
+export const roleLabels: Record<string, string> = {
+  client: 'Kunde',
+  service: 'Dienstleister',
+  care: 'Pflegekraft',
+  admin: 'Administrator',
 };

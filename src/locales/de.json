@@ -63,7 +63,8 @@
         "AG": "AG",
         "GMBH": "GmbH",
         "Einzelfirma": "Einzelfirma",
-        "Andere": "Andere"
+        "Andere": "Andere",
+        "Verein": "Verein"
       },
       "Firmenname": {
         "Feld": "Firmenname",

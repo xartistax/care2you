@@ -44,7 +44,7 @@ export default function Entrance({ title, linkTo, linkTitle }: { title: string; 
               Als private Pflegeperson
             </Text>
             <Text fontSize="sm" textAlign="center">
-              Registrieren Sie sich in unserem Pool und laden Sie Ihre Bewerbung direkt auf der Plattform hoch. So werden Sie von potenziellen Auftraggebern gefunden und können flexibel Pflegeeinsätze übernehmen.
+              Registrieren Sie sich in unserem Pool und laden Sie Ihre Bewerbung direkt auf der Plattform hoch. Als Teil des IAHA-Pools werden Sie flexibel für passende Einsätze eingesetzt.
             </Text>
             <Text fontSize="sm" textAlign="center">
               Wir freuen uns, Sie auf unserer Plattform begrüssen zu dürfen!

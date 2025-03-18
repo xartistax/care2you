@@ -86,10 +86,13 @@ export default function ServiceList({ services }: ServiceListProps) {
 
           {/* Category Select */}
           <Box width="100%">
+
+            <Text> Sie können zuerst die gewünschte Kategorie auswählen und dann die passende Dienstleistung filtern. Anschliessend können Sie den Dienstleister direkt über Telefon, Homepage oder die Plattform kontaktieren. Der Dienstleister wird sich umgehend bei Ihnen melden. </Text>
             <Controller
               name="category"
               control={control}
               render={({ field }) => (
+
                 <Field label="Kategorie" width="48%">
                   <SelectRoot
                     value={field.value ? [field.value] : []} // FIXED: Ensures selected category is displayed

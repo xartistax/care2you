@@ -21,7 +21,8 @@ const Step2Service = () => {
       { value: '0', label: t('Service.Unternehmensform.AG') },
       { value: '1', label: t('Service.Unternehmensform.GMBH') },
       { value: '2', label: t('Service.Unternehmensform.Einzelfirma') },
-      { value: '3', label: t('Service.Unternehmensform.Andere') },
+      { value: '3', label: t('Service.Unternehmensform.Verein') },
+      { value: '4', label: t('Service.Unternehmensform.Andere') },
     ],
   });
 

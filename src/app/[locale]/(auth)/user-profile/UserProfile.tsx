@@ -44,6 +44,8 @@ export default function UserProfile({ user }: UserProfileProps) {
       { value: '0', label: 'AG' },
       { value: '1', label: 'GmbH' },
       { value: '2', label: 'Einzelfirma' },
+      { value: '3', label: 'Verein' },
+      { value: '4', label: 'Andere' },
     ],
   });
 

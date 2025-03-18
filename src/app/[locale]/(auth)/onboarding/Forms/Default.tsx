@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/select';
 import type { OnboardingState } from '@/contexts/OnboardingContext';
 import { AppConfig } from '@/utils/AppConfig';
+import { roleLabels } from '@/utils/Helpers';
 
 export function OnBoardingFormDefault({
   formState,
@@ -65,6 +66,7 @@ export function OnBoardingFormDefault({
                 }}
               >
                 {role.charAt(0).toUpperCase() + role.slice(1)}
+                {roleLabels[role] || role}
               </Button>
 
             ))}

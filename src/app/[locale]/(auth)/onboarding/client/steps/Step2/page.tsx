@@ -120,7 +120,12 @@ const Step2Client = () => {
               {t('Allgemein.Compliance.Untertitel', { salutation, lastName })}
 
             </Box>
-            {t('Allgemein.Compliance.Text')}
+
+            {
+              formState.data.privateMetadata.role !== 'care' ? t('Allgemein.Compliance.Text') : <Text> Care2you bietet Ausbildungsangebote im Gesundheitsbereich und unterstützt häusliche Betreuung mit Beratungs-, Koordinations- und Servicedienstleistungen. </Text>
+
+            }
+
           </Text>
         </VStack>
         <VStack alignItems="left" marginBottom={8}>
