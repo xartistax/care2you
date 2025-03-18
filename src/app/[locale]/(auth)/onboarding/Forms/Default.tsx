@@ -65,7 +65,7 @@ export function OnBoardingFormDefault({
                   bg: formState.data.privateMetadata.role === role ? 'black' : 'white', // Kein Hover-Effekt für ausgewählte Rolle
                 }}
               >
-                {role.charAt(0).toUpperCase() + role.slice(1)}
+
                 {roleLabels[role] || role}
               </Button>
 
