@@ -19,7 +19,13 @@ const Step1 = () => {
       || !formState.data.firstName
       || !formState.data.privateMetadata.gender
       || !formState.data.privateMetadata.phone
-      || !formState.data.privateMetadata.role) {
+      || !formState.data.privateMetadata.role
+      || !formState.data.privateMetadata.plz
+      || !formState.data.privateMetadata.street
+      || !formState.data.privateMetadata.location
+      || !formState.data.privateMetadata.streetnumber
+
+    ) {
       setShowAlert(true);
       setAlertMessage('Bitte alles ausfüllen');
       return;

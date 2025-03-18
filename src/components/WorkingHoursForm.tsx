@@ -38,6 +38,8 @@ const WorkingHoursForm = <T extends string>({
     <FormControl w="100%">
       <FormLabel fontSize="small" fontWeight="bold">
         {label}
+        {' '}
+        *
       </FormLabel>
       {Object.keys(workingHours)
         .sort((a, b) => officialOrder.indexOf(a) - officialOrder.indexOf(b))

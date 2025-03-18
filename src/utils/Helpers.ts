@@ -489,6 +489,8 @@ export const companyTypeRetriever = (companyType: string) => {
       return 'GmbH';
     case '2':
       return 'Einzelfirma';
+    case '3':
+      return 'Andere';
 
     default:
       return 'Einzelfirma';
@@ -511,6 +513,8 @@ export const expertiseTypeRetriever = (expertise: string) => {
 
 export const categoryTypeRetriever = (category: string) => {
   switch (category) {
+    case 'all':
+      return 'all';
     case '0':
       return 'Mobilität & Transport';
     case '1':

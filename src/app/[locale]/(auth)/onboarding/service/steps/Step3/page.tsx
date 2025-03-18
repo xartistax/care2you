@@ -130,7 +130,7 @@ const Step3Service = () => {
               {t('OnBoarding.Care und Service Compilance.Untertitel', { salutation, lastName })}
 
             </Box>
-            Bei Nutzung der Plattform hat der Serviceanbieter die Möglichkeit, seine Dienstleistung anzubieten und von interessierten Kunden gefunden zu werden. Kunden können Sie direkt über unsere Plattform per Telefon oder E-Mail kontaktieren. Um einen reibungslosen Ablauf zu gewährleisten, bitten wir Sie, sich innerhalb von 24 Stunden beim Kunden zu melden, um einen Termin zu vereinbaren.\n\nEin Credit kostet CHF 5.00. Zur Begrüssung schenken wir Ihnen 10 Credits, damit Sie unsere Plattform unverbindlich ausprobieren können. Jedes Inserat entspricht einem Credit.
+            Bei Nutzung der Plattform hat der Serviceanbieter die Möglichkeit, seine Dienstleistung anzubieten und von interessierten Kunden gefunden zu werden. Kunden können Sie direkt über unsere Plattform per Telefon oder E-Mail kontaktieren. Um einen reibungslosen Ablauf zu gewährleisten, bitten wir Sie, sich innerhalb von 24 Stunden beim Kunden zu melden, um einen Termin zu vereinbaren. Ein Credit kostet CHF 5.00. Zur Begrüssung schenken wir Ihnen 10 Credits, damit Sie unsere Plattform unverbindlich ausprobieren können. Jedes Inserat entspricht einem Credit.
             <br />
             <br />
             Wir danken Ihnen herzlich für Ihre Unterstützung und freuen uns, Sie auf unserer Plattform willkommen zu heissen!

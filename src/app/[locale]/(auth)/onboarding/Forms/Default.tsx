@@ -46,6 +46,8 @@ export function OnBoardingFormDefault({
             {' '}
             {t('Allgemein.Rolle.Feld')}
             {' '}
+            *
+            {' '}
           </FormLabel>
           <Stack direction="row" align="stretch" w="100%">
             {' '}
@@ -77,6 +79,8 @@ export function OnBoardingFormDefault({
             {
               t('Allgemein.Anrede.Feld')
             }
+            {' '}
+            *
 
           </FormLabel>
 
@@ -110,7 +114,11 @@ export function OnBoardingFormDefault({
 
       <Stack h={85} align="stretch" w="100%">
         <FormControl flex="1">
-          <FormLabel fontSize="small" fontWeight="bold">{t('Allgemein.Vorname.Feld')}</FormLabel>
+          <FormLabel fontSize="small" fontWeight="bold">
+            {t('Allgemein.Vorname.Feld')}
+            {' '}
+            *
+          </FormLabel>
           <Input
             disabled
             type="text"
@@ -125,7 +133,11 @@ export function OnBoardingFormDefault({
 
       <Stack h={85} align="stretch" w="100%">
         <FormControl flex="1">
-          <FormLabel fontSize="small" fontWeight="bold">{t('Allgemein.Nachname.Feld')}</FormLabel>
+          <FormLabel fontSize="small" fontWeight="bold">
+            {t('Allgemein.Nachname.Feld')}
+            {' '}
+            *
+          </FormLabel>
           <Input
             placeholder={t('Allgemein.Nachname.Platzhalter')}
             disabled
@@ -143,6 +155,8 @@ export function OnBoardingFormDefault({
           <FormLabel fontSize="small" fontWeight="bold">
             {' '}
             {t('Allgemein.E-Mail.Feld')}
+            {' '}
+            *
             {' '}
           </FormLabel>
           <Input
@@ -162,6 +176,8 @@ export function OnBoardingFormDefault({
           <FormLabel fontSize="small" fontWeight="bold">
             {' '}
             {t('Allgemein.Telefon.Feld')}
+            {' '}
+            *
             {' '}
           </FormLabel>
 
@@ -184,6 +200,8 @@ export function OnBoardingFormDefault({
           <FormControl flex="3">
             <FormLabel fontSize="small" fontWeight="bold">
               {t('Allgemein.Strasse.Feld')}
+              {' '}
+              *
             </FormLabel>
 
             <Input
@@ -200,6 +218,8 @@ export function OnBoardingFormDefault({
           <FormControl flex="1">
             <FormLabel fontSize="small" fontWeight="bold">
               {t('Allgemein.Strasse.Nr')}
+              {' '}
+              *
             </FormLabel>
 
             <Input
@@ -223,6 +243,8 @@ export function OnBoardingFormDefault({
           <FormControl flex="1">
             <FormLabel fontSize="small" fontWeight="bold">
               {t('Allgemein.Postleitzahl.Feld')}
+              {' '}
+              *
             </FormLabel>
 
             <Input
@@ -238,6 +260,8 @@ export function OnBoardingFormDefault({
           <FormControl flex="3">
             <FormLabel fontSize="small" fontWeight="bold">
               {t('Allgemein.Ortschaft.Feld')}
+              {' '}
+              *
             </FormLabel>
 
             <Input

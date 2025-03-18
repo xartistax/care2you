@@ -265,7 +265,6 @@ export default function UserProfile({ user }: UserProfileProps) {
         <Avatar size="xl" name={fullName} src={user.imageUrl || ''} mb={4} />
         <Text fontSize="2xl" fontWeight="bold">{fullName || 'N/A'}</Text>
         <Text fontSize="sm" color="gray.600">{user.email || 'No email provided'}</Text>
-        <Text fontSize="sm" color="gray.500">{privateMetadata.role as string}</Text>
       </Flex>
 
       <Divider my={4} />

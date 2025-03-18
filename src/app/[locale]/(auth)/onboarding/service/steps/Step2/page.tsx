@@ -21,6 +21,7 @@ const Step2Service = () => {
       { value: '0', label: t('Service.Unternehmensform.AG') },
       { value: '1', label: t('Service.Unternehmensform.GMBH') },
       { value: '2', label: t('Service.Unternehmensform.Einzelfirma') },
+      { value: '3', label: t('Service.Unternehmensform.Andere') },
     ],
   });
 
@@ -41,13 +42,13 @@ const Step2Service = () => {
   };
 
   const handleNext = async () => {
-    setIsLoading(true);
-
     if (!formState.data.privateMetadata.companyTitle || !formState.data.privateMetadata.companyCategory || !formState.data.privateMetadata.companyDescription) {
       setShowAlert(true);
       setAlertMessage('Bitte alles ausfüllen');
       return;
     }
+
+    setIsLoading(true);
 
     try {
       setShowAlert(false);
@@ -62,14 +63,14 @@ const Step2Service = () => {
   };
 
   const handleCompanySelectChange = (selected?: { value: string; label: string }) => {
-    if (selected && (selected.value === '0' || selected.value === '1' || selected.value === '2')) {
+    if (selected && (selected.value === '0' || selected.value === '1' || selected.value === '2' || selected.value === '3')) {
       setFormState(prev => ({
         ...prev,
         data: {
           ...prev.data,
           privateMetadata: {
             ...prev.data.privateMetadata,
-            companyCategory: selected.value as '0' | '1' | '2', // Gender wird korrekt gesetzt
+            companyCategory: selected.value as '0' | '1' | '2' | '3',
           },
         },
       }));
@@ -113,6 +114,8 @@ const Step2Service = () => {
               {
                 t('Service.Unternehmensform.Feld')
               }
+              {' '}
+              *
             </FormLabel>
             <SelectRoot
               collection={company_collection}
@@ -152,6 +155,8 @@ const Step2Service = () => {
           <FormControl flex="1" w="100%" h={85}>
             <FormLabel fontSize="small" fontWeight="bold">
               { t('Service.Firmenname.Feld') }
+              {' '}
+              *
             </FormLabel>
             <Input
               type="text"
@@ -183,6 +188,8 @@ const Step2Service = () => {
           <FormControl w="100%" h={100}>
             <FormLabel fontSize="small" fontWeight="bold">
               { t('Service.Tätigkeitsbeschreib.Feld') }
+              {' '}
+              *
             </FormLabel>
             <Textarea
               placeholder={t('Service.Tätigkeitsbeschreib.Platzhalter')}

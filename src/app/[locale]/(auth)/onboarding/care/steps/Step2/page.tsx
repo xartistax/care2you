@@ -153,7 +153,6 @@ const Step2Care = () => {
   };
 
   const handleNext = async () => {
-    setIsLoading(true);
     if (formState.data.privateMetadata.role === 'care') {
       formState.data.privateMetadata.status = formState.data.privateMetadata.status || 'inactive';
     } else {
@@ -179,6 +178,7 @@ const Step2Care = () => {
     }
 
     try {
+      setIsLoading(true);
       const user = constructOnboardingUser(formState);
       const uploadedFiles = await uploadCertsToBunny(formState.data.privateMetadata.certificates as File[]);
 
@@ -245,24 +245,6 @@ const Step2Care = () => {
     }
   };
 
-  // const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = e.target.files;
-  //   if (files) {
-  //     // You can implement file handling logic (e.g., upload to server or save locally)
-  //     const uploadedFiles = Array.from(files);
-  //     setFormState(prev => ({
-  //       ...prev,
-  //       data: {
-  //         ...prev.data,
-  //         privateMetadata: {
-  //           ...prev.data.privateMetadata,
-  //           certifications: uploadedFiles, // Store uploaded files
-  //         },
-  //       },
-  //     }));
-  //   }
-  // };
-
   const handleLanguagesChange = (selectedItems: string[]) => {
     setFormState(prev => ({
       ...prev,
@@ -309,6 +291,8 @@ const Step2Care = () => {
           <FormControl flex="1">
             <FormLabel fontSize="small" fontWeight="bold">
               { t('Care.Geburtsdatum.Feld') }
+              {' '}
+              *
             </FormLabel>
 
             <DatePickerHero
@@ -328,6 +312,8 @@ const Step2Care = () => {
           <FormControl flex="1">
             <FormLabel fontSize="small" fontWeight="bold">
               { t('Care.Nationalität.Feld') }
+              {' '}
+              *
             </FormLabel>
 
             <Input
@@ -347,6 +333,8 @@ const Step2Care = () => {
           <FormControl flex="0.2" w="100%" h={85}>
             <FormLabel fontSize="small" fontWeight="bold">
               { t('Care.Erfahrung.Feld') }
+              {' '}
+              *
             </FormLabel>
             <SelectRoot
               collection={expertise_collection}
@@ -384,6 +372,8 @@ const Step2Care = () => {
             <FormLabel fontSize="small" fontWeight="bold">
 
               { t('Care.Tätigkeitsbereich.Feld') }
+              {' '}
+              *
             </FormLabel>
 
             <SelectRoot
@@ -425,6 +415,8 @@ const Step2Care = () => {
           <FormControl flex="0.2" w="100%">
             <FormLabel fontSize="small" fontWeight="bold">
               { t('Care.Gesprochene Sprachen.Feld') }
+              {' '}
+              *
             </FormLabel>
 
             <Fieldset.Root>
@@ -463,6 +455,8 @@ const Step2Care = () => {
           <FormControl flex="0.2" w="100%">
             <FormLabel fontSize="small" fontWeight="bold">
               { t('Care.Upload.Feld') }
+              {' '}
+              *
             </FormLabel>
 
             <FileUploadRoot

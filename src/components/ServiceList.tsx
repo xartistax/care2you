@@ -54,7 +54,7 @@ export default function ServiceList({ services }: ServiceListProps) {
 
   // Filtering services based on category
   const filteredServices = services.filter((service) => {
-    return !selectedCategory || service.category === selectedCategory;
+    return !selectedCategory || selectedCategory === 'all' || service.category === selectedCategory;
   });
 
   return (
