@@ -43,22 +43,14 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
           </Heading>
 
         </HStack>
-
+        <br />
         <Text fontSize="sm">
           <strong> Vielen Dank für Ihre Anmeldung auf unserer Plattform! </strong>
+          <br />
           {' '}
           <br />
 
-          Wir werden Ihre Unterlagen prüfen und uns in Kürze bei Ihnen melden. Bei Fragen stehen wir Ihnen jederzeit gerne zur Verfügung.
-          <br />
-          <br />
-
-          Wir schätzen Ihr Vertrauen und freuen uns auf die Zusammenarbeit!
-          {' '}
-          <br />
-          <br />
-
-          Wir werden Ihre unterlagen prüfen und uns in Kürze bei Ihnen melden. Bei Fragen stehen wir Ihnen jederzeit gerne unter
+          Wir werden Ihre Unterlagen prüfen und uns in Kürze bei Ihnen melden. Bei Fragen stehen wir Ihnen jederzeit gerne unter
           {' '}
           <a href="tel:044 208 88 44"> 044 208 88 44 </a>
           {' '}
@@ -67,6 +59,14 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
           <a href="mailto:info@care2you.ch"> info@care2you.ch </a>
           {' '}
           zur Verfügung.
+
+          <br />
+          <br />
+
+          Wir schätzen Ihr Vertrauen und freuen uns auf die Zusammenarbeit!
+          {' '}
+          <br />
+          <br />
 
         </Text>
 

@@ -130,22 +130,21 @@ const Step3Service = () => {
               {t('OnBoarding.Care und Service Compilance.Untertitel', { salutation, lastName })}
 
             </Box>
+            <br />
             {
               formState.data.privateMetadata.role !== 'care'
                 ? <> Bei Nutzung der Plattform hat der Serviceanbieter die Möglichkeit, seine Dienstleistung anzubieten und von interessierten Kunden gefunden zu werden. Kunden können Sie direkt über unsere Plattform per Telefon oder E-Mail kontaktieren. Um einen reibungslosen Ablauf zu gewährleisten, bitten wir Sie, sich innerhalb von 24 Stunden beim Kunden zu melden, um einen Termin zu vereinbaren. Ein Credit kostet CHF 5.00. Zur Begrüssung schenken wir Ihnen 10 Credits, damit Sie unsere Plattform unverbindlich ausprobieren können. Jedes Inserat entspricht einem Credit. </>
-                : <> Care2you bietet Ausbildungsangebote im Gesundheitsbereich und unterstützt häusliche Betreuung mit Beratungs-, Koordinations- und Servicedienstleistungen. </>
+                : t('OnBoarding.Care und Service Compilance.Text')
 
             }
 
             <br />
             <br />
             Wir danken Ihnen herzlich für Ihre Unterstützung und freuen uns, Sie auf unserer Plattform willkommen zu heissen!
-            <br />
-            <br />
-            {t('OnBoarding.Care und Service Compilance.Text')}
+
           </Text>
         </VStack>
-        <VStack alignItems="left" marginBottom={8}>
+        <VStack alignItems="left" marginBottom={0}>
           <HStack alignItems="center">
             <Stack align="flex-start" flex="1" key={0}>
               <Checkbox checked={formState.data.privateMetadata.compilance as true | false} onChange={handleCheckboxChange}>

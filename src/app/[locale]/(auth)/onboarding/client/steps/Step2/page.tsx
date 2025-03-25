@@ -124,7 +124,7 @@ const Step2Client = () => {
             {
               formState.data.privateMetadata.role !== 'care'
                 ? t('Allgemein.Compliance.Text')
-                : <Text> Care2you bietet Ausbildungsangebote im Gesundheitsbereich und unterstützt häusliche Betreuung mit Beratungs-, Koordinations- und Servicedienstleistungen. </Text>
+                : null
 
             }
 

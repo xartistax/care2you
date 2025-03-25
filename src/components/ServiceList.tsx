@@ -88,6 +88,7 @@ export default function ServiceList({ services }: ServiceListProps) {
           <Box width="100%">
 
             <Text> Sie können zuerst die gewünschte Kategorie auswählen und dann die passende Dienstleistung filtern. Anschliessend können Sie den Dienstleister direkt über Telefon, Homepage oder die Plattform kontaktieren. Der Dienstleister wird sich umgehend bei Ihnen melden. </Text>
+            <br />
             <Controller
               name="category"
               control={control}
@@ -135,7 +136,7 @@ export default function ServiceList({ services }: ServiceListProps) {
           {filteredServices.length > 0 ? (
             filteredServices.map(service => <ListElement key={service.id} formData={service} />)
           ) : (
-            <Text fontSize="sm" color="gray.500" textAlign="center" mt={2}>
+            <Text fontSize="sm" color="gray.500" textAlign="center" mt={20}>
               ❌ Keine passenden Services gefunden. Bitte passe die Filter an.
             </Text>
           )}
