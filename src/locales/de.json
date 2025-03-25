@@ -106,7 +106,7 @@
       },
       "Upload": {
         "Feld": "Zertifikate und andere Dateien",
-        "Platzhalter": "Ziehen Sie die Dateien hierher.pdf bis zu 5MB"
+        "Platzhalter": "Ziehen Sie die Dateien hierher. (max. 3 Dateien in PDF bis zu 5MB)"
       }
     },
     "Care und Service Compilance": {
