@@ -773,6 +773,6 @@ export const formatDate = (dateString: string) => {
 export const roleLabels: Record<string, string> = {
   client: 'Kunde',
   service: 'Dienstleister',
-  care: 'Pflegekraft',
+  care: 'Pflegeperson',
   admin: 'Administrator',
 };
