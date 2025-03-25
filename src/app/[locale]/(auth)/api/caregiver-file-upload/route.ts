@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     // Loop over each file in the form data
     for (const [key, value] of formData.entries()) {
-      if (value instanceof File) {
+      if (typeof value === 'object' && 'arrayBuffer' in value) {
         const fileExtension = path.extname(value.name);
         const filename = uuidv4() + fileExtension;
 
@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
 
         // Upload the file to Bunny Storage
         const bunnyStorage = new BunnyStorage(BUNNY_API, STORAGE_ZONE);
+
         await bunnyStorage.upload(tempFilePath);
 
         // Store the file URL in the object
