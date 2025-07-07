@@ -11,7 +11,15 @@ import type { z } from 'zod';
 import { Avatar } from '@/components/ui/avatar';
 import { FileUploadDropzone, FileUploadRoot } from '@/components/ui/file-upload';
 import WorkingHoursForm from '@/components/WorkingHoursForm';
-import { companyTypeRetriever, editAddress, editCare, editCompany, expertiseTypeRetriever, uploadCertsToBunny } from '@/utils/Helpers';
+import {
+  companyTypeRetriever,
+  deleteCertsFromBunny,
+  editAddress,
+  editCare,
+  editCompany,
+  expertiseTypeRetriever,
+  uploadCertsToBunny,
+} from '@/utils/Helpers';
 import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 
 type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
@@ -158,24 +166,35 @@ export default function UserProfile({ user }: UserProfileProps) {
 
   const handleCareSaveChanges = async () => {
     setLoading(true);
-    try {
-      const filesToUpload = allCertificates.filter(
-        cert => cert instanceof File,
-      ) as File[];
 
-      const existingCertificates = allCertificates.filter(
-        cert => typeof cert === 'string',
-      ) as string[];
+    try {
+      const newFiles = allCertificates.filter(cert => cert instanceof File) as File[];
+      const keptUrls = allCertificates.filter(cert => typeof cert === 'string') as string[];
+
+      const removedUrls = oldFilesArray.filter(original => !keptUrls.includes(original));
 
       let uploadedUrls: string[] = [];
 
-      if (filesToUpload.length > 0) {
-        const uploadedFiles = await uploadCertsToBunny(filesToUpload);
-        const certificates = Object.values(uploadedFiles).map(url => ({ url }));
+      // Run upload and delete in parallel
+      const [uploadResult, deleteResult] = await Promise.allSettled([
+        newFiles.length > 0 ? uploadCertsToBunny(newFiles) : Promise.resolve([]),
+        removedUrls.length > 0 ? deleteCertsFromBunny(removedUrls) : Promise.resolve(),
+      ]);
+
+      // Handle upload result
+      if (uploadResult.status === 'fulfilled') {
+        const certificates = Object.values(uploadResult.value).map(url => ({ url }));
         uploadedUrls = Object.values(certificates[1]?.url || []);
+      } else {
+        console.error('Upload failed:', uploadResult.reason);
       }
 
-      const finalCertificateList = [...existingCertificates, ...uploadedUrls];
+      // Handle delete result
+      if (deleteResult.status === 'rejected') {
+        console.warn('Some files could not be deleted:', deleteResult.reason);
+      }
+
+      const finalCertificateList = [...keptUrls, ...uploadedUrls];
 
       await editCare(
         {
@@ -247,10 +266,14 @@ export default function UserProfile({ user }: UserProfileProps) {
     const maxSize = 5 * 1024 * 1024;
     if (Array.isArray(fileDetails.files)) {
       const validFiles = fileDetails.files.filter(file => file.size <= maxSize);
-      setAllCertificates(prev => [
-        ...prev.filter(f => typeof f === 'string'),
-        ...validFiles,
-      ]);
+      // Take the last valid file to avoid duplicates
+      const lastValidFile = validFiles[validFiles.length - 1];
+      if (lastValidFile) {
+        setAllCertificates(prev => [
+          ...prev,
+          lastValidFile,
+        ]);
+      }
     }
   };
 

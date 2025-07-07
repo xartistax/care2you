@@ -60,3 +60,32 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  const STORAGE_ZONE = process.env.BUNNY_ZONE;
+  const BUNNY_API = process.env.BUNNY_API;
+
+  if (!BUNNY_API || !STORAGE_ZONE) {
+    return NextResponse.json({ success: false, error: 'Missing Bunny config' }, { status: 500 });
+  }
+
+  try {
+    const { urls } = await request.json();
+
+    if (!Array.isArray(urls) || urls.length === 0) {
+      return NextResponse.json({ success: false, error: 'No URLs provided' }, { status: 400 });
+    }
+
+    const bunnyStorage = new BunnyStorage(BUNNY_API, STORAGE_ZONE);
+    for (const url of urls) {
+      const filename = url.split('/').pop();
+      if (filename) {
+        await bunnyStorage.delete(filename);
+      }
+    }
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Bunny Storage Delete Error:', error);
+    return NextResponse.json({ success: false, error: 'Delete failed' }, { status: 500 });
+  }
+}
