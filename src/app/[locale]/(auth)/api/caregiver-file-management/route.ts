@@ -18,19 +18,19 @@ export async function POST(request: NextRequest) {
   try {
     // Use formData() to parse the form data
     const formData = await request.formData();
-    const uploadedFiles: { [key: string]: string } = {}; // Object to hold file URLs
+    const uploadedFiles: { [key: string]: { url: string; filename: string } } = {}; // Object to hold file URLs
 
     // Loop over each file in the form data
     for (const [key, value] of formData.entries()) {
       if (typeof value === 'object' && 'arrayBuffer' in value) {
         const fileExtension = path.extname(value.name);
-        const filename = value.name || `${uuidv4()}${fileExtension}`;
+        const internalFilename = uuidv4() + fileExtension;
 
         // Convert the file to a buffer
         const buffer = Buffer.from(await value.arrayBuffer());
 
         // Temp file path
-        const tempFilePath = path.join('/tmp', filename);
+        const tempFilePath = path.join('/tmp', internalFilename);
 
         // Save the file temporarily
         fs.writeFileSync(tempFilePath, buffer);
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         await bunnyStorage.upload(tempFilePath);
 
         // Store the file URL in the object
-        uploadedFiles[key] = `https://iahapullzone.b-cdn.net/${filename}`;
+        uploadedFiles[key] = { url: `https://iahapullzone.b-cdn.net/${internalFilename}`, filename: value.name };
       }
     }
 
