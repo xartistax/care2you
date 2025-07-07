@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     for (const [key, value] of formData.entries()) {
       if (typeof value === 'object' && 'arrayBuffer' in value) {
         const fileExtension = path.extname(value.name);
-        const filename = uuidv4() + fileExtension;
+        const filename = value.name || `${uuidv4()}${fileExtension}`;
 
         // Convert the file to a buffer
         const buffer = Buffer.from(await value.arrayBuffer());

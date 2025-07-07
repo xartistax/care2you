@@ -709,8 +709,8 @@ export const uploadCertsToBunny = async (certFiles: File[]) => {
   const formData = new FormData();
 
   // Append each file to the FormData object
-  certFiles.forEach((file, index) => {
-    formData.append(`file${index}`, file); // Ensure the field name matches on the server side
+  certFiles.forEach((file) => {
+    formData.append(file.name, file); // Ensure the field name matches on the server side
   });
 
   // Make the API request with the FormData as the body
