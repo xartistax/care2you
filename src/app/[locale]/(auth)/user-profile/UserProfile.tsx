@@ -29,6 +29,11 @@ type UserProfileProps = {
   user: OnBoardingClientUser;
 };
 
+type Certificate = {
+  url: string;
+  filename: string;
+};
+
 export default function UserProfile({ user }: UserProfileProps) {
   const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
 
@@ -37,12 +42,12 @@ export default function UserProfile({ user }: UserProfileProps) {
   const phone = privateMetadata.phone;
   const role = privateMetadata.role;
   const workingHours = privateMetadata.workingHours;
-  const oldFilesArray = privateMetadata.certificates as string[] ?? [];
+  const oldFilesArray = privateMetadata.certificates as Certificate[] ?? [];
 
   const [companyEditMode, setCompanyEditMode] = useState(false);
   const [adressEditMode, setAddressEditMode] = useState(false);
   const [careEditMode, setCareEditMode] = useState(false);
-  const [allCertificates, setAllCertificates] = useState<(string | File)[]>(oldFilesArray);
+  const [allCertificates, setAllCertificates] = useState<(Certificate | File)[]>(oldFilesArray);
 
   const [loading, setLoading] = useState(false);
 
@@ -169,37 +174,37 @@ export default function UserProfile({ user }: UserProfileProps) {
 
     try {
       const newFiles = allCertificates.filter(cert => cert instanceof File) as File[];
-      const keptUrls = allCertificates.filter(cert => typeof cert === 'string') as string[];
+      const keptCerts = allCertificates.filter(
+        cert => typeof cert === 'object' && 'url' in cert && 'filename' in cert,
+      ) as Certificate[];
 
-      const removedUrls = oldFilesArray.filter(original => !keptUrls.includes(original));
+      const originalUrls = oldFilesArray.map(c => c.url);
+      const keptUrls = keptCerts.map(c => c.url);
+      // Identify URLs to delete (present in original, but not in current kept)
+      const removedUrls = originalUrls.filter(url => !keptUrls.includes(url));
 
-      let uploadedUrls: string[] = [];
+      let uploadedCerts: Certificate[] = [];
 
       // Run upload and delete in parallel
       const [uploadResult, deleteResult] = await Promise.allSettled([
-        newFiles.length > 0 ? uploadCertsToBunny(newFiles) : Promise.resolve([]),
+        newFiles.length > 0 ? uploadCertsToBunny(newFiles) : Promise.resolve({ files: [] }),
         removedUrls.length > 0 ? deleteCertsFromBunny(removedUrls) : Promise.resolve(),
       ]);
 
-      // Handle upload result
       if (uploadResult.status === 'fulfilled') {
-        const certificates = Object.values(uploadResult.value).map(url => ({ url }));
-        uploadedUrls = Object.values(certificates[1]?.url || []);
+        uploadedCerts = Object.values(uploadResult.value?.files);
       } else {
         console.error('Upload failed:', uploadResult.reason);
       }
 
-      // Handle delete result
       if (deleteResult.status === 'rejected') {
         console.warn('Some files could not be deleted:', deleteResult.reason);
       }
 
-      const finalCertificateList = [...keptUrls, ...uploadedUrls];
-
       await editCare(
         {
           ...careFormData,
-          certificates: finalCertificateList,
+          certificates: [...keptCerts, ...uploadedCerts],
         },
         user.id,
       );
@@ -523,8 +528,8 @@ export default function UserProfile({ user }: UserProfileProps) {
                 <>
                   <Heading size="sm">Zertifikate</Heading>
                   {oldFilesArray.map(cert => (
-                    <Link key={uuidv4()} href={cert} target="_blank" fontSize="sm">
-                      {cert?.split('/')?.pop()}
+                    <Link key={uuidv4()} href={cert?.url} target="_blank" fontSize="sm">
+                      {cert?.filename}
                     </Link>
                   ))}
                 </>
@@ -652,7 +657,7 @@ export default function UserProfile({ user }: UserProfileProps) {
                           const isFile = cert instanceof File;
                           const fileName = isFile
                             ? cert.name
-                            : decodeURIComponent((cert as string).split('/').pop() || 'unknown.pdf');
+                            : cert.filename;
 
                           return (
                             <Flex
@@ -666,7 +671,7 @@ export default function UserProfile({ user }: UserProfileProps) {
                             >
                               {isFile
                                 ? <Text maxWidth="90%">{fileName}</Text>
-                                : <Link href={cert as string} maxWidth="90%">{fileName}</Link>}
+                                : <Link href={cert.url} maxWidth="90%">{fileName}</Link>}
                               <IconButton
                                 aria-label="Delete certificate"
                                 size="sm"
