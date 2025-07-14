@@ -7,6 +7,7 @@ import { useState } from 'react';
 
 import { Toaster, toaster } from '@/components/ui/toaster';
 import { topUpCredits } from '@/utils/Helpers';
+import { logError, logMessage, logWarning } from '@/utils/sentryLogger';
 
 import { Button } from './ui/button';
 
@@ -22,6 +23,7 @@ const TopUpCredits = ({ userId }: TopUpCreditsProps) => {
 
   const handleTopUp = async () => {
     if (!amount || amount <= 0) {
+      logWarning('TopUpCredits: Invalid amount entered', { userId, amount });
       toaster.create({
         title: 'Invalid Amount',
         description: 'Bitte geben Sie mehr ein als null',
@@ -32,13 +34,14 @@ const TopUpCredits = ({ userId }: TopUpCreditsProps) => {
     }
 
     setLoading(true);
-
+    logMessage('TopUpCredits: Attempting to top up credits', { userId, amount });
     try {
       // Simulate API request (replace with actual request)
       // await new Promise(resolve => setTimeout(resolve, 1500));
 
       await topUpCredits(userId, amount);
 
+      logMessage('TopUpCredits: Credits topped up successfully', { userId, amount });
       toaster.create({
         title: 'Super!',
         description: `Du hast erfolgreich ${amount} Credits hinzugefügt!`,
@@ -48,6 +51,7 @@ const TopUpCredits = ({ userId }: TopUpCreditsProps) => {
 
       setAmount(0);
     } catch (error) {
+      logError(error, { userId, amount, location: 'TopUpCredits' });
       toaster.create({
         title: 'Error',
         description: `Bitte versuchen Sies später nochmals ${error}`,

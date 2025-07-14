@@ -3,6 +3,7 @@ import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import type { z } from 'zod';
 
+import { logMessage } from '@/utils/sentryLogger';
 import type { serviceSchema } from '@/validations/serviceValidation';
 
 import { Button } from './ui/button';
@@ -36,7 +37,13 @@ const ServiceSuccess: React.FC<ServiceSuccessProps> = ({ formData }) => {
       </VStack>
       <VStack>
 
-        <Button mt={8} onClick={() => router.push('/welcome')}>
+        <Button
+          mt={8}
+          onClick={() => {
+            logMessage('ServiceSuccess: Navigation button clicked', { file: 'ServiceSuccess.tsx', to: '/welcome' });
+            router.push('/welcome');
+          }}
+        >
           zur Startseite
         </Button>
       </VStack>

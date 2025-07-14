@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import { constructOnboardingUser, getSalutation, updateUserDataService } from '@/utils/Helpers';
+import { logError, logMessage, logWarning } from '@/utils/sentryLogger';
 
 const Step2Client = () => {
   const [isComplete, setIsComplete] = useState(false);
@@ -22,6 +23,7 @@ const Step2Client = () => {
     setIsLoading(true);
 
     if (!formState.data.privateMetadata.compilance) {
+      logWarning('Step2: Compliance not confirmed', { file: 'Step2/page.tsx', formState });
       setAlertMessage('Bitte bestätigen Sie die Nutzervereinbarung');
       setShowAlert(true);
       setIsLoading(false);
@@ -31,10 +33,12 @@ const Step2Client = () => {
     const user = constructOnboardingUser(formState);
 
     try {
+      logMessage('Step2: Attempting to update user data', { file: 'Step2/page.tsx', user });
       // Warte auf die Fertigstellung der Updates
       const updateSuccess = await updateUserDataService(locale, user);
 
       if (!updateSuccess) {
+        logError('Step2: Error when updating user data', { file: 'Step2/page.tsx', user });
         throw new Error('Fehler beim Aktualisieren der Benutzerdaten');
       }
 
@@ -42,16 +46,16 @@ const Step2Client = () => {
       setShowAlert(false);
       setIsComplete(true);
 
+      logMessage('Step2: User onboarding complete, navigating to welcome', { file: 'Step2/page.tsx', locale });
       router.push(`/${locale}/welcome`);
     } catch (error) {
-      console.error('Fehler während der Anmeldung:', error);
+      logError(error, { file: 'Step2/page.tsx', location: 'handleFinish' });
       setAlertMessage('Bei der Anmeldung ist ein Fehler aufgetreten');
       setShowAlert(true);
     } finally {
       setIsLoading(false);
 
       /// SEND SIGNUP MAIL HERE
-
       const response = await fetch('/api/send-email-signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -63,12 +67,11 @@ const Step2Client = () => {
           user_email: user.email,
           user_phone: user.phone,
           user_role: user.privateMetadata.role,
-
         }),
       });
 
       if (!response.ok) {
-        console.error('Fehler beim Senden der Nachricht');
+        logWarning('Step2:  Error when sending the message', { file: 'Step2/page.tsx', responseStatus: response.status });
       }
     }
   };

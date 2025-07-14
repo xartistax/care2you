@@ -6,6 +6,8 @@ import { HStack, Text } from '@chakra-ui/react';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker'; // Make sure this matches the TimeRangePicker you're using.
 import React, { useEffect } from 'react';
 
+import { logMessage, logWarning } from '@/utils/sentryLogger';
+
 import { Switch } from './ui/switch';
 
 type WorkingHoursProps<T extends string> = {
@@ -56,7 +58,10 @@ const WorkingHoursForm = <T extends string>({
               <HStack w="100%" opacity={1}>
                 <Switch
                   defaultChecked={dayData.enabled}
-                  onChange={() => onToggle(dayKey)}
+                  onChange={() => {
+                    logMessage('WorkingHoursForm: Toggled day', { file: 'WorkingHoursForm.tsx', day: dayKey, enabled: !dayData.enabled });
+                    onToggle(dayKey);
+                  }}
                   colorScheme="blue"
                 />
                 <Text fontSize="sm">{day}</Text>
@@ -71,9 +76,10 @@ const WorkingHoursForm = <T extends string>({
                     && typeof value[0] === 'string'
                     && typeof value[1] === 'string'
                   ) {
+                    logMessage('WorkingHoursForm: Time range changed', { file: 'WorkingHoursForm.tsx', day: dayKey, value });
                     onTimeChange(dayKey, value as [string, string]);
                   } else {
-                    console.warn('Invalid time range value:', value);
+                    logWarning('WorkingHoursForm: Invalid time range value', { file: 'WorkingHoursForm.tsx', day: dayKey, value });
                     onTimeChange(dayKey, ['08:00', '16:00']);
                   }
                 }}

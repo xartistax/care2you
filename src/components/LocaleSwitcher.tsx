@@ -5,6 +5,7 @@ import type { ChangeEventHandler } from 'react';
 
 import { usePathname, useRouter } from '@/libs/i18nNavigation';
 import { AppConfig } from '@/utils/AppConfig';
+import { logMessage } from '@/utils/sentryLogger';
 
 export const LocaleSwitcher = () => {
   const router = useRouter();
@@ -12,6 +13,7 @@ export const LocaleSwitcher = () => {
   const locale = useLocale();
 
   const handleChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
+    logMessage('LocaleSwitcher: Locale changed', { file: 'LocaleSwitcher.tsx', newLocale: event.target.value });
     router.push(pathname, { locale: event.target.value });
     router.refresh();
   };
