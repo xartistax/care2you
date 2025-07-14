@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Buffer } from 'node:buffer';
 import fs from 'node:fs';
 import path, { extname } from 'node:path';
@@ -8,11 +7,14 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 
+import { logError, logMessage, logWarning } from '@/utils/sentryLogger';
+
 export async function POST(request: NextRequest) {
   const STORAGE_ZONE = process.env.BUNNY_ZONE;
   const BUNNY_API = process.env.BUNNY_API;
 
   if (!BUNNY_API || !STORAGE_ZONE) {
+    logError('No API KEY OR STORAGE ZONE', { BUNNY_API, STORAGE_ZONE });
     throw new Error('No API KEY OR STORAGE ZONE');
   }
 
@@ -21,25 +23,25 @@ export async function POST(request: NextRequest) {
     const file = formData.get('file') as File;
 
     if (!file) {
+      logWarning('No file uploaded in bunny-upload', {});
       return new NextResponse(JSON.stringify({ success: false, error: 'No file uploaded' }), { status: 400 });
     }
     const fileExtension = extname(file.name);
-
     const filename = uuidv4() + fileExtension;
 
     // Convert File object to Buffer
     const buffer = Buffer.from(await file.arrayBuffer());
     const tempFilePath = path.join('/tmp', `${filename}`);
 
-    console.log(`Saving file to ${tempFilePath}`);
+    logMessage('Saving file to temp path', { tempFilePath });
     await fs.promises.writeFile(tempFilePath, buffer);
-    console.log('File saved successfully.');
+    logMessage('File saved successfully', { tempFilePath });
 
     const bunnyStorage = new BunnyStorage(BUNNY_API, STORAGE_ZONE);
 
-    console.log('Attempting to upload to Bunny CDN...');
+    logMessage('Attempting to upload to Bunny CDN', { tempFilePath, filename });
     bunnyStorage.upload(tempFilePath);
-    console.log('Upload initiated.');
+    logMessage('Upload initiated', { filename });
 
     return new NextResponse(
       JSON.stringify({ success: true, url: `https://iahapullzone.b-cdn.net/${filename}` }),
@@ -49,7 +51,7 @@ export async function POST(request: NextRequest) {
       },
     );
   } catch (error) {
-    console.error('Bunny Storage Upload Error:', error);
+    logError(error, { location: 'POST /bunny-upload' });
     return new NextResponse(JSON.stringify({ success: false, error: 'Upload failed' }), { status: 500 });
   }
 }

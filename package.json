@@ -177,5 +177,8 @@
       "@semantic-release/git",
       "@semantic-release/github"
     ]
+  },
+  "volta": {
+    "node": "22.16.0"
   }
 }
