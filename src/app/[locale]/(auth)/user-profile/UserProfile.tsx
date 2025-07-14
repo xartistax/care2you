@@ -1,18 +1,25 @@
 'use client';
 
-// Icons you requested
-
 import { Divider } from '@chakra-ui/layout';
 import { Box, Button, createListCollection, type FileUploadFileAcceptDetails, Flex, Grid, GridItem, Heading, IconButton, Input, Link, SelectContent, SelectItem, SelectRoot, SelectTrigger, SelectValueText, Spinner, Text, Textarea, VStack } from '@chakra-ui/react';
 import { ClipboardIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { LuX } from 'react-icons/lu';
 import { v4 as uuidv4 } from 'uuid';
 import type { z } from 'zod';
 
 import { Avatar } from '@/components/ui/avatar';
-import { FileUploadDropzone, FileUploadList, FileUploadRoot } from '@/components/ui/file-upload';
+import { FileUploadDropzone, FileUploadRoot } from '@/components/ui/file-upload';
 import WorkingHoursForm from '@/components/WorkingHoursForm';
-import { companyTypeRetriever, editAddress, editCare, editCompany, expertiseTypeRetriever, uploadCertsToBunny } from '@/utils/Helpers';
+import {
+  companyTypeRetriever,
+  deleteCertsFromBunny,
+  editAddress,
+  editCare,
+  editCompany,
+  expertiseTypeRetriever,
+  uploadCertsToBunny,
+} from '@/utils/Helpers';
 import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 
 type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
@@ -20,6 +27,11 @@ type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
 // User profile component
 type UserProfileProps = {
   user: OnBoardingClientUser;
+};
+
+type Certificate = {
+  url: string;
+  filename: string;
 };
 
 export default function UserProfile({ user }: UserProfileProps) {
@@ -30,12 +42,12 @@ export default function UserProfile({ user }: UserProfileProps) {
   const phone = privateMetadata.phone;
   const role = privateMetadata.role;
   const workingHours = privateMetadata.workingHours;
-  const oldFilesArray = privateMetadata.certificates;
+  const oldFilesArray = privateMetadata.certificates as Certificate[] ?? [];
 
   const [companyEditMode, setCompanyEditMode] = useState(false);
   const [adressEditMode, setAddressEditMode] = useState(false);
   const [careEditMode, setCareEditMode] = useState(false);
-  const [acceptedFiles, setAcceptedFiles] = useState<File[]>([]);
+  const [allCertificates, setAllCertificates] = useState<(Certificate | File)[]>(oldFilesArray);
 
   const [loading, setLoading] = useState(false);
 
@@ -159,30 +171,50 @@ export default function UserProfile({ user }: UserProfileProps) {
 
   const handleCareSaveChanges = async () => {
     setLoading(true);
+
     try {
-      // Upload certificates
-      const uploadedFiles = await uploadCertsToBunny(careFormData.certificates as File[]);
-      const newcertificates = Object.values(uploadedFiles).map(url => ({ url }));
-      const newextractedFiles = Object.values(newcertificates[1]?.url || []);
-      const newFiles = oldFilesArray.concat(newextractedFiles);
+      const newFiles = allCertificates.filter(cert => cert instanceof File) as File[];
+      const keptCerts = allCertificates.filter(
+        cert => typeof cert === 'object' && 'url' in cert && 'filename' in cert,
+      ) as Certificate[];
 
-      // Prepare the data for the API call
-      const validCareFormData = {
-        skill: Array.isArray(careFormData.skill) ? careFormData.skill : [],
-        expertise: careFormData.expertise || '',
-        certificates: newFiles, // Use the final combined list
-        workingHours: careFormData.workingHours || {},
-      };
+      const originalUrls = oldFilesArray.map(c => c.url);
+      const keptUrls = keptCerts.map(c => c.url);
+      // Identify URLs to delete (present in original, but not in current kept)
+      const removedUrls = originalUrls.filter(url => !keptUrls.includes(url));
 
-      await editCare(validCareFormData, user.id);
+      let uploadedCerts: Certificate[] = [];
 
-      // ✅ Check the structure of uploadedFiles to understand how to access the URLs
-    } catch (error) {
-      console.error('Error uploading certificates:', error);
-    } finally {
-      setLoading(false);
+      // Run upload and delete in parallel
+      const [uploadResult, deleteResult] = await Promise.allSettled([
+        newFiles.length > 0 ? uploadCertsToBunny(newFiles) : Promise.resolve({ files: [] }),
+        removedUrls.length > 0 ? deleteCertsFromBunny(removedUrls) : Promise.resolve(),
+      ]);
+
+      if (uploadResult.status === 'fulfilled') {
+        uploadedCerts = Object.values(uploadResult.value?.files);
+      } else {
+        console.error('Upload failed:', uploadResult.reason);
+      }
+
+      if (deleteResult.status === 'rejected') {
+        console.warn('Some files could not be deleted:', deleteResult.reason);
+      }
+
+      await editCare(
+        {
+          ...careFormData,
+          certificates: [...keptCerts, ...uploadedCerts],
+        },
+        user.id,
+      );
+
       setCareEditMode(false);
       window.location.href = '/de/user-profile';
+    } catch (e) {
+      console.error('Error saving care info:', e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -236,28 +268,19 @@ export default function UserProfile({ user }: UserProfileProps) {
   };
 
   const handleAcceptedFiles = (fileDetails: FileUploadFileAcceptDetails) => {
-    const maxSize = 5 * 1024 * 1024; // 5MB limit
-
-    // Ensure acceptedFiles exists and is an array
+    const maxSize = 5 * 1024 * 1024;
     if (Array.isArray(fileDetails.files)) {
-      const validFiles = fileDetails.files.filter((file) => {
-        if (file.size > maxSize) {
-          console.error(`File ${file.name} exceeds the 5MB size limit.`);
-          return false; // Exclude file if it's too large
-        }
-        return true; // Include valid files
-      });
-
-      // Update the state with the valid files
-      setAcceptedFiles(validFiles);
-    } else {
-      console.error('No accepted files found');
+      const validFiles = fileDetails.files.filter(file => file.size <= maxSize);
+      // Take the last valid file to avoid duplicates
+      const lastValidFile = validFiles[validFiles.length - 1];
+      if (lastValidFile) {
+        setAllCertificates(prev => [
+          ...prev,
+          lastValidFile,
+        ]);
+      }
     }
   };
-
-  if (acceptedFiles.length > 0) {
-    careFormData.certificates = acceptedFiles;
-  }
 
   return (
   /// AVATAR
@@ -500,21 +523,17 @@ export default function UserProfile({ user }: UserProfileProps) {
               <Text fontSize="sm" marginBottom="8px">
                 {expertiseTypeRetriever(careFormData.expertise as string)}
               </Text>
-              <Heading size="sm">Zertifikate</Heading>
 
-              {careFormData.certificates.length > 0
-                ? (
-                    careFormData.certificates.map((cert, index) => (
-                      <Link key={uuidv4()} href={cert as string} target="_blank" fontSize="sm">
-
-                        Zertifikat
-                        {' '}
-                        {index + 1}
-
-                      </Link>
-                    ))
-                  )
-                : null}
+              {oldFilesArray?.length > 0 && (
+                <>
+                  <Heading size="sm">Zertifikate</Heading>
+                  {oldFilesArray.map(cert => (
+                    <Link key={uuidv4()} href={cert?.url} target="_blank" fontSize="sm">
+                      {cert?.filename}
+                    </Link>
+                  ))}
+                </>
+              )}
 
               <Heading size="sm" mb={4}>Verfügbarkeiten</Heading>
 
@@ -631,7 +650,47 @@ export default function UserProfile({ user }: UserProfileProps) {
                     label="Zertifikate Upload"
 
                   />
-                  <FileUploadList clearable />
+                  {allCertificates.length > 0 && (
+                    <Box mt={2} width="100%">
+                      <VStack align="start">
+                        {allCertificates.map((cert, index) => {
+                          const isFile = cert instanceof File;
+                          const fileName = isFile
+                            ? cert.name
+                            : cert.filename;
+
+                          return (
+                            <Flex
+                              key={uuidv4()}
+                              justify="space-between"
+                              align="center"
+                              width="100%"
+                              p={2}
+                              borderWidth="1px"
+                              borderRadius="md"
+                            >
+                              {isFile
+                                ? <Text maxWidth="90%">{fileName}</Text>
+                                : <Link href={cert.url} maxWidth="90%">{fileName}</Link>}
+                              <IconButton
+                                aria-label="Delete certificate"
+                                size="sm"
+                                variant="ghost"
+                                colorScheme="red"
+                                onClick={() => {
+                                  setAllCertificates(prev =>
+                                    prev.filter((_, prevIndex) => prevIndex !== index),
+                                  );
+                                }}
+                              >
+                                <LuX />
+                              </IconButton>
+                            </Flex>
+                          );
+                        })}
+                      </VStack>
+                    </Box>
+                  )}
                 </FileUploadRoot>
 
                 <Flex gap={4}>

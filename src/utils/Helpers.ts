@@ -714,7 +714,7 @@ export const uploadCertsToBunny = async (certFiles: File[]) => {
   });
 
   // Make the API request with the FormData as the body
-  const response = await fetch('/api/caregiver-file-upload', {
+  const response = await fetch('/api/caregiver-file-management', {
     method: 'POST',
     body: formData, // The body contains the FormData with files
   });
@@ -727,6 +727,24 @@ export const uploadCertsToBunny = async (certFiles: File[]) => {
   }
 
   return result; // This should contain the URLs from the response
+};
+
+export const deleteCertsFromBunny = async (urls: string[]) => {
+  try {
+    const response = await fetch('/api/caregiver-file-management', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ urls }),
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to delete files: ${response.status} - ${response.statusText}\n${errorText}`);
+    }
+    return true;
+  } catch (error) {
+    console.error('Error deleting Bunny files:', error);
+    return false;
+  }
 };
 
 export const SaveNote = async (note: string, user: OnBoardingClientUser) => {

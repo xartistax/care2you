@@ -18,19 +18,19 @@ export async function POST(request: NextRequest) {
   try {
     // Use formData() to parse the form data
     const formData = await request.formData();
-    const uploadedFiles: { [key: string]: string } = {}; // Object to hold file URLs
+    const uploadedFiles: { [key: string]: { url: string; filename: string } } = {}; // Object to hold file URLs
 
     // Loop over each file in the form data
     for (const [key, value] of formData.entries()) {
       if (typeof value === 'object' && 'arrayBuffer' in value) {
         const fileExtension = path.extname(value.name);
-        const filename = uuidv4() + fileExtension;
+        const internalFilename = uuidv4() + fileExtension;
 
         // Convert the file to a buffer
         const buffer = Buffer.from(await value.arrayBuffer());
 
         // Temp file path
-        const tempFilePath = path.join('/tmp', filename);
+        const tempFilePath = path.join('/tmp', internalFilename);
 
         // Save the file temporarily
         fs.writeFileSync(tempFilePath, buffer);
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         await bunnyStorage.upload(tempFilePath);
 
         // Store the file URL in the object
-        uploadedFiles[key] = `https://iahapullzone.b-cdn.net/${filename}`;
+        uploadedFiles[key] = { url: `https://iahapullzone.b-cdn.net/${internalFilename}`, filename: value.name };
       }
     }
 
@@ -58,5 +58,34 @@ export async function POST(request: NextRequest) {
       JSON.stringify({ success: false, error: 'Upload failed' }),
       { status: 500 },
     );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  const STORAGE_ZONE = process.env.BUNNY_ZONE;
+  const BUNNY_API = process.env.BUNNY_API;
+
+  if (!BUNNY_API || !STORAGE_ZONE) {
+    return NextResponse.json({ success: false, error: 'Missing Bunny config' }, { status: 500 });
+  }
+
+  try {
+    const { urls } = await request.json();
+
+    if (!Array.isArray(urls) || urls.length === 0) {
+      return NextResponse.json({ success: false, error: 'No URLs provided' }, { status: 400 });
+    }
+
+    const bunnyStorage = new BunnyStorage(BUNNY_API, STORAGE_ZONE);
+    for (const url of urls) {
+      const filename = url.split('/').pop();
+      if (filename) {
+        await bunnyStorage.delete(filename);
+      }
+    }
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Bunny Storage Delete Error:', error);
+    return NextResponse.json({ success: false, error: 'Delete failed' }, { status: 500 });
   }
 }
