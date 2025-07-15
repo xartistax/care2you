@@ -243,11 +243,9 @@ export function OnBoardingFormDefault({
 
       </Stack>
 
-      <Stack h={85} align="stretch" w="100%">
-
-        <HStack>
-
-          <FormControl flex="1">
+      <Stack align="stretch" w="100%">
+        <Stack direction={{ base: 'column', md: 'row' }} w="100%">
+          <FormControl w={{ base: '100%', md: '30%' }} mb={{ base: 4, md: 0 }}>
             <FormLabel fontSize="small" fontWeight="bold">
               {t('Allgemein.Postleitzahl.Feld')}
               {' '}
@@ -263,8 +261,7 @@ export function OnBoardingFormDefault({
               onChange={handleInputChange}
             />
           </FormControl>
-
-          <FormControl flex="3">
+          <FormControl w="100%">
             <FormLabel fontSize="small" fontWeight="bold">
               {t('Allgemein.Ortschaft.Feld')}
               {' '}
@@ -280,16 +277,15 @@ export function OnBoardingFormDefault({
               onChange={handleInputChange}
             />
           </FormControl>
-
-        </HStack>
-
+        </Stack>
       </Stack>
 
-      <Stack direction="row" justifyContent="flex-end" w="100%">
+      <Stack direction="row" justifyContent="flex-end" w="100%" mt={4}>
         <Button
           onClick={handleNext}
           colorScheme="blue"
-          size="md" // Control button size
+          size="md"
+          w={{ base: '100%', md: 'auto' }}
         >
           {t('Allgemein.Button')}
         </Button>

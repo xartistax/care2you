@@ -285,17 +285,17 @@ export default function UserProfile({ user }: UserProfileProps) {
   return (
   /// AVATAR
 
-    <Box p={6} bg="white" borderRadius="lg" maxW="800px" margin="0 auto">
+    <Box p={{ base: 4, md: 6 }} bg="white" borderRadius="lg" maxW={{ base: '100%', md: '800px' }} w="100%" mx="auto">
       <Flex direction="column" align="center" textAlign="center" mb={6}>
         <Avatar size="xl" name={fullName} src={user.imageUrl || ''} mb={4} />
-        <Text fontSize="2xl" fontWeight="bold">{fullName || 'N/A'}</Text>
+        <Text fontSize={{ base: 'lg', md: '2xl' }} fontWeight="bold">{fullName || 'N/A'}</Text>
         <Text fontSize="sm" color="gray.600">{user.email || 'No email provided'}</Text>
       </Flex>
 
       <Divider my={4} />
 
-      <VStack align="start" mb={6}>
-        <Flex align="center" justify="space-between" width="100%">
+      <VStack align="start" mb={6} w="100%">
+        <Flex direction={{ base: 'column', md: 'row' }} align={{ base: 'flex-start', md: 'center' }} justify="space-between" width="100%" mb={{ base: 2, md: 0 }}>
           <Heading size="sm" mb={2}>
             <Flex align="center">
               <Text>Kontakt</Text>
@@ -318,7 +318,7 @@ export default function UserProfile({ user }: UserProfileProps) {
         </Flex>
 
         {/* Street and Address */}
-        <Flex align="center" justify="space-between" width="100%">
+        <Flex direction={{ base: 'column', md: 'row' }} align={{ base: 'flex-start', md: 'center' }} justify="space-between" width="100%">
           <Text fontSize="sm">
             Adresse:
             {' '}
@@ -328,7 +328,7 @@ export default function UserProfile({ user }: UserProfileProps) {
         </Flex>
 
         {/* Phone */}
-        <Flex align="center" justify="space-between" width="100%">
+        <Flex direction={{ base: 'column', md: 'row' }} align={{ base: 'flex-start', md: 'center' }} justify="space-between" width="100%">
           <Text fontSize="sm">
             Telefon:
             {' '}
@@ -337,46 +337,15 @@ export default function UserProfile({ user }: UserProfileProps) {
         </Flex>
       </VStack>
       {adressEditMode && (
-        <VStack align="start" mb={6}>
+        <VStack align="start" mb={6} w="100%">
           <Heading size="sm" mb={2}> Ändern Sie ihre Kontaktinformationen </Heading>
-          <Input
-            name="street"
-            value={adressFormData.street as string || ''}
-            onChange={handleAdressChange}
-            mb={3}
-            placeholder="Strasse"
-          />
-          <Input
-            name="streetnumber"
-            value={adressFormData.streetnumber as string || ''}
-            onChange={handleAdressChange}
-            mb={3}
-            placeholder="Nr."
-          />
-          <Input
-            name="plz"
-            value={adressFormData.plz as string || ''}
-            onChange={handleAdressChange}
-            mb={3}
-            placeholder="Postleitzahl"
-          />
-          <Input
-            name="location"
-            value={adressFormData.location as string || ''}
-            onChange={handleAdressChange}
-            mb={3}
-            placeholder="Adresse"
-          />
-          <Input
-            name="phone"
-            value={adressFormData.phone || ''}
-            onChange={handleAdressChange}
-            mb={3}
-            placeholder="Telefon"
-          />
-          <Flex gap={4}>
-
-            <Button size="sm" onClick={handleAdressSaveChanges} disabled={loading} aria-label="Save Changes" colorScheme="blue">
+          <Input name="street" value={adressFormData.street as string || ''} onChange={handleAdressChange} mb={3} placeholder="Strasse" w="100%" />
+          <Input name="streetnumber" value={adressFormData.streetnumber as string || ''} onChange={handleAdressChange} mb={3} placeholder="Nr." w="100%" />
+          <Input name="plz" value={adressFormData.plz as string || ''} onChange={handleAdressChange} mb={3} placeholder="Postleitzahl" w="100%" />
+          <Input name="location" value={adressFormData.location as string || ''} onChange={handleAdressChange} mb={3} placeholder="Adresse" w="100%" />
+          <Input name="phone" value={adressFormData.phone || ''} onChange={handleAdressChange} mb={3} placeholder="Telefon" w="100%" />
+          <Flex gap={4} w="100%" direction={{ base: 'column', md: 'row' }}>
+            <Button size="sm" onClick={handleAdressSaveChanges} disabled={loading} aria-label="Save Changes" colorScheme="blue" w={{ base: '100%', md: 'auto' }}>
               {loading ? <Spinner size="sm" /> : 'Speichern'}
             </Button>
 
@@ -389,8 +358,8 @@ export default function UserProfile({ user }: UserProfileProps) {
           <>
             <Divider my={4} />
 
-            <VStack align="start" mb={6}>
-              <Flex align="center" justify="space-between" width="100%">
+            <VStack align="start" mb={6} w="100%">
+              <Flex direction={{ base: 'column', md: 'row' }} align={{ base: 'flex-start', md: 'center' }} justify="space-between" width="100%" mb={{ base: 2, md: 0 }}>
                 <Heading size="sm" mb={2}>
                   <Flex align="center">
                     <Text>Firmendetails</Text>
@@ -421,7 +390,7 @@ export default function UserProfile({ user }: UserProfileProps) {
             </VStack>
 
             {companyEditMode && (
-              <VStack align="start" mb={6}>
+              <VStack align="start" mb={6} w="100%">
                 <Heading size="sm" mb={2}> Ändern Sie die Firmendetails </Heading>
                 <Input
                   name="companyTitle"
@@ -475,9 +444,9 @@ export default function UserProfile({ user }: UserProfileProps) {
 
                 />
 
-                <Flex gap={4}>
+                <Flex gap={4} w="100%" direction={{ base: 'column', md: 'row' }}>
 
-                  <Button size="sm" onClick={handleCompanySaveChanges} disabled={loading} aria-label="Save Changes" colorScheme="blue">
+                  <Button size="sm" onClick={handleCompanySaveChanges} disabled={loading} aria-label="Save Changes" colorScheme="blue" w={{ base: '100%', md: 'auto' }}>
                     {loading ? <Spinner size="sm" /> : 'Speichern'}
                   </Button>
 
@@ -493,8 +462,8 @@ export default function UserProfile({ user }: UserProfileProps) {
           <>
             <Divider my={4} />
 
-            <VStack align="start" mb={6}>
-              <Flex align="center" justify="space-between" width="100%">
+            <VStack align="start" mb={6} w="100%">
+              <Flex direction={{ base: 'column', md: 'row' }} align={{ base: 'flex-start', md: 'center' }} justify="space-between" width="100%" mb={{ base: 2, md: 0 }}>
                 <Heading size="sm" mb={2}>
                   <Flex align="center">
                     <Text>Weitere Infos</Text>
@@ -537,7 +506,7 @@ export default function UserProfile({ user }: UserProfileProps) {
 
               <Heading size="sm" mb={4}>Verfügbarkeiten</Heading>
 
-              <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+              <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4} w="100%">
                 {workingHours
                 && Object.entries(workingHours)
                   .sort(([dayA], [dayB]) => daysOfWeek.indexOf(dayA) - daysOfWeek.indexOf(dayB)) // Sort by custom order
@@ -563,7 +532,7 @@ export default function UserProfile({ user }: UserProfileProps) {
             </VStack>
 
             {careEditMode && (
-              <VStack align="start" mb={6}>
+              <VStack align="start" mb={6} w="100%">
                 <Heading size="sm" mb={2}> Ändern Sie Ihre Informationen </Heading>
 
                 <SelectRoot
@@ -693,9 +662,9 @@ export default function UserProfile({ user }: UserProfileProps) {
                   )}
                 </FileUploadRoot>
 
-                <Flex gap={4}>
+                <Flex gap={4} w="100%" direction={{ base: 'column', md: 'row' }}>
 
-                  <Button size="sm" onClick={handleCareSaveChanges} disabled={loading} aria-label="Save Changes" colorScheme="blue">
+                  <Button size="sm" onClick={handleCareSaveChanges} disabled={loading} aria-label="Save Changes" colorScheme="blue" w={{ base: '100%', md: 'auto' }}>
                     {loading ? <Spinner size="sm" /> : 'Speichern'}
                   </Button>
 

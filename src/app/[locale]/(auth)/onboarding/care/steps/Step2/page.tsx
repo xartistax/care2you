@@ -269,15 +269,15 @@ const Step2Care = () => {
   return (
 
     <Box
-      p={8}
+      p={{ base: 4, md: 8 }}
       bg="white"
       borderRadius="lg"
-      maxWidth="800px"
-      width="100%"
-      margin="0 auto"
+      maxW={{ base: '100%', md: '800px' }}
+      w="100%"
+      mx="auto"
     >
       {showAlert && (
-        <HStack alignItems="center" marginBottom="4">
+        <HStack alignItems="center" marginBottom={{ base: 2, md: 4 }}>
           <Alert status="error" icon={<HiXCircle />}>
             {alertMessage}
           </Alert>
@@ -479,11 +479,11 @@ const Step2Care = () => {
         </VStack>
         {/* Submit Button */}
 
-        <HStack alignItems="start" justifyContent="flex-end" marginBottom={8}>
-          <Button colorScheme="gray" onClick={prevStep} variant="outline">
+        <HStack alignItems="start" justifyContent="flex-end" marginBottom={{ base: 4, md: 8 }} flexDirection={{ base: 'column', md: 'row' }}>
+          <Button colorScheme="gray" onClick={prevStep} variant="outline" w={{ base: '100%', md: 'auto' }}>
             { t('Zurück') }
           </Button>
-          <Button colorScheme="blue" onClick={handleNext}>
+          <Button colorScheme="blue" onClick={handleNext} w={{ base: '100%', md: 'auto' }}>
             { t('Bestätigen') }
           </Button>
         </HStack>
