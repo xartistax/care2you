@@ -7,6 +7,7 @@ import { HiXCircle } from 'react-icons/hi';
 import { Alert } from '@/components/ui/alert';
 import { useOnboarding } from '@/contexts/OnboardingContext';
 import { AppConfig } from '@/utils/AppConfig';
+import { logMessage, logWarning } from '@/utils/sentryLogger';
 
 import { OnBoardingFormDefault } from '../../../Forms/Default';
 
@@ -26,12 +27,14 @@ const Step1 = () => {
       || !formState.data.privateMetadata.streetnumber
 
     ) {
+      logWarning('Step1: Missing required fields', { file: 'Step1/page.tsx', formState });
       setShowAlert(true);
       setAlertMessage('Bitte alles ausfüllen');
       return;
     }
 
     if (!EmailValidator.validate(formState.data.email)) {
+      logWarning('Step1: Invalid email address', { file: 'Step1/page.tsx', email: formState.data.email });
       setAlertMessage('Invalid email address.');
       setShowAlert(true);
       return;
@@ -50,6 +53,7 @@ const Step1 = () => {
     formState.data.privateMetadata.phone = phoneNumber;
     formState.data.privateMetadata.status = 'active';
 
+    logMessage('Step1: Proceeding to next step', { file: 'Step1/page.tsx', formState });
     setAlertMessage('');
     setShowAlert(false);
     nextStep(); // Go to the next step
@@ -68,7 +72,7 @@ const Step1 = () => {
         },
       }));
     } else {
-      console.error('Invalid selection:', selected);
+      logWarning('Step1: Invalid gender selection', { file: 'Step1/page.tsx', selected });
     }
   };
 

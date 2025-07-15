@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
 import { categoryTypeRetriever } from '@/utils/Helpers';
+import { logError, logMessage, logWarning } from '@/utils/sentryLogger';
 import { serviceSchema } from '@/validations/serviceValidation';
 
 import { Switch } from './ui/switch';
@@ -18,6 +19,7 @@ export default function UserServices({ userId }: { userId: string }) {
 
   useEffect(() => {
     const fetchServices = async () => {
+      logMessage('UserServices: Fetching user services', { userId });
       try {
         const response = await fetch('/api/user-services', {
           method: 'POST',
@@ -26,12 +28,15 @@ export default function UserServices({ userId }: { userId: string }) {
         });
 
         if (!response.ok) {
+          logWarning('UserServices: Failed to fetch services', { userId, status: response.status });
           throw new Error('Failed to fetch services');
         }
 
         const data = await response.json();
         setServices(ServiceArraySchema.parse(data));
+        logMessage('UserServices: Services fetched and parsed successfully', { userId, count: data.length });
       } catch (err: any) {
+        logError(err, { userId, location: 'UserServices fetchServices' });
         setError(err.message);
       } finally {
         setLoading(false);
@@ -43,7 +48,7 @@ export default function UserServices({ userId }: { userId: string }) {
 
   const handleSwitchChange = async (serviceId: string, newStatus: boolean) => {
     setLoadingServiceId(serviceId); // Set loading state
-
+    logMessage('UserServices: Attempting to update service status', { serviceId, newStatus });
     try {
       const response = await fetch('/api/update-status', {
         method: 'PATCH',
@@ -59,11 +64,12 @@ export default function UserServices({ userId }: { userId: string }) {
               : service,
           ),
         );
+        logMessage('UserServices: Service status updated successfully', { serviceId, newStatus });
       } else {
-        console.error('Failed to update service status');
+        logWarning('UserServices: Failed to update service status', { serviceId, newStatus, status: response.status });
       }
     } catch (error) {
-      console.error('Error occurred while updating status:', error);
+      logError(error, { serviceId, newStatus, location: 'UserServices handleSwitchChange' });
     } finally {
       setLoadingServiceId(null); // Remove loading state
     }

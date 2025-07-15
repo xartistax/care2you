@@ -20,6 +20,7 @@ import {
   expertiseTypeRetriever,
   uploadCertsToBunny,
 } from '@/utils/Helpers';
+import { logError, logMessage, logWarning } from '@/utils/sentryLogger';
 import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 
 type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
@@ -131,8 +132,9 @@ export default function UserProfile({ user }: UserProfileProps) {
     try {
       await editAddress(adressFormData, user.id);
       setAddressEditMode(false); // Only hide edit mode after successful save
+      logMessage('UserProfile: Address saved', { file: 'UserProfile.tsx', userId: user.id, adressFormData });
     } catch (error) {
-      console.error('Error saving changes:', error);
+      logError(error, { file: 'UserProfile.tsx', location: 'handleAdressSaveChanges', userId: user.id });
     } finally {
       setLoading(false); // Stop loading in all cases
     }
@@ -153,7 +155,7 @@ export default function UserProfile({ user }: UserProfileProps) {
         companyCategory: selected.value as '0' | '1' | '2', // Gender wird korrekt gesetzt
       }));
     } else {
-      console.error('Invalid selection:', selected);
+      logWarning('UserProfile: Invalid company selection', { file: 'UserProfile.tsx', selected });
     }
   };
 
@@ -162,8 +164,9 @@ export default function UserProfile({ user }: UserProfileProps) {
     try {
       await editCompany(companyFormData, user.id);
       setCompanyEditMode(false); // Only hide edit mode after successful save
+      logMessage('UserProfile: Company info saved', { file: 'UserProfile.tsx', userId: user.id, companyFormData });
     } catch (error) {
-      console.error('Error saving changes:', error);
+      logError(error, { file: 'UserProfile.tsx', location: 'handleCompanySaveChanges', userId: user.id });
     } finally {
       setLoading(false); // Stop loading in all cases
     }
@@ -194,13 +197,11 @@ export default function UserProfile({ user }: UserProfileProps) {
       if (uploadResult.status === 'fulfilled') {
         uploadedCerts = Object.values(uploadResult.value?.files);
       } else {
-        console.error('Upload failed:', uploadResult.reason);
+        logError('UserProfile: Upload failed', { file: 'UserProfile.tsx', reason: uploadResult.reason });
       }
-
       if (deleteResult.status === 'rejected') {
-        console.warn('Some files could not be deleted:', deleteResult.reason);
+        logWarning('UserProfile: Some files could not be deleted', { file: 'UserProfile.tsx', reason: deleteResult.reason });
       }
-
       await editCare(
         {
           ...careFormData,
@@ -210,9 +211,10 @@ export default function UserProfile({ user }: UserProfileProps) {
       );
 
       setCareEditMode(false);
+      logMessage('UserProfile: Care info saved', { file: 'UserProfile.tsx', userId: user.id, careFormData });
       window.location.href = '/de/user-profile';
     } catch (e) {
-      console.error('Error saving care info:', e);
+      logError(e, { file: 'UserProfile.tsx', location: 'handleCareSaveChanges', userId: user.id });
     } finally {
       setLoading(false);
     }
@@ -229,12 +231,10 @@ export default function UserProfile({ user }: UserProfileProps) {
     if (selected) {
       setCareFormData(prev => ({
         ...prev,
-
         expertise: selected.value as string, // Gender wird korrekt gesetzt
-
       }));
     } else {
-      console.error('Invalid selection:', selected);
+      logWarning('UserProfile: Invalid expertise selection', { file: 'UserProfile.tsx', selected });
     }
   };
 
@@ -449,7 +449,7 @@ export default function UserProfile({ user }: UserProfileProps) {
                   onValueChange={(details) => {
                     const selected = details.items[0];
                     if (!selected) {
-                      console.error('Invalid selection:', selected);
+                      logWarning('UserProfile: Invalid company selection', { file: 'UserProfile.tsx', selected });
                     }
                     handleCompanySelectChange(selected);
                   }}
@@ -612,7 +612,7 @@ export default function UserProfile({ user }: UserProfileProps) {
                   onValueChange={(details) => {
                     const selected = details.items[0];
                     if (!selected) {
-                      console.error('Invalid selection:', selected);
+                      logWarning('UserProfile: Invalid expertise selection', { file: 'UserProfile.tsx', selected });
                       return;
                     }
                     handleExpertiseSelectChange(selected);

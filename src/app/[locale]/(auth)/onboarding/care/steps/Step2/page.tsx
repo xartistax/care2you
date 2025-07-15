@@ -16,6 +16,7 @@ import { SelectContent, SelectItem, SelectRoot, SelectTrigger, SelectValueText }
 import WorkingHoursForm from '@/components/WorkingHoursForm';
 import { useOnboarding } from '@/contexts/OnboardingContext';
 import { constructOnboardingUser, updateUserDataCare, uploadCertsToBunny } from '@/utils/Helpers';
+import { logError, logWarning } from '@/utils/sentryLogger';
 
 const expertise_collection = createListCollection({
   items: [
@@ -64,7 +65,7 @@ const Step2Care = () => {
     if (Array.isArray(fileDetails.files)) {
       const validFiles = fileDetails.files.filter((file) => {
         if (file.size > maxSize) {
-          console.error(`File ${file.name} exceeds the 5MB size limit.`);
+          logWarning('Step2Care: File exceeds size limit', { file: 'care/steps/Step2/page.tsx', fileName: file.name, fileSize: file.size });
           return false; // Exclude file if it's too large
         }
         return true; // Include valid files
@@ -73,7 +74,7 @@ const Step2Care = () => {
       // Update the state with the valid files
       setAcceptedFiles(validFiles);
     } else {
-      console.error('No accepted files found');
+      logWarning('Step2Care: No accepted files found', { file: 'care/steps/Step2/page.tsx', fileDetails });
     }
   };
 
@@ -148,7 +149,7 @@ const Step2Care = () => {
         },
       }));
     } else {
-      console.error('Invalid date:', date); // Optional: Log invalid date for debugging
+      logWarning('Step2Care: Invalid date', { file: 'care/steps/Step2/page.tsx', date });
     }
   };
 
@@ -168,6 +169,7 @@ const Step2Care = () => {
       || !formState.data.privateMetadata.dob
       || !formState.data.privateMetadata.nationality
     ) {
+      logWarning('Step2Care: Missing required fields', { file: 'care/steps/Step2/page.tsx', formState });
       setShowAlert(true);
       setAlertMessage('Bitte alles ausfüllen');
       return;
@@ -196,6 +198,7 @@ const Step2Care = () => {
       const updateSuccess = await updateUserDataCare(locale, updatedUser);
 
       if (!updateSuccess) {
+        logError('Step2Care: Error when updating user data', { file: 'care/steps/Step2/page.tsx', updatedUser });
         throw new Error('Fehler beim Aktualisieren der Benutzerdaten');
       }
 
@@ -205,7 +208,7 @@ const Step2Care = () => {
 
       nextStep();
     } catch (error) {
-      console.error('Fehler während der Anmeldung:', error);
+      logError(error, { file: 'care/steps/Step2/page.tsx', location: 'handleNext' });
       setAlertMessage('Bei der Anmeldung ist ein Fehler aufgetreten');
       setShowAlert(true);
       setIsLoading(false);
@@ -238,7 +241,7 @@ const Step2Care = () => {
         },
       }));
     } else {
-      console.error('Invalid selection:', selected);
+      logWarning('Step2Care: Invalid expertise selection', { file: 'care/steps/Step2/page.tsx', selected });
     }
   };
 

@@ -9,6 +9,7 @@ import { HiXCircle } from 'react-icons/hi';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { useOnboarding } from '@/contexts/OnboardingContext';
+import { logMessage, logWarning } from '@/utils/sentryLogger';
 
 const Step2Service = () => {
   const t = useTranslations('OnBoarding');
@@ -44,6 +45,7 @@ const Step2Service = () => {
 
   const handleNext = async () => {
     if (!formState.data.privateMetadata.companyTitle || !formState.data.privateMetadata.companyCategory || !formState.data.privateMetadata.companyDescription) {
+      logWarning('Step2Service: Missing required fields', { file: 'service/steps/Step2/page.tsx', formState });
       setShowAlert(true);
       setAlertMessage('Bitte alles ausfüllen');
       return;
@@ -54,9 +56,10 @@ const Step2Service = () => {
     try {
       setShowAlert(false);
       setIsLoading(false);
+      logMessage('Step2Service: Proceeding to next step', { file: 'service/steps/Step2/page.tsx', formState });
       nextStep();
     } catch (error) {
-      console.error('Fehler während der Anmeldung:', error);
+      logWarning('Step2Service: Error during registration', { file: 'service/steps/Step2/page.tsx', error });
       setAlertMessage('Bei der Anmeldung ist ein Fehler aufgetreten');
       setShowAlert(true);
       setIsLoading(false);
@@ -76,7 +79,7 @@ const Step2Service = () => {
         },
       }));
     } else {
-      console.error('Invalid selection:', selected);
+      logWarning('Step2Service: Invalid company selection', { file: 'service/steps/Step2/page.tsx', selected });
     }
   };
 
@@ -128,7 +131,7 @@ const Step2Service = () => {
               onValueChange={(details) => {
                 const selected = details.items[0];
                 if (!selected) {
-                  console.error('Invalid selection:', selected);
+                  logWarning('Step2Service: Invalid company selection', { file: 'service/steps/Step2/page.tsx', selected });
                   return;
                 }
                 handleCompanySelectChange(selected);

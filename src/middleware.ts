@@ -2,6 +2,8 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { type NextFetchEvent, type NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 
+import { logError, logMessage, logWarning } from '@/utils/sentryLogger';
+
 import { routing } from './libs/i18nNavigation';
 import { chekOnboarding, getBaseUrl, getI18nPath } from './utils/Helpers';
 
@@ -25,28 +27,30 @@ export default function middleware(
   request: NextRequest,
   event: NextFetchEvent,
 ) {
+  logMessage('middleware: Entry', { file: 'middleware.ts', function: 'middleware', url: request.nextUrl.pathname });
   // Run Clerk middleware only when it's necessary
   if (
     isAuthPage(request) || isProtectedRoute(request)
   ) {
+    logMessage('middleware: Auth or protected route', { file: 'middleware.ts', function: 'middleware', url: request.nextUrl.pathname });
     return clerkMiddleware(async (auth, req) => {
+      logMessage('middleware: clerkMiddleware invoked', { file: 'middleware.ts', function: 'middleware', url: req.nextUrl.pathname });
       if (isProtectedRoute(req)) {
-        const locale = req.nextUrl.pathname.match(/^\/([a-z]{2})(?=\/)/)?.[1] ?? '';
+        const locale = req.nextUrl.pathname.match(/^\/[a-z]{2}(?=\/)/)?.[1] ?? '';
         const { userId } = auth();
+        logMessage('middleware: Protected route check', { file: 'middleware.ts', function: 'middleware', locale, userId });
         if (userId) {
-          /// Check if user has a role if so is it a valid Role? TRUE/FALSE
-          /// IF False -> redirect to onboarding
-
-          const checkOnboarding = await chekOnboarding(locale, userId);
-          // const checkCompilance = await chekCompilance(locale, userId);
-
-          if (!checkOnboarding) {
+          try {
+            const checkOnboarding = await chekOnboarding(locale, userId);
+            if (!checkOnboarding) {
+              logWarning('middleware: Onboarding check failed, redirecting', { file: 'middleware.ts', function: 'middleware', locale, userId });
+              return NextResponse.redirect(getI18nPath(`${getBaseUrl()}/onboarding`, locale));
+            }
+          } catch (error) {
+            logError(error, { file: 'middleware.ts', function: 'middleware', location: 'checkOnboarding', locale, userId });
             return NextResponse.redirect(getI18nPath(`${getBaseUrl()}/onboarding`, locale));
           }
         }
-
-        // return NextResponse.redirect(getI18nPath(`${getBaseUrl()}/onboarding`, locale));
-
         const signInUrl = new URL(`/good-bye`, req.url);
 
         auth().protect({

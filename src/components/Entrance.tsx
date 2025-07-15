@@ -2,6 +2,8 @@
 import { Box, Button, Flex, Text, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 
+import { logMessage } from '@/utils/sentryLogger';
+
 export default function Entrance({ title, linkTo, linkTitle }: { title: string; text?: string; linkTo: string; linkTitle: string }) {
   const router = useRouter();
   return (
@@ -56,7 +58,10 @@ export default function Entrance({ title, linkTo, linkTitle }: { title: string; 
             mt={12}
             colorScheme="teal"
             size="md"
-            onClick={() => router.push(`/de${linkTo}`)}
+            onClick={() => {
+              logMessage('Entrance: Navigation button clicked', { file: 'Entrance.tsx', linkTo });
+              router.push(`/de${linkTo}`);
+            }}
           >
             {linkTitle}
           </Button>

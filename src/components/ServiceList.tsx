@@ -8,6 +8,7 @@ import { z } from 'zod';
 
 import ListElement from '@/components/ListElement';
 import { Field } from '@/components/ui/field';
+import { logMessage, logWarning } from '@/utils/sentryLogger';
 import { categoriesList } from '@/utils/Types';
 import type { serviceSchema } from '@/validations/serviceValidation';
 
@@ -45,9 +46,10 @@ export default function ServiceList({ services }: ServiceListProps) {
     selected: { value: string; label: string } | undefined,
   ) => {
     if (selected) {
+      logMessage('ServiceList: Category selected', { file: 'ServiceList.tsx', category: selected.value });
       field.onChange(selected.value);
     } else {
-      console.error('Invalid selection:', selected);
+      logWarning('ServiceList: Invalid category selection', { file: 'ServiceList.tsx', selected });
       field.onChange(null);
     }
   };

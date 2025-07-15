@@ -5,6 +5,7 @@ import type { z } from 'zod';
 
 import type { OnboardingState } from '@/contexts/OnboardingContext';
 import { Env } from '@/libs/Env';
+import { logError, logMessage, logWarning } from '@/utils/sentryLogger';
 import type { addressSchema } from '@/validations/addressValidation';
 import type { careSchema } from '@/validations/careValidation';
 import type { companySchema } from '@/validations/companyValidation';
@@ -62,21 +63,20 @@ export const getHeaders = (locale: string) => ({
 export const chekOnboarding = async (locale: string, userId: string) => {
   try {
     const headers = getClerkHeaders(locale);
+    logMessage('Helpers: Checking onboarding', { file: 'Helpers.ts', locale, userId });
     const response = await fetch(`${getBaseUrl()}/${locale}/api/check-user-login`, {
       method: 'POST',
       headers,
       body: JSON.stringify({ userId }),
     });
-
     if (!response.ok) {
+      logWarning('Helpers: checkOnboarding response not ok', { file: 'Helpers.ts', status: response.status });
       return false;
     }
-
     const data = await response.json();
-
     return data.result === true; // Return true if the server indicates success
   } catch (error) {
-    console.error('Error in chekOnboarding:', error);
+    logError(error, { file: 'Helpers.ts', location: 'checkOnboarding' });
     return false;
   }
 };
@@ -104,6 +104,7 @@ export const getShortSalutation = (gender: '0' | '1') => {
 /// Update Clients Name & FirstName
 export const updateFirstAndLastName = async (locale: string, user: OnBoardingClientUser) => {
   try {
+    logMessage('Helpers: Updating first and last name', { file: 'Helpers.ts', locale, userId: user.id });
     const response = await fetch(`/api/update-user`, {
       method: 'POST',
       headers: {
@@ -116,21 +117,14 @@ export const updateFirstAndLastName = async (locale: string, user: OnBoardingCli
         lastName: user.lastName,
       }),
     });
-
-    // Prüfe den HTTP-Status der Antwort
     if (!response.ok) {
-      const errorResponse = await response.text(); // Lese die Fehlermeldung
-      console.error(`Failed to update user: ${response.status} - ${response.statusText}`);
-      console.error(`Response body: ${errorResponse}`);
+      const errorResponse = await response.text();
+      logError('Helpers: Failed to update user', { file: 'Helpers.ts', status: response.status, statusText: response.statusText, errorResponse });
       return false;
     }
-
-    // Parsen der JSON-Antwort
-    // const responseBody = await response.json();
-
     return true;
   } catch (error) {
-    console.error('Error in updateFirstAndLastName:', error);
+    logError(error, { file: 'Helpers.ts', location: 'updateFirstAndLastName' });
     return false;
   }
 };
@@ -138,6 +132,7 @@ export const updateFirstAndLastName = async (locale: string, user: OnBoardingCli
 /// Update userdata
 export const updateUserDataService = async (locale: string, user: OnBoardingClientUser) => {
   try {
+    logMessage('Helpers: Updating user data (service)', { file: 'Helpers.ts', locale, userId: user.id });
     const response = await fetch(`/api/update-data-service`, {
       method: 'POST',
       headers: {
@@ -148,28 +143,21 @@ export const updateUserDataService = async (locale: string, user: OnBoardingClie
         locale,
       }),
     });
-
-    // Prüfe den HTTP-Status der Antwort
     if (!response.ok) {
-      const errorResponse = await response.text(); // Lese die Fehlermeldung aus der Antwort
-      console.error(`Failed to update user: ${response.status} - ${response.statusText}`);
-      console.error(`Response body: ${errorResponse}`);
+      const errorResponse = await response.text();
+      logError('Helpers: Failed to update user (service)', { file: 'Helpers.ts', status: response.status, statusText: response.statusText, errorResponse });
       return false;
     }
-
-    // Parsen der JSON-Antwort
-    // const responseBody = await response.json();
-
     return true;
   } catch (error) {
-    // Fehler bei Netzwerk oder Fetch
-    console.error('Error in updateUserDataService:', error);
+    logError(error, { file: 'Helpers.ts', location: 'updateUserDataService' });
     return false;
   }
 };
 
 export const updateUserDataCare = async (locale: string, user: OnBoardingClientUser) => {
   try {
+    logMessage('Helpers: Updating user data (care)', { file: 'Helpers.ts', locale, userId: user.id });
     const response = await fetch(`/api/update-data-care`, {
       method: 'POST',
       headers: {
@@ -180,22 +168,14 @@ export const updateUserDataCare = async (locale: string, user: OnBoardingClientU
         locale,
       }),
     });
-
-    // Prüfe den HTTP-Status der Antwort
     if (!response.ok) {
-      const errorResponse = await response.text(); // Lese die Fehlermeldung aus der Antwort
-      console.error(`Failed to update user: ${response.status} - ${response.statusText}`);
-      console.error(`Response body: ${errorResponse}`);
+      const errorResponse = await response.text();
+      logError('Helpers: Failed to update user (care)', { file: 'Helpers.ts', status: response.status, statusText: response.statusText, errorResponse });
       return false;
     }
-
-    // Parsen der JSON-Antwort
-    // const responseBody = await response.json();
-
     return true;
   } catch (error) {
-    // Fehler bei Netzwerk oder Fetch
-    console.error('Error in updateUserDataService:', error);
+    logError(error, { file: 'Helpers.ts', location: 'updateUserDataCare' });
     return false;
   }
 };
@@ -203,6 +183,7 @@ export const updateUserDataCare = async (locale: string, user: OnBoardingClientU
 /// Update Compilance
 export const updateCompilance = async (userId: string) => {
   try {
+    logMessage('Helpers: Updating compliance', { file: 'Helpers.ts', userId });
     const response = await fetch(`/api/update-compilance`, {
       method: 'POST',
       headers: {
@@ -213,72 +194,65 @@ export const updateCompilance = async (userId: string) => {
 
     // Prüfe den HTTP-Status
     if (!response.ok) {
-      const errorText = await response.text(); // Hole die Antwort im Fehlerfall
-      console.error(`Failed to update compliance: ${response.status} - ${response.statusText}`);
-      console.error(`Response body: ${errorText}`);
+      logWarning('Helpers: updateCompilance response not ok', { file: 'Helpers.ts', status: response.status });
       return false;
     }
-
     return true; // Erfolg
   } catch (error) {
-    // Netzwerk- oder andere Fehler
-    console.error('Error in updateCompilance:', error);
+    logError(error, { file: 'Helpers.ts', location: 'updateCompilance' });
     return false;
   }
 };
 
 export const removeCompilance = async (userId: string) => {
   try {
+    logMessage('Helpers: Removing compliance', { file: 'Helpers.ts', userId });
     const response = await fetch(`/api/remove-compilance`, {
       method: 'POST',
       body: JSON.stringify({ userId }),
     });
-
     if (!response.ok) {
-      console.error(`Failed to update compilance: ${response.statusText}`);
+      logWarning('Helpers: removeCompilance response not ok', { file: 'Helpers.ts', status: response.status });
       return false;
     }
-
     return true;
   } catch (error) {
-    console.error('Error in updateRole:', error);
+    logError(error, { file: 'Helpers.ts', location: 'removeCompilance' });
     return false;
   }
 };
 
 export const chekCompilance = async (locale: string, userId: string) => {
   try {
+    logMessage('Helpers: Checking compliance', { file: 'Helpers.ts', locale, userId });
     const response = await fetch(`${getBaseUrl()}/${locale}/api/check-compilance`, {
       method: 'POST',
       body: JSON.stringify({ userId }),
     });
-
     if (!response.ok) {
-      console.error(`Failed to check compilance: ${response.statusText}`);
+      logWarning('Helpers: chekCompilance response not ok', { file: 'Helpers.ts', status: response.status });
       return false;
     }
-
     return true;
   } catch (error) {
-    console.error('Error in checkCompilance:', error);
+    logError(error, { file: 'Helpers.ts', location: 'chekCompilance' });
     return false;
   }
 };
 
 export const currentUser = async (locale: string) => {
   try {
+    logMessage('Helpers: Fetching current user', { file: 'Helpers.ts', locale });
     const response = await fetch(`${getBaseUrl()}/${locale}/api/current-user`, {
       method: 'POST',
     });
-
     if (!response.ok) {
-      console.error(`Failed to update compilance: ${response.statusText}`);
+      logWarning('Helpers: currentUser response not ok', { file: 'Helpers.ts', status: response.status });
       return false;
     }
-
     return response;
   } catch (error) {
-    console.error('Error in updateRole:', error);
+    logError(error, { file: 'Helpers.ts', location: 'currentUser' });
     return false;
   }
 };
@@ -373,28 +347,28 @@ export const giveCredits = (role: string) => {
 
 export const uploadImageToBunny = async (serviceImage: File | null) => {
   if (!serviceImage) {
+    logError('Helpers: No file provided for upload', { file: 'Helpers.ts' });
     throw new Error('No file provided for upload.');
   }
-
+  logMessage('Helpers: Uploading image to Bunny', { file: 'Helpers.ts', fileName: serviceImage.name });
   const formData = new FormData();
   formData.append('file', serviceImage);
-
   const response = await fetch('/api/bunny-upload', {
     method: 'POST',
     body: formData,
   });
-
   const result = await response.json();
-
   if (!response.ok) {
+    logError('Helpers: Upload to Bunny failed', { file: 'Helpers.ts', error: result.error || response.statusText });
     throw new Error(`Upload failed: ${result.error || response.statusText}`);
   }
-
+  logMessage('Helpers: Image uploaded to Bunny successfully', { file: 'Helpers.ts', url: result.url });
   return result; // This should be { success: true, url: "..." }
 };
 
 export const saveNewService = async (formData: ServiceFormData, userId: string) => {
   try {
+    logMessage('Helpers: Saving new service', { file: 'Helpers.ts', function: 'saveNewService', userId, formData });
     const response = await fetch(`/api/addNewService`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -428,18 +402,20 @@ export const saveNewService = async (formData: ServiceFormData, userId: string) 
 
     if (!response.ok) {
       const errorText = await response.text();
+      logError('Helpers: Failed to add new service', { file: 'Helpers.ts', function: 'saveNewService', status: response.status, statusText: response.statusText, errorText });
       throw new Error(`Failed to add new service: ${response.status} - ${response.statusText}\n${errorText}`);
     }
 
     return true;
   } catch (error) {
-    console.error('Error in saveNewService:', error);
+    logError(error, { file: 'Helpers.ts', function: 'saveNewService' });
     throw error;
   }
 };
 
 export const decreaseCreditByOne = async (userId: string) => {
   try {
+    logMessage('Helpers: Decreasing credit by one', { file: 'Helpers.ts', function: 'decreaseCreditByOne', userId });
     const response = await fetch(`/api/decrease-credit`, {
       method: 'POST',
       body: JSON.stringify({
@@ -449,18 +425,20 @@ export const decreaseCreditByOne = async (userId: string) => {
 
     if (!response.ok) {
       const errorText = await response.text();
+      logError('Helpers: Failed to decrease credit', { file: 'Helpers.ts', function: 'decreaseCreditByOne', status: response.status, statusText: response.statusText, errorText });
       throw new Error(`Failed to decrease cxredit: ${response.status} - ${response.statusText}\n${errorText}`);
     }
 
     return true;
   } catch (error) {
-    console.error('Error in decrease credit:', error);
+    logError(error, { file: 'Helpers.ts', function: 'decreaseCreditByOne' });
     throw error;
   }
 };
 
 export const topUpCredits = async (userId: string, credits: number) => {
   try {
+    logMessage('Helpers: Topping up credits', { file: 'Helpers.ts', function: 'topUpCredits', userId, credits });
     const response = await fetch(`/api/addCredits`, {
       method: 'POST',
       body: JSON.stringify({
@@ -471,12 +449,13 @@ export const topUpCredits = async (userId: string, credits: number) => {
 
     if (!response.ok) {
       const errorText = await response.text();
+      logError('Helpers: Failed to top up credits', { file: 'Helpers.ts', function: 'topUpCredits', status: response.status, statusText: response.statusText, errorText });
       throw new Error(`Failed to decrease cxredit: ${response.status} - ${response.statusText}\n${errorText}`);
     }
 
     return true;
   } catch (error) {
-    console.error('Error in decrease credit:', error);
+    logError(error, { file: 'Helpers.ts', function: 'topUpCredits' });
     throw error;
   }
 };
@@ -544,6 +523,7 @@ export const categoryTypeRetriever = (category: string) => {
 
 export const editAddress = async (formData: AddressFormData, userId: string) => {
   try {
+    logMessage('Helpers: Editing address', { file: 'Helpers.ts', function: 'editAddress', userId, formData });
     const response = await fetch(`/api/editAddress`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -563,18 +543,20 @@ export const editAddress = async (formData: AddressFormData, userId: string) => 
 
     if (!response.ok) {
       const errorText = await response.text();
+      logError('Helpers: Failed to edit address', { file: 'Helpers.ts', function: 'editAddress', status: response.status, statusText: response.statusText, errorText });
       throw new Error(`Failed to addressEdit cxredit: ${response.status} - ${response.statusText}\n${errorText}`);
     }
 
     return true;
   } catch (error) {
-    console.error('Error address edit:', error);
+    logError(error, { file: 'Helpers.ts', function: 'editAddress' });
     throw error;
   }
 };
 
 export const editCompany = async (formData: CompanyFormData, userId: string) => {
   try {
+    logMessage('Helpers: Editing company', { file: 'Helpers.ts', function: 'editCompany', userId, formData });
     const response = await fetch(`/api/editCompany`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -593,18 +575,20 @@ export const editCompany = async (formData: CompanyFormData, userId: string) => 
 
     if (!response.ok) {
       const errorText = await response.text();
+      logError('Helpers: Failed to edit company', { file: 'Helpers.ts', function: 'editCompany', status: response.status, statusText: response.statusText, errorText });
       throw new Error(`Failed to addressEdit cxredit: ${response.status} - ${response.statusText}\n${errorText}`);
     }
 
     return true;
   } catch (error) {
-    console.error('Error address edit:', error);
+    logError(error, { file: 'Helpers.ts', function: 'editCompany' });
     throw error;
   }
 };
 
 export const editCare = async (formData: CareFormData, userId: string) => {
   try {
+    logMessage('Helpers: Editing care', { file: 'Helpers.ts', function: 'editCare', userId, formData });
     const response = await fetch(`/api/editCare`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -623,18 +607,20 @@ export const editCare = async (formData: CareFormData, userId: string) => {
 
     if (!response.ok) {
       const errorText = await response.text();
+      logError('Helpers: Failed to edit care', { file: 'Helpers.ts', function: 'editCare', status: response.status, statusText: response.statusText, errorText });
       throw new Error(`Failed to editCare: ${response.status} - ${response.statusText}\n${errorText}`);
     }
 
     return true;
   } catch (error) {
-    console.error('Error address edit:', error);
+    logError(error, { file: 'Helpers.ts', function: 'editCare' });
     throw error;
   }
 };
 
 export const updateStatus = async (userId: string, currentStatus: string) => {
   try {
+    logMessage('Helpers: Updating status', { file: 'Helpers.ts', function: 'updateStatus', userId, currentStatus });
     const response = await fetch(`/api/change-user-status`, {
       method: 'POST',
       headers: {
@@ -645,18 +631,20 @@ export const updateStatus = async (userId: string, currentStatus: string) => {
 
     // Prüfe den HTTP-Status
     if (!response.ok) {
+      logWarning('Helpers: updateStatus response not ok', { file: 'Helpers.ts', function: 'updateStatus', status: response.status });
       return false;
     }
     return true; // Erfolg
   } catch (error) {
     // Netzwerk- oder andere Fehler
-    console.error('Error in updateStatus:', error);
+    logError(error, { file: 'Helpers.ts', function: 'updateStatus' });
     return false;
   }
 };
 
 export const deleteUser = async (userId: string, role: string) => {
   try {
+    logMessage('Helpers: Deleting user', { file: 'Helpers.ts', function: 'deleteUser', userId, role });
     const response = await fetch(`/api/delete-user`, {
       method: 'POST',
       headers: {
@@ -667,12 +655,13 @@ export const deleteUser = async (userId: string, role: string) => {
 
     // Prüfe den HTTP-Status
     if (!response.ok) {
+      logWarning('Helpers: deleteUser response not ok', { file: 'Helpers.ts', function: 'deleteUser', status: response.status });
       return false;
     }
     return true; // Erfolg
   } catch (error) {
     // Netzwerk- oder andere Fehler
-    console.error('Error in deleteUser:', error);
+    logError(error, { file: 'Helpers.ts', function: 'deleteUser' });
     return false;
   }
 };
@@ -701,36 +690,46 @@ export const get18YearsAgoDate = () => {
 };
 
 export const uploadCertsToBunny = async (certFiles: File[]) => {
-  if (!certFiles || certFiles.length < 1) {
-    throw new Error('No file provided for upload.');
+  try {
+    logMessage('Helpers: Uploading certificates to Bunny', { file: 'Helpers.ts', function: 'uploadCertsToBunny', certFilesLength: certFiles?.length });
+    if (!certFiles || certFiles.length < 1) {
+      logError('Helpers: No file provided for upload', { file: 'Helpers.ts', function: 'uploadCertsToBunny' });
+      throw new Error('No file provided for upload.');
+    }
+
+    // Create a new FormData object to append the files
+    const formData = new FormData();
+
+    // Append each file to the FormData object
+    certFiles.forEach((file, index) => {
+      formData.append(`file${index}`, file); // Ensure the field name matches on the server side
+    });
+
+    // Make the API request with the FormData as the body
+    const response = await fetch('/api/caregiver-file-management', {
+      method: 'POST',
+      body: formData, // The body contains the FormData with files
+    });
+
+    // Parse the response and check for success
+    const result = await response.json();
+
+    if (!response.ok) {
+      logError('Helpers: Upload certificates to Bunny failed', { file: 'Helpers.ts', function: 'uploadCertsToBunny', error: result.error || response.statusText });
+      throw new Error(`Upload failed: ${result.error || response.statusText}`);
+    }
+
+    logMessage('Helpers: Certificates uploaded to Bunny successfully', { file: 'Helpers.ts', function: 'uploadCertsToBunny', result });
+    return result; // This should contain the URLs from the response
+  } catch (error) {
+    logError(error, { file: 'Helpers.ts', function: 'uploadCertsToBunny' });
+    throw error;
   }
-
-  // Create a new FormData object to append the files
-  const formData = new FormData();
-
-  // Append each file to the FormData object
-  certFiles.forEach((file, index) => {
-    formData.append(`file${index}`, file); // Ensure the field name matches on the server side
-  });
-
-  // Make the API request with the FormData as the body
-  const response = await fetch('/api/caregiver-file-management', {
-    method: 'POST',
-    body: formData, // The body contains the FormData with files
-  });
-
-  // Parse the response and check for success
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(`Upload failed: ${result.error || response.statusText}`);
-  }
-
-  return result; // This should contain the URLs from the response
 };
 
 export const deleteCertsFromBunny = async (urls: string[]) => {
   try {
+    logMessage('Helpers: Deleting certificates from Bunny', { file: 'Helpers.ts', function: 'deleteCertsFromBunny', urls });
     const response = await fetch('/api/caregiver-file-management', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
@@ -738,17 +737,19 @@ export const deleteCertsFromBunny = async (urls: string[]) => {
     });
     if (!response.ok) {
       const errorText = await response.text();
+      logError('Helpers: Failed to delete certificates from Bunny', { file: 'Helpers.ts', function: 'deleteCertsFromBunny', status: response.status, statusText: response.statusText, errorText });
       throw new Error(`Failed to delete files: ${response.status} - ${response.statusText}\n${errorText}`);
     }
     return true;
   } catch (error) {
-    console.error('Error deleting Bunny files:', error);
+    logError(error, { file: 'Helpers.ts', function: 'deleteCertsFromBunny' });
     return false;
   }
 };
 
 export const SaveNote = async (note: string, user: OnBoardingClientUser) => {
   try {
+    logMessage('Helpers: Saving note', { file: 'Helpers.ts', function: 'SaveNote', userId: user.id, note });
     const response = await fetch(`/api/update-notes`, {
       method: 'POST',
       headers: {
@@ -763,14 +764,13 @@ export const SaveNote = async (note: string, user: OnBoardingClientUser) => {
     // Prüfe den HTTP-Status der Antwort
     if (!response.ok) {
       const errorResponse = await response.text(); // Lese die Fehlermeldung
-      console.error(`Failed to update note: ${response.status} - ${response.statusText}`);
-      console.error(`Response body: ${errorResponse}`);
+      logError('Helpers: Failed to update note', { file: 'Helpers.ts', function: 'SaveNote', status: response.status, statusText: response.statusText, errorResponse });
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error('Error in updateFirstAndLastName:', error);
+    logError(error, { file: 'Helpers.ts', function: 'SaveNote' });
     return false;
   }
 };

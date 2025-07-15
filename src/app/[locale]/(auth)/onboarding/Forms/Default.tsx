@@ -13,6 +13,7 @@ import {
 import type { OnboardingState } from '@/contexts/OnboardingContext';
 import { AppConfig } from '@/utils/AppConfig';
 import { roleLabels } from '@/utils/Helpers';
+import { logMessage, logWarning } from '@/utils/sentryLogger';
 
 export function OnBoardingFormDefault({
   formState,
@@ -56,7 +57,10 @@ export function OnBoardingFormDefault({
             {roles.map(role => (
               <Button
                 key={role}
-                onClick={() => handleRoleSelect(role)}
+                onClick={() => {
+                  logMessage('OnBoardingFormDefault: Role selected', { file: 'Default.tsx', role });
+                  handleRoleSelect(role);
+                }}
                 loading={false}
                 bg={formState.data.privateMetadata.role === role ? 'black' : 'white'} // Rot für die aktuell ausgewählte Rolle
                 color={formState.data.privateMetadata.role === role ? 'white' : 'black'} // Weißer Text auf rotem Hintergrund
@@ -93,9 +97,10 @@ export function OnBoardingFormDefault({
             onValueChange={(details) => {
               const selected = details.items[0]; // Get the first selected item
               if (!selected) {
-                console.error('Invalid selection:', selected);
+                logWarning('OnBoardingFormDefault: Invalid gender selection', { file: 'Default.tsx', selected });
                 return;
               }
+              logMessage('OnBoardingFormDefault: Gender selected', { file: 'Default.tsx', gender: selected.value });
               handleSelectChange(selected); // ✅ Pass only the string value
             }}
           >

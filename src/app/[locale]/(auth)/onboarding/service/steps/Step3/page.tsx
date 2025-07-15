@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import { constructOnboardingUser, getSalutation, updateUserDataCare, updateUserDataService } from '@/utils/Helpers';
+import { logError, logMessage, logWarning } from '@/utils/sentryLogger';
 
 const Step3Service = () => {
   const [isComplete, setIsComplete] = useState(false);
@@ -22,6 +23,7 @@ const Step3Service = () => {
     setIsLoading(true);
 
     if (!formState.data.privateMetadata.compilance) {
+      logWarning('Step3Service: Compliance not confirmed', { file: 'service/steps/Step3/page.tsx', formState });
       setAlertMessage('Bitte bestätigen Sie die Nutzervereinbarung');
       setShowAlert(true);
       setIsLoading(false);
@@ -33,17 +35,20 @@ const Step3Service = () => {
     const user = constructOnboardingUser(formState);
 
     try {
+      logMessage('Step3Service: Attempting to update user data', { file: 'service/steps/Step3/page.tsx', user });
       // Warte auf die Fertigstellung der Updates
 
       if (user.privateMetadata.role === 'service') {
         const updateSuccess = await updateUserDataService(locale, user);
 
         if (!updateSuccess) {
+          logError('Step3Service: Error when updating the user data', { file: 'service/steps/Step3/page.tsx', user });
           throw new Error('Fehler beim Aktualisieren der Benutzerdaten');
         }
       } else if (user.privateMetadata.role === 'care') {
         const updateSuccess = await updateUserDataCare(locale, user);
         if (!updateSuccess) {
+          logError('Step3Service: Error when updating the user data', { file: 'service/steps/Step3/page.tsx', user });
           throw new Error('Fehler beim Aktualisieren der Benutzerdaten');
         }
       }
@@ -52,11 +57,12 @@ const Step3Service = () => {
       setShowAlert(false);
       setIsComplete(true);
 
+      logMessage('Step3Service: User onboarding complete, navigating to welcome', { file: 'service/steps/Step3/page.tsx', locale });
       router.push(`/${locale}/welcome`);
 
       // console.log(user);
     } catch (error) {
-      console.error('Fehler während der Anmeldung:', error);
+      logError(error, { file: 'service/steps/Step3/page.tsx', location: 'handleFinish' });
       setAlertMessage('Bei der Anmeldung ist ein Fehler aufgetreten');
       setShowAlert(true);
     } finally {
@@ -73,12 +79,11 @@ const Step3Service = () => {
           user_email: user.email,
           user_phone: user.phone,
           user_role: user.privateMetadata.role,
-
         }),
       });
 
       if (!response.ok) {
-        console.error('Fehler beim Senden der Nachricht');
+        logWarning('Step3Service:  Error when sending the message', { file: 'service/steps/Step3/page.tsx', responseStatus: response.status });
       }
     }
   };
