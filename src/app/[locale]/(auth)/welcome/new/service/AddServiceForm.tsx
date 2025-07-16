@@ -16,6 +16,7 @@ import { Tag } from '@/components/ui/tag';
 import { Toaster, toaster } from '@/components/ui/toaster';
 import WorkingHoursForm from '@/components/WorkingHoursForm';
 import { categoryTypeRetriever, decreaseCreditByOne, saveNewService, uploadImageToBunny } from '@/utils/Helpers';
+import { logError } from '@/utils/sentryLogger';
 import { categoriesList } from '@/utils/Types';
 import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 import type { serviceSchema } from '@/validations/serviceValidation';
@@ -185,7 +186,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
       // Step 5: Other operations
       await decreaseCreditByOne(user.id);
     } catch (error) {
-      console.error('Failed to save service:', error);
+      logError('AddServiceForm: Failed to save service:', { reason: (error as Error)?.message });
     } finally {
       setSuccess(true);
       setIsLoading(false);
@@ -222,7 +223,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
         category: selected.value, // ✅ Store only the value, not the full object
       }));
     } else {
-      console.error('Invalid selection:', selected);
+      logError('AddServiceForm: Invalid category selection');
     }
   };
 
@@ -371,7 +372,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 onValueChange={(details) => {
                   const selected = details.items[0];
                   if (!selected) {
-                    console.error('Invalid selection:', selected);
+                    logError('AddServiceForm: Invalid service category selection');
                     return;
                   }
                   handleCategorySelectChange(selected);

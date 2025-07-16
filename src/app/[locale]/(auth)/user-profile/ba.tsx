@@ -11,6 +11,7 @@ import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Tag } from '@/components/ui/tag';
 import { companyTypeRetriever, editAddress, expertiseTypeRetriever } from '@/utils/Helpers';
+import { logError } from '@/utils/sentryLogger';
 import type { onboardingClientUserSchema } from '@/validations/onBoardingValidation';
 
 type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
@@ -98,7 +99,7 @@ export default function UserProfileBA({ user }: UserProfileProps) {
       await editAddress(formData, user.id);
       setEditMode(false); // Only hide edit mode after successful save
     } catch (error) {
-      console.error('Error saving changes:', error);
+      logError('UserProfileBA: Error saving changes:', { reason: (error as Error)?.message, userId: user.id });
     } finally {
       setLoading(false); // Stop loading in all cases
     }
@@ -110,7 +111,7 @@ export default function UserProfileBA({ user }: UserProfileProps) {
       // await editAddress({ skill: skills }, user.id);
       setEditSkillsMode(false);
     } catch (error) {
-      console.error('Error saving skills:', error);
+      logError('UserProfileBA:Error saving skills:', { reason: (error as Error)?.message, userId: user.id });
     } finally {
       setLoading(false);
     }

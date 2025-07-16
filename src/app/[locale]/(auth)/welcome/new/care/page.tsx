@@ -7,6 +7,7 @@ import { z } from 'zod';
 import ServiceList from '@/components/ServiceList';
 import { db } from '@/libs/DB';
 import { servicesSchema } from '@/models/Schema';
+import { logError } from '@/utils/sentryLogger';
 import { serviceSchema } from '@/validations/serviceValidation';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
@@ -69,7 +70,14 @@ export default async function NewServiceServer() {
       </Box>
     );
   } catch (error) {
-    console.error('❌ Validation Error:', error);
-    return <Box>Fehler beim Laden der Services</Box>;
+    logError('NewServiceServer: ❌ Validation Error:', { reason: (error as Error)?.message });
+    return (
+      <Box
+        spaceY={8}
+        p={8}
+      >
+        Fehler beim Laden der Services
+      </Box>
+    );
   }
 }

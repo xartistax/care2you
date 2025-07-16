@@ -59,8 +59,6 @@ const Step3Service = () => {
 
       logMessage('Step3Service: User onboarding complete, navigating to welcome', { file: 'service/steps/Step3/page.tsx', locale });
       router.push(`/${locale}/welcome`);
-
-      // console.log(user);
     } catch (error) {
       logError(error, { file: 'service/steps/Step3/page.tsx', location: 'handleFinish' });
       setAlertMessage('Bei der Anmeldung ist ein Fehler aufgetreten');

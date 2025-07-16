@@ -346,7 +346,7 @@ const Step2Care = () => {
               onValueChange={(details) => {
                 const selected = details.items[0];
                 if (!selected) {
-                  console.error('Invalid selection:', selected);
+                  logError('Step2Care: Experience invalid selection');
                   return;
                 }
                 handleExpertiseSelectChange(selected);
