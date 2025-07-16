@@ -60,9 +60,9 @@ export default function ServiceList({ services }: ServiceListProps) {
   });
 
   return (
-    <Box position="relative" paddingTop={100}>
+    <Box position="relative">
       {/* Filter Section */}
-      <Box typeof="form" position="absolute" top={0} left={0} width="100%" onSubmit={handleSubmit(() => {})}>
+      <Box typeof="form" width="100%" onSubmit={handleSubmit(() => {})}>
         <Stack spaceY={6} align="center" direction="row" width="100%">
 
           {/* Entfernung Slider */}
@@ -138,7 +138,7 @@ export default function ServiceList({ services }: ServiceListProps) {
           {filteredServices.length > 0 ? (
             filteredServices.map(service => <ListElement key={service.id} formData={service} />)
           ) : (
-            <Text fontSize="sm" color="gray.500" textAlign="center" mt={20}>
+            <Text fontSize="sm" color="gray.500" textAlign="center" mt={5}>
               ❌ Keine passenden Services gefunden. Bitte passe die Filter an.
             </Text>
           )}
