@@ -96,7 +96,7 @@ export default function ServiceList({ services }: ServiceListProps) {
               control={control}
               render={({ field }) => (
 
-                <Field label="Kategorie" width="48%">
+                <Field label="Kategorie" width={{ base: '100%', md: '50%' }}>
                   <SelectRoot
                     value={field.value ? [field.value] : []} // FIXED: Ensures selected category is displayed
                     onValueChange={(details) => {

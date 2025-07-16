@@ -22,7 +22,7 @@ export async function BaseTemplate({
   const constructedUser = constructUser(user);
 
   return (
-    <div className="w-full px-1 text-gray-700 antialiased">
+    <div className="flex min-h-screen flex-col text-gray-700 antialiased">
 
       <Header
         leftNav={
@@ -32,10 +32,11 @@ export async function BaseTemplate({
         locale={locale}
       />
 
-      <div className="mx-auto max-w-screen-xl">
+      <div className="mx-auto w-full max-w-screen-xl grow px-1">
         <main>{children}</main>
-        <Footer />
       </div>
+
+      <Footer />
     </div>
   );
 }
