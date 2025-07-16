@@ -17,13 +17,26 @@ type ServiceSuccessProps = {
 const ServiceSuccess: React.FC<ServiceSuccessProps> = ({ formData }) => {
   const router = useRouter();
   return (
-    <VStack justifyContent="center" alignItems="center" height="70vh">
+    <VStack
+      justifyContent="center"
+      alignItems="center"
+      height={{ base: 'auto', md: '70vh' }}
+      px={{ base: 4, md: 0 }}
+      py={{ base: 8, md: 0 }}
+      width="100%"
+      maxW="md"
+      mx="auto"
+    >
       <VStack textAlign="center">
-        <CheckCircleIcon fontSize="small" color="green.500" className="size-8" />
-        <Text fontSize="xl" fontWeight="bold">
+        <CheckCircleIcon
+          fontSize="small"
+          color="green.500"
+          className="size-8"
+        />
+        <Text fontSize={{ base: '2xl', md: 'xl' }} fontWeight="bold">
           Vielen Dank
         </Text>
-        <Text fontSize="sm">
+        <Text fontSize={{ base: 'md', md: 'sm' }}>
           Der Service
           {' '}
           <Box as="span" fontWeight="bold">
@@ -35,10 +48,10 @@ const ServiceSuccess: React.FC<ServiceSuccessProps> = ({ formData }) => {
           wurde erfolgreich eingestellt.
         </Text>
       </VStack>
-      <VStack>
-
+      <VStack width="100%">
         <Button
-          mt={8}
+          mt={{ base: 6, md: 8 }}
+          width={{ base: '100%', md: 'auto' }}
           onClick={() => {
             logMessage('ServiceSuccess: Navigation button clicked', { file: 'ServiceSuccess.tsx', to: '/welcome' });
             router.push('/welcome');

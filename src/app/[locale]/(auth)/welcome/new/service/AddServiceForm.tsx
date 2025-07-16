@@ -252,12 +252,12 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
 
   return (
     <Box
-      p={8}
+      p={{ base: 4, md: 8 }}
       bg="white"
       borderRadius="lg"
-      maxWidth="800px"
-      width="100%"
-      margin="0 auto"
+      maxW={{ base: '100%', md: '800px' }}
+      w="100%"
+      mx="auto"
     >
 
       <Stack spaceY={4} w="100%">
@@ -279,7 +279,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 justifyContent="center"
                 bg="gray.100"
                 cursor="pointer"
-                marginBottom={8}
+                mb={8}
               >
                 <Image
                   src={formData.image}
@@ -311,7 +311,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               label={t('Verfügbarkeiten.Platzhalter')}
             />
 
-            <FormControl paddingBottom={8}>
+            <FormControl pb={8}>
               <FormLabel fontSize="small" fontWeight="bold">{t('Webseite.Feld')}</FormLabel>
               <Input
                 type="text"
@@ -322,7 +322,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
             </FormControl>
 
             <Flex justify="flex-end">
-              <Button colorScheme="blue" onClick={handleNextStep}>
+              <Button colorScheme="blue" onClick={handleNextStep} w={{ base: '100%', md: 'auto' }}>
                 {t('Buttons.Weiter')}
               </Button>
             </Flex>
@@ -332,7 +332,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
         {step === 2 && (
           <>
             {/* Step 2: Service Details */}
-            <FormControl paddingBottom={8}>
+            <FormControl pb={8}>
               <FormLabel fontSize="small" fontWeight="bold">{t('Service Titel.Feld')}</FormLabel>
               <Input
                 type="text"
@@ -342,7 +342,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               />
             </FormControl>
 
-            <FormControl paddingBottom={8}>
+            <FormControl pb={8}>
               <FormLabel fontSize="small" fontWeight="bold">
                 {' '}
                 {t('Service Beschreibung.Feld')}
@@ -356,7 +356,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               />
             </FormControl>
 
-            <FormControl paddingBottom={8}>
+            <FormControl pb={8}>
               <FormLabel fontSize="small" fontWeight="bold">
                 {' '}
                 {
@@ -394,10 +394,10 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
 
             </FormControl>
 
-            <Divider marginY={4} />
+            <Divider my={4} />
 
             {/* Price Input (Changes Label Based on Selection) */}
-            <FormControl paddingBottom={8}>
+            <FormControl pb={8}>
               <FormLabel fontSize="small" fontWeight="bold">
                 {formData.priceType === 'fix' ? t('Fixpreis.Feld') : t('Stundensatz.Feld')}
               </FormLabel>
@@ -411,11 +411,11 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
 
             </FormControl>
 
-            <Flex justify="flex-end" gap={2}>
-              <Button onClick={handlePreviousStep} colorScheme="gray">
+            <Flex justify="flex-end" gap={2} w="100%" direction={{ base: 'column', md: 'row' }}>
+              <Button onClick={handlePreviousStep} colorScheme="gray" w={{ base: '100%', md: 'auto' }}>
                 {t('Buttons.Zurück')}
               </Button>
-              <Button onClick={handleNextStep} colorScheme="green">
+              <Button onClick={handleNextStep} colorScheme="green" w={{ base: '100%', md: 'auto' }}>
                 {t('Buttons.Weiter')}
               </Button>
             </Flex>
@@ -425,9 +425,9 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
         {step === 3 && (
           <>
             {/* Street Address & Street Number in One Row */}
-            <HStack w="100%" alignItems="center">
+            <Stack direction={{ base: 'column', md: 'row' }} w="100%" mb={4}>
 
-              <FormControl flex={2}>
+              <FormControl flex={2} mb={{ base: 4, md: 0 }}>
 
                 <FormLabel fontSize="small" fontWeight="bold">
                   {' '}
@@ -458,11 +458,11 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 />
               </FormControl>
 
-            </HStack>
+            </Stack>
 
             {/* Zip Code & City in One Row */}
-            <HStack w="100%" alignItems="center">
-              <FormControl flex={2} marginTop={0}>
+            <Stack direction={{ base: 'column', md: 'row' }} w="100%" mb={4}>
+              <FormControl flex={2} mb={{ base: 4, md: 0 }}>
                 <FormLabel fontSize="small" fontWeight="bold">
                   {' '}
                   {t('Postleitzahl.Feld')}
@@ -479,7 +479,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                 />
               </FormControl>
 
-              <FormControl flex={2} marginTop={0}>
+              <FormControl flex={2}>
                 <FormLabel fontSize="small" fontWeight="bold">City</FormLabel>
                 <Input
                   type="text"
@@ -491,14 +491,14 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
                   }))}
                 />
               </FormControl>
-            </HStack>
+            </Stack>
 
             {/* Navigation Buttons */}
-            <Flex justify="flex-end" gap={2} marginTop={6}>
-              <Button onClick={handlePreviousStep} colorScheme="gray">
+            <Flex justify="flex-end" gap={2} w="100%" direction={{ base: 'column', md: 'row' }}>
+              <Button onClick={handlePreviousStep} colorScheme="gray" w={{ base: '100%', md: 'auto' }}>
                 {t('Buttons.Zurück')}
               </Button>
-              <Button onClick={handleNextStep} colorScheme="green">
+              <Button onClick={handleNextStep} colorScheme="green" w={{ base: '100%', md: 'auto' }}>
                 {t('Buttons.Weiter')}
               </Button>
             </Flex>
@@ -545,7 +545,7 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               />
             </Box>
 
-            <Divider marginY={4} />
+            <Divider my={4} />
 
             <Text fontWeight="bold" fontSize="lg">
               {formData.title}
@@ -648,14 +648,14 @@ export default function AddServiceForm({ user }: { user: OnBoardingClientUser })
               </HStack>
 
               {/* Right-aligned buttons (stacks below warning on mobile) */}
-              <HStack gap={2} w="100%" justify={{ base: 'center', md: 'flex-end' }}>
-                <Button onClick={handlePreviousStep} colorScheme="gray">
+              <Flex justify="flex-end" gap={2} w="100%" direction={{ base: 'column', md: 'row' }}>
+                <Button onClick={handlePreviousStep} colorScheme="gray" w={{ base: '100%', md: 'auto' }}>
                   {t('Buttons.Zurück')}
                 </Button>
-                <Button onClick={handleSubmit} colorScheme="green">
+                <Button onClick={handleSubmit} colorScheme="green" w={{ base: '100%', md: 'auto' }}>
                   {t('Buttons.Bestätigen')}
                 </Button>
-              </HStack>
+              </Flex>
             </Flex>
 
           </>

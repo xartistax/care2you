@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { userEvent, within } from '@storybook/test';
 import { NextIntlClientProvider } from 'next-intl';
 
-import MainNavigation from '@/components/navigation/main/Navigation';
+import Navigation from '@/components/navigation/main/Navigation';
 import messages from '@/locales/de.json';
 
 import { BaseTemplate } from './BaseTemplate';
@@ -31,7 +31,7 @@ export const BaseWithReactComponent = {
     locale: 'en', // ✅ Ensure the locale is provided
     children: (
       <>
-        <MainNavigation />
+        <Navigation userRole="service" />
         <div>Children node</div>
       </>
     ),
@@ -43,7 +43,7 @@ export const BaseWithString = {
     locale: 'de', // ✅ Ensure the locale is provided
     children: (
       <>
-        <MainNavigation />
+        <Navigation userRole="client" />
         'String'
       </>
     ),
@@ -55,7 +55,7 @@ export const BaseWithHomeLink: Story = {
     locale: 'en', // ✅ Ensure the locale is provided
     children: (
       <>
-        <MainNavigation />
+        <Navigation userRole="client" />
         <div>Children node</div>
       </>
     ),

@@ -9,7 +9,7 @@ import {
   Bars3Icon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import type { z } from 'zod';
 
 import { Avatar } from '@/components/ui/avatar';
@@ -20,8 +20,12 @@ import SiteLogo from '../Logo';
 
 type OnBoardingClientUser = z.infer<typeof onboardingClientUserSchema>;
 
+type LeftNavProps = {
+  onNavigate: () => void;
+};
+
 type HeaderProps = {
-  leftNav: React.ReactNode;
+  leftNav: React.ReactElement<LeftNavProps> | null;
   rightNav?: React.ReactNode;
   user: OnBoardingClientUser;
   locale: string;
@@ -29,7 +33,6 @@ type HeaderProps = {
 
 export default function Header({ leftNav, user }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // const t = useTranslations('RootLayout');
 
   return (
     <header className="bg-white">
@@ -92,7 +95,9 @@ export default function Header({ leftNav, user }: HeaderProps) {
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-4 py-6">
                 <ul className="gap-x-8  space-y-4 text-sm">
-                  {leftNav}
+                  {leftNav && React.cloneElement(leftNav, {
+                    onNavigate: () => setMobileMenuOpen(false),
+                  })}
                 </ul>
               </div>
               <div className="py-6">

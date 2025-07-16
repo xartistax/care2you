@@ -236,9 +236,14 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
         </VStack>
 
         {/* Actions */}
-        <Stack direction="row" pt="4" width="100%">
+        <Stack
+          direction={{ base: 'column', md: 'row' }}
+          pt={{ base: 2, md: 4 }}
+          width="100%"
+          className="gap-2 md:gap-4"
+        >
           {/* Calendly Link */}
-          <Link href={`${service.calendly}`} style={{ flex: 2 }} target="_blank">
+          <Link href={`${service.calendly}`} className="flex-2" target="_blank">
             <Button colorScheme="blue" size="md" width="100%">
               Zur Webseite
             </Button>
@@ -281,6 +286,7 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
                   mt={3}
                   onClick={handleSendMessage}
                   loading={loading}
+                  w={{ base: '100%', md: 'auto' }}
                 >
                   Senden
                 </Button>
@@ -293,8 +299,7 @@ export default function SingleListing({ service, user }: { service: ServiceFormD
             variant="outline"
             colorScheme="blue"
             size="md"
-            flex="1"
-            width="100%"
+            className="h-10 md:h-auto"
             onClick={() => router.back()}
           >
             {t('Zurück')}
