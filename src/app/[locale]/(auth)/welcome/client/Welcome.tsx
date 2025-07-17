@@ -90,7 +90,7 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
         <GridItem>
           <LinkBox
             as={CardRoot}
-            height="100%"
+            height={{ base: '160px', md: '100%' }}
             bg="gray.50"
             p="4"
             borderRadius="md"
@@ -124,7 +124,7 @@ export default function Welcome({ user }: { user: OnBoardingClientUser }) {
         <GridItem>
           <LinkBox
             as={CardRoot}
-            height="100%"
+            height={{ base: '160px', md: '100%' }}
             p="4"
             bg="gray.50"
             borderRadius="md"
