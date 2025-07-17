@@ -129,7 +129,7 @@ export default function AdminPanel({
               placeholder="Passwort"
               mb={4}
             />
-            <Button type="submit" colorScheme="teal">
+            <Button type="submit" colorScheme="teal" width={{ base: '100%', md: 'auto' }}>
               Weiter
             </Button>
           </form>
@@ -244,20 +244,28 @@ export default function AdminPanel({
           </Table.ScrollArea>
 
           <ActionBarRoot open={hasSelection}>
-            <ActionBarContent>
+            <ActionBarContent
+              display="flex"
+              flexDirection={{ base: 'column', md: 'row' }}
+              gap={{ base: 2, md: 4 }}
+              alignItems={{ base: 'stretch', md: 'center' }}
+              width={{ base: '100%', md: 'auto' }}
+              mx={{ base: 8, md: 0 }}
+            >
               <ActionBarSelectionTrigger>
                 {selection.length}
                 {' '}
                 ausgewählt
               </ActionBarSelectionTrigger>
 
-              <ActionBarSeparator />
+              <ActionBarSeparator display={{ base: 'none', md: 'block' }} />
 
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleStatus}
                 loading={loadingIdsStatus.length > 0} // ✅ Spinner only for status action
+                width={{ base: '100%', md: 'auto' }}
               >
                 {loadingIdsStatus.length > 0 ? 'Aktualisiere...' : 'Aktivieren / Deaktivieren'}
               </Button>
@@ -267,6 +275,7 @@ export default function AdminPanel({
                 size="sm"
                 onClick={handleDelete}
                 loading={loadingIdsDelete.length > 0} // ✅ Spinner only for delete action
+                width={{ base: '100%', md: 'auto' }}
               >
                 {loadingIdsDelete.length > 0 ? 'Aktualisiere...' : 'Entfernen'}
               </Button>
