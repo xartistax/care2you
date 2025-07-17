@@ -60,7 +60,7 @@ export default async function NewServiceServer() {
       }),
     );
 
-    const servicesWithCompanyTitle = enrichedServices.filter(service => service !== null);
+    const availableServices = enrichedServices.filter(service => service !== null);
 
     return (
       <Box
@@ -71,7 +71,7 @@ export default async function NewServiceServer() {
         spaceY={8}
         p={8}
       >
-        <ServiceList services={servicesWithCompanyTitle} />
+        <ServiceList services={availableServices} />
       </Box>
     );
   } catch (error) {
