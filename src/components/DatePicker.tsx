@@ -16,15 +16,17 @@ type DatePickerHeroProps = {
 
 export default function DatePickerHero({ selectedDate, onChange }: DatePickerHeroProps) {
   return (
-
-    <DatePicker
-      selected={selectedDate}
-      onChange={onChange}
-      dateFormat="dd.MM.yyyy"
-      placeholderText={`${get18YearsAgoDate()}`}
-      locale="de"
-      customInput={<Input />}
-    />
-
+    <div className="w-full max-w-[400px]">
+      <DatePicker
+        selected={selectedDate}
+        onChange={onChange}
+        dateFormat="dd.MM.yyyy"
+        placeholderText={`${get18YearsAgoDate()}`}
+        locale="de"
+        popperPlacement="bottom"
+        customInput={<Input w="100%" />}
+        wrapperClassName="w-full"
+      />
+    </div>
   );
 }

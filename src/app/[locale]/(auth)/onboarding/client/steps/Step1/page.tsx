@@ -144,16 +144,16 @@ const Step1 = () => {
   return (
 
     <Box
-      p={8}
+      p={{ base: 4, md: 8 }}
       bg="white"
       borderRadius="lg"
-      maxWidth="800px"
-      width="100%"
-      margin="0 auto"
+      maxW={{ base: '100%', md: '800px' }}
+      w="100%"
+      mx="auto"
     >
 
       {showAlert && (
-        <HStack alignItems="center" marginBottom="4">
+        <HStack alignItems="center" marginBottom={{ base: 2, md: 4 }}>
           <Alert status="error" icon={<HiXCircle />}>
             {alertMessage}
           </Alert>

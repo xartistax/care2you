@@ -7,6 +7,7 @@ import { z } from 'zod';
 import ServiceList from '@/components/ServiceList';
 import { db } from '@/libs/DB';
 import { servicesSchema } from '@/models/Schema';
+import { logError, logWarning } from '@/utils/sentryLogger';
 import { serviceSchema } from '@/validations/serviceValidation';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
@@ -42,19 +43,24 @@ export default async function NewServiceServer() {
     const validatedServices = z.array(serviceSchema).parse(formattedServices);
 
     // Fetch the companyTitle for each service user (optional)
-    const servicesWithCompanyTitle = await Promise.all(
+    const enrichedServices = await Promise.all(
       validatedServices.map(async (service) => {
-        let companyTitle: string | undefined; // Ensure companyTitle is either a string or undefined
-        if (service.userId) {
+        try {
           const user = await clerkClient.users.getUser(service.userId);
-          companyTitle = user.privateMetadata?.companyTitle as string; // Explicitly set to undefined if not available
+          const companyTitle = user?.privateMetadata?.companyTitle as string | undefined;
+
+          return {
+            ...service,
+            companyTitle,
+          };
+        } catch (error) {
+          logWarning(`NewServiceServer: Skipping service ${service.id} (user not found)`, { reason: (error as Error)?.message });
+          return null; // Skip this service if user not found
         }
-        return {
-          ...service,
-          companyTitle, // Ensure companyTitle is a string or undefined
-        };
       }),
     );
+
+    const availableServices = enrichedServices.filter(service => service !== null);
 
     return (
       <Box
@@ -65,11 +71,18 @@ export default async function NewServiceServer() {
         spaceY={8}
         p={8}
       >
-        <ServiceList services={servicesWithCompanyTitle} />
+        <ServiceList services={availableServices} />
       </Box>
     );
   } catch (error) {
-    console.error('❌ Validation Error:', error);
-    return <Box>Fehler beim Laden der Services</Box>;
+    logError('NewServiceServer: ❌ Validation Error:', { reason: (error as Error)?.message });
+    return (
+      <Box
+        spaceY={8}
+        p={8}
+      >
+        Fehler beim Laden der Services
+      </Box>
+    );
   }
 }

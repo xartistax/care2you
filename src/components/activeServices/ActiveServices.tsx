@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { db } from '@/libs/DB';
 import { servicesSchema } from '@/models/Schema';
+import { logError } from '@/utils/sentryLogger';
 import { serviceSchema } from '@/validations/serviceValidation';
 
 const ServiceArraySchema = z.array(serviceSchema);
@@ -46,7 +47,7 @@ export default async function ActiveServices() {
       </Box>
     );
   } catch (error) {
-    console.error('❌ Error fetching services:', error);
+    logError('ActiveServices: ❌ Error fetching services:', { reason: (error as Error).message });
     return (
       <Box textAlign="center" py={10}>
         <Text fontSize="lg" color="red.500">Fehler beim Laden der Services.</Text>

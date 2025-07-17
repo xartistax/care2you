@@ -12,17 +12,17 @@ export default function Entrance({ title, linkTo, linkTitle }: { title: string; 
       minHeight="100vh" // Full viewport height
       align="center" // Vertical centering
       justify="center" // Horizontal centering
-      p={4} // Padding for smaller screens
+      p={{ base: 4, md: 8 }} // Padding for smaller screens
     >
       <Box
         bg="white"
 
-        maxWidth="800px"
-        width="100%" // Responsive width
-        p={8}
+        maxW={{ base: '100%', md: '800px' }}
+        w="100%" // Responsive width
+        p={{ base: 4, md: 8 }}
       >
         <VStack>
-          <Text fontSize="3xl" fontWeight="bold">
+          <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold" textAlign="center">
             {title}
           </Text>
 
@@ -55,9 +55,10 @@ export default function Entrance({ title, linkTo, linkTitle }: { title: string; 
           </VStack>
 
           <Button
-            mt={12}
+            mt={{ base: 6, md: 12 }}
             colorScheme="teal"
             size="md"
+            w={{ base: 'full', md: 'auto' }}
             onClick={() => {
               logMessage('Entrance: Navigation button clicked', { file: 'Entrance.tsx', linkTo });
               router.push(`/de${linkTo}`);

@@ -59,8 +59,6 @@ const Step3Service = () => {
 
       logMessage('Step3Service: User onboarding complete, navigating to welcome', { file: 'service/steps/Step3/page.tsx', locale });
       router.push(`/${locale}/welcome`);
-
-      // console.log(user);
     } catch (error) {
       logError(error, { file: 'service/steps/Step3/page.tsx', location: 'handleFinish' });
       setAlertMessage('Bei der Anmeldung ist ein Fehler aufgetreten');
@@ -112,23 +110,23 @@ const Step3Service = () => {
     const lastName = formState.data.lastName;
     return (
 
-      <Box p={8} bg="white" borderRadius="lg" maxWidth="800px" width="100%" margin="0 auto">
+      <Box p={{ base: 4, md: 8 }} bg="white" borderRadius="lg" maxW={{ base: '100%', md: '800px' }} w="100%" mx="auto">
 
         {showAlert && (
-          <HStack alignItems="center" marginBottom="4">
+          <HStack alignItems="center" marginBottom={{ base: 2, md: 4 }}>
             <Alert status="error" icon={<HiXCircle />}>
               {alertMessage}
             </Alert>
           </HStack>
         )}
 
-        <VStack alignItems="left" marginBottom={8}>
-          <Heading as="h1" size="2xl">
+        <VStack alignItems="left" marginBottom={{ base: 4, md: 8 }}>
+          <Heading as="h1" fontSize={{ base: 'lg', md: '2xl' }}>
             {t('OnBoarding.Care und Service Compilance.Titel')}
 
           </Heading>
         </VStack>
-        <VStack alignItems="left" marginBottom={8} fontSize="sm">
+        <VStack alignItems="left" marginBottom={{ base: 4, md: 8 }} fontSize={{ base: 'sm', md: 'md' }}>
           <Text marginBottom={4}>
             <Box as="span" display="block" fontWeight="bold">
 
@@ -164,11 +162,11 @@ const Step3Service = () => {
             </Stack>
           </HStack>
         </VStack>
-        <HStack alignItems="start" justifyContent="flex-end" marginBottom={8}>
-          <Button colorScheme="gray" onClick={prevStep} variant="outline">
+        <HStack alignItems="start" justifyContent="flex-end" marginTop="8" marginBottom={{ base: 4, md: 8 }} flexDirection={{ base: 'column', md: 'row' }}>
+          <Button colorScheme="gray" onClick={prevStep} variant="outline" w={{ base: '100%', md: 'auto' }}>
             Zurück
           </Button>
-          <Button colorScheme="blue" onClick={handleFinish}>
+          <Button colorScheme="blue" onClick={handleFinish} w={{ base: '100%', md: 'auto' }}>
             Anmeldung bestätigen
           </Button>
         </HStack>

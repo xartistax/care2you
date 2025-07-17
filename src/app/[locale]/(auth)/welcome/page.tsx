@@ -2,6 +2,7 @@ import { currentUser } from '@clerk/nextjs/server';
 import { getTranslations } from 'next-intl/server';
 import type { z } from 'zod';
 
+import { logError } from '@/utils/sentryLogger';
 import type { onboardingClientUserSchema, workingHoursSchema } from '@/validations/onBoardingValidation';
 
 import Welcome_Care from './care/Welcome';
@@ -12,7 +13,7 @@ export async function generateMetadata(props: { params: { locale: string } }) {
   const user = await currentUser();
 
   if (!user) {
-    console.error('User not found while generating metadata!');
+    logError('generateMetadata: User not found while generating metadata!');
     return {
       title: 'Error: User Not Found',
     };
@@ -34,7 +35,7 @@ export default async function WelcomeServer() {
   const user = await currentUser();
 
   if (!user) {
-    console.error('User not found!');
+    logError('WelcomeServer: User not found!');
     throw new Error('Fatal Error!');
   }
 
@@ -92,7 +93,7 @@ export default async function WelcomeServer() {
     case 'care':
       return <Welcome_Care user={fullUser} />;
     default:
-      console.error('No user role defined!');
+      logError('WelcomeServer: No user role defined!');
       return <div>Error: No valid role found for the user.</div>;
   }
 }

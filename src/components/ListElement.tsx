@@ -5,6 +5,7 @@ import {
   CardBody,
   CardRoot,
   CardTitle,
+  Flex,
   Link,
   LinkBox,
   Stack,
@@ -35,6 +36,25 @@ export default function ListElement({ formData }: ListElementProps) {
   const currency = 'CHF';
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [isReady, setIsReady] = useState(false);
+
+  const infoItems = [
+    {
+      icon: <GlobeAltIcon className="size-3" />,
+      text: categoryTypeRetriever(formData.category as string),
+    },
+    {
+      icon: <GlobeAltIcon className="size-3" />,
+      text: formData.companyTitle || 'no company title',
+    },
+    {
+      icon: <GlobeAltIcon className="size-3" />,
+      text: formData.location.city,
+    },
+    {
+      icon: <ClipboardIcon className="size-3" />,
+      text: formData.location.postalCode,
+    },
+  ];
 
   useEffect(() => {
     setIsReady(true);
@@ -122,26 +142,20 @@ export default function ListElement({ formData }: ListElementProps) {
             <Box>
               <br />
 
-              <Box fontSize="sm" display="flex" flexFlow="row" alignItems="center" gap={2}>
-                <GlobeAltIcon className="size-3" />
-                { categoryTypeRetriever(formData.category as string)}
-                {' '}
-                |
-                {' '}
-                <GlobeAltIcon className="size-3" />
-                {formData.companyTitle || 'no company title'}
-                {' '}
-                |
-                {' '}
-                <GlobeAltIcon className="size-3" />
-                {formData.location.city}
-                {' '}
-                |
-                {' '}
-                <ClipboardIcon className="size-3" />
-                {formData.location.postalCode}
-
-              </Box>
+              <Flex
+                fontSize="sm"
+                wrap="wrap"
+                align="center"
+                gap={2}
+              >
+                {infoItems.map((item, index) => (
+                  <Flex key={index} align="center" gap={1}>
+                    {item.icon}
+                    <Text>{item.text}</Text>
+                    {index < infoItems.length - 1 && <Text mx={1}>|</Text>}
+                  </Flex>
+                ))}
+              </Flex>
 
             </Box>
           </Box>

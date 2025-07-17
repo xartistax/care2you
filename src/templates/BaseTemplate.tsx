@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
-import MainNavigation from '@/components/navigation/main/Navigation';
+import Navigation from '@/components/navigation/main/Navigation';
 import { constructUser } from '@/utils/Helpers';
 
 export async function BaseTemplate({
@@ -22,20 +22,21 @@ export async function BaseTemplate({
   const constructedUser = constructUser(user);
 
   return (
-    <div className="w-full px-1 text-gray-700 antialiased">
+    <div className="flex min-h-screen flex-col text-gray-700 antialiased">
 
       <Header
         leftNav={
-          constructedUser?.privateMetadata?.status === 'active' ? <MainNavigation /> : null
+          constructedUser?.privateMetadata?.status === 'active' ? <Navigation userRole={String(user.privateMetadata.role)} /> : null
         }
         user={constructedUser}
         locale={locale}
       />
 
-      <div className="mx-auto max-w-screen-xl">
+      <div className="mx-auto w-full max-w-screen-xl grow px-1">
         <main>{children}</main>
-        <Footer />
       </div>
+
+      <Footer />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import createMiddleware from 'next-intl/middleware';
 import { logError, logMessage, logWarning } from '@/utils/sentryLogger';
 
 import { routing } from './libs/i18nNavigation';
-import { chekOnboarding, getBaseUrl, getI18nPath } from './utils/Helpers';
+import { chekOnboarding, getI18nPath } from './utils/Helpers';
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -35,6 +35,8 @@ export default function middleware(
     logMessage('middleware: Auth or protected route', { file: 'middleware.ts', function: 'middleware', url: request.nextUrl.pathname });
     return clerkMiddleware(async (auth, req) => {
       logMessage('middleware: clerkMiddleware invoked', { file: 'middleware.ts', function: 'middleware', url: req.nextUrl.pathname });
+      const url = req.nextUrl.clone();
+
       if (isProtectedRoute(req)) {
         const locale = req.nextUrl.pathname.match(/^\/[a-z]{2}(?=\/)/)?.[1] ?? '';
         const { userId } = auth();
@@ -44,11 +46,13 @@ export default function middleware(
             const checkOnboarding = await chekOnboarding(locale, userId);
             if (!checkOnboarding) {
               logWarning('middleware: Onboarding check failed, redirecting', { file: 'middleware.ts', function: 'middleware', locale, userId });
-              return NextResponse.redirect(getI18nPath(`${getBaseUrl()}/onboarding`, locale));
+              url.pathname = '/onboarding';
+              return NextResponse.redirect(url);
             }
           } catch (error) {
             logError(error, { file: 'middleware.ts', function: 'middleware', location: 'checkOnboarding', locale, userId });
-            return NextResponse.redirect(getI18nPath(`${getBaseUrl()}/onboarding`, locale));
+            url.pathname = '/onboarding';
+            return NextResponse.redirect(url);
           }
         }
         const signInUrl = new URL(`/good-bye`, req.url);
