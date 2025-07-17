@@ -50,5 +50,6 @@ local
 # vercel
 .vercel
 
+# IDE
 .history
 .idea
